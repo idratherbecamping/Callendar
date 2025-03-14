@@ -1,10 +1,41 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 const HeroSection = () => {
+  const [isCallLoading, setIsCallLoading] = useState(false);
+
+  const handleTestCall = async () => {
+    try {
+      setIsCallLoading(true);
+      // Make a request to your backend endpoint that will trigger the Twilio call
+      const response = await fetch('/api/twilio/call', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // You can add body data if needed, such as:
+        // body: JSON.stringify({ phoneNumber: '+1234567890' }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to initiate call');
+      }
+      
+      // Handle successful response
+      alert('Test call initiated successfully!');
+    } catch (error) {
+      console.error('Error initiating test call:', error);
+      alert('Failed to initiate test call. Please try again later.');
+    } finally {
+      setIsCallLoading(false);
+    }
+  };
+
   return (
     <section id="Hero" className="pt-36 pb-24 relative overflow-hidden">
       <div className="absolute w-full h-full top-0 left-0 bg-beeslyDark z-0"></div>
@@ -27,8 +58,12 @@ const HeroSection = () => {
         </p>
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-5 mb-20">
-          <Button className="beesly-button beesly-button-secondary w-48 h-12">
-            Test Call
+          <Button 
+            className="beesly-button beesly-button-secondary w-48 h-12"
+            onClick={handleTestCall}
+            disabled={isCallLoading}
+          >
+            {isCallLoading ? 'Calling...' : 'Test Call'}
           </Button>
           <Button className="beesly-button beesly-button-primary w-48 h-12 flex items-center gap-2">
             Download the Callendar app
