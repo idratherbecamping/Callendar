@@ -98,7 +98,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
 
         <div className="mt-auto pt-8">
           <div className="text-gray-500 text-sm">
-            © 2024 Beesly AI
+            © 2024 Callendar AI
           </div>
         </div>
       </div>

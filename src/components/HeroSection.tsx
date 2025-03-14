@@ -31,7 +31,7 @@ const HeroSection = () => {
             Test Call
           </Button>
           <Button className="beesly-button beesly-button-primary w-48 h-12 flex items-center gap-2">
-            Download the beesly app
+            Download the Callendar app
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -55,7 +55,7 @@ const HeroSection = () => {
         <div className="relative h-72 md:h-96 max-w-md mx-auto mb-16">
           <Image
             src="https://web-assets.same.dev/77499892/3772306543.png"
-            alt="Beesly App Interface"
+            alt="Callendar App Interface"
             fill
             className="object-contain"
           />
