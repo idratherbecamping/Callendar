@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 58 77% 64%;   /* Callendar's yellow-green */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --heading-text: 0 0% 92%;  /* Light gray for headlines */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-poppins;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins font-bold text-heading;
+  }
+}
+
+@layer components {
+  .beesly-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .beesly-button {
+    @apply bg-primary hover:opacity-90 text-primary-foreground rounded-xl px-6 py-3 font-medium transition-all duration-300;
+  }
+
+  .beesly-button-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5;
+  }
+
+  .beesly-button-secondary {
+    @apply bg-secondary/50 text-white border border-gray-700 hover:bg-secondary/70 hover:border-gray-600 hover:shadow-lg hover:shadow-secondary/10 hover:-translate-y-0.5;
+  }
+
+  .beesly-button-yellow {
+    @apply bg-beeslyYellow text-black hover:bg-beeslyYellow/90 hover:shadow-lg hover:shadow-beeslyYellow/20 hover:-translate-y-0.5;
+  }
+
+  .beesly-card {
+    @apply bg-secondary/30 backdrop-blur-sm rounded-xl p-6 border border-gray-800 transition-all duration-300;
+  }
+
+  .beesly-card-hover {
+    @apply hover:bg-secondary/40 hover:border-gray-700 hover:shadow-lg hover:shadow-secondary/5 hover:-translate-y-1;
+  }
+
+  .beesly-section {
+    @apply py-16 sm:py-24;
+  }
+
+  .beesly-section-title {
+    @apply text-beeslyYellow font-medium text-sm uppercase tracking-wider;
+  }
+
+  .beesly-section-heading {
+    @apply text-3xl md:text-4xl font-bold mt-3 mb-8 text-heading;
+  }
+
+  .beesly-section-spacer {
+    @apply my-28;
+  }
+
+  .text-heading {
+    @apply text-[hsl(var(--heading-text))];
+  }
+
+  /* Interactive hover effects */
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-lg;
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+
+  .hover-bright {
+    @apply transition-all duration-300 hover:brightness-110;
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    @apply fixed top-0 right-0 bottom-0 flex flex-col w-[75%] max-w-sm py-6 px-6 bg-beeslyDark border-l border-gray-800 overflow-y-auto transition-all duration-300 transform shadow-xl z-50;
+  }
+
+  .mobile-menu-overlay {
+    @apply fixed inset-0 bg-black/70 backdrop-blur-sm z-40 transition-opacity duration-300;
+  }
+
+  /* Animation classes */
+  .fade-in {
+    @apply opacity-0 transition-opacity duration-1000;
+  }
+
+  .fade-in.appear {
+    @apply opacity-100;
+  }
+
+  .slide-up {
+    @apply opacity-0 translate-y-10 transition-all duration-700;
+  }
+
+  .slide-up.appear {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .slide-in-right {
+    @apply opacity-0 translate-x-10 transition-all duration-700;
+  }
+
+  .slide-in-right.appear {
+    @apply opacity-100 translate-x-0;
+  }
+
+  .slide-in-left {
+    @apply opacity-0 -translate-x-10 transition-all duration-700;
+  }
+
+  .slide-in-left.appear {
+    @apply opacity-100 translate-x-0;
+  }
+
+  /* Back to top button */
+  .back-to-top {
+    @apply fixed bottom-6 right-6 p-3 rounded-full bg-beeslyYellow text-black shadow-lg opacity-0 invisible transition-all duration-300 z-40 hover:bg-beeslyYellow/90 hover:-translate-y-1;
+  }
+
+  .back-to-top.visible {
+    @apply opacity-100;
+    visibility: visible;
+  }
+}
+
+/* Custom font variables */
+.font-poppins {
+  font-family: var(--font-poppins);
+}
+
+.font-inter {
+  font-family: var(--font-inter);
+}
+
+.font-lexend {
+  font-family: var(--font-lexend-deca);
+}
+
+/* Accordion customization */
+.accordion-trigger {
+  @apply transition-colors duration-300;
+}
+
+.accordion-trigger:hover {
+  @apply bg-secondary/50 text-heading;
+}
