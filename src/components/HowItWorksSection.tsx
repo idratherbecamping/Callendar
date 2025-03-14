@@ -51,7 +51,7 @@ const HowItWorksSection = () => {
             How It Works
           </span>
           <h2 className="beesly-section-heading">
-            Connect With Beesly In Under 90 Seconds
+            Connect With Callendar In Under 90 Seconds
           </h2>
         </div>
 
