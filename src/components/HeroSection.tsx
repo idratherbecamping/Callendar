@@ -65,7 +65,7 @@ const HeroSection = () => {
           >
             {isCallLoading ? 'Calling...' : 'Test Call'}
           </Button>
-          <Button className="beesly-button beesly-button-primary w-48 h-12 flex items-center gap-2">
+          {/* <Button className="beesly-button beesly-button-primary w-48 h-12 flex items-center gap-2">
             Download the Callendar app
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +83,7 @@ const HeroSection = () => {
               <path d="M8 21h8"></path>
               <path d="M12 17v4"></path>
             </svg>
-          </Button>
+          </Button> */}
         </div>
 
         {/* Hero Image - Phone */}

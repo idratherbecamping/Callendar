@@ -87,13 +87,22 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
           </Link>
         </nav>
 
-        <div className="mt-8">
-          <Button
-            className="beesly-button beesly-button-primary w-full"
-            onClick={onClose}
-          >
-            Try it out
-          </Button>
+        <div className="mt-8 space-y-4">
+          <Link href="/auth/signin" onClick={onClose}>
+            <Button
+              variant="outline"
+              className="beesly-button beesly-button-secondary w-full"
+            >
+              Sign In
+            </Button>
+          </Link>
+          <Link href="/auth/signup" onClick={onClose}>
+            <Button
+              className="beesly-button beesly-button-primary w-full"
+            >
+              Sign Up
+            </Button>
+          </Link>
         </div>
 
         <div className="mt-auto pt-8">

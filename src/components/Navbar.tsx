@@ -87,11 +87,23 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <Button
-            className="beesly-button beesly-button-primary rounded-xl px-6 py-2 hidden md:flex"
-          >
-            Try it out
-          </Button>
+          <div className="hidden md:flex space-x-4">
+            <Link href="/auth/signin">
+              <Button
+                variant="outline"
+                className="beesly-button beesly-button-secondary rounded-xl px-6 py-2"
+              >
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/auth/signup">
+              <Button
+                className="beesly-button beesly-button-primary rounded-xl px-6 py-2"
+              >
+                Sign Up
+              </Button>
+            </Link>
+          </div>
 
           <div className="md:hidden">
             <Button
