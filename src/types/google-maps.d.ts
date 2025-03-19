@@ -3,7 +3,7 @@ declare namespace google {
     namespace places {
       class Autocomplete {
         constructor(inputField: HTMLInputElement, options?: AutocompleteOptions);
-        addListener(eventName: string, handler: (...args: any[]) => void): void;
+        addListener(eventName: 'place_changed', handler: () => void): void;
         getPlace(): PlaceResult;
       }
       
@@ -84,9 +84,12 @@ declare namespace google {
     }
     
     namespace event {
+      type MapsEventHandler = () => void;
+      type MapsDomEventHandler = (event: Event) => void;
+      
       function clearInstanceListeners(instance: object): void;
-      function addListener(instance: object, eventName: string, handler: (...args: any[]) => void): MapsEventListener;
-      function addDomListener(instance: object, eventName: string, handler: (...args: any[]) => void, capture?: boolean): MapsEventListener;
+      function addListener(instance: object, eventName: string, handler: MapsEventHandler): MapsEventListener;
+      function addDomListener(instance: object, eventName: string, handler: MapsDomEventHandler, capture?: boolean): MapsEventListener;
       function removeListener(listener: MapsEventListener): void;
     }
     

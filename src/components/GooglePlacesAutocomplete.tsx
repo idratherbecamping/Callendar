@@ -98,7 +98,6 @@ export default function GooglePlacesAutocomplete({
         console.log('[GooglePlacesAutocomplete] Place changed event fired');
         if (autocompleteRef.current) {
           console.log('[GooglePlacesAutocomplete] Getting selected place');
-          // @ts-expect-error - TypeScript doesn't recognize that we've already checked for null
           const place = autocompleteRef.current.getPlace();
           console.log('[GooglePlacesAutocomplete] Selected place:', place);
           
@@ -127,9 +126,10 @@ export default function GooglePlacesAutocomplete({
       };
 
       console.log('[GooglePlacesAutocomplete] Adding place_changed listener');
-      // We know autocompleteRef.current is not null here
-      // @ts-ignore - TypeScript doesn't recognize that we've already checked for null
-      autocompleteRef.current.addListener('place_changed', handlePlaceChanged);
+      const autocomplete = autocompleteRef.current;
+      if (autocomplete) {
+        autocomplete.addListener('place_changed', handlePlaceChanged);
+      }
       console.log('[GooglePlacesAutocomplete] Autocomplete initialization complete');
     } catch (error) {
       console.error('[GooglePlacesAutocomplete] Error initializing Maps Autocomplete:', error);
