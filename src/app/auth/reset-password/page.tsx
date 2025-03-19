@@ -40,8 +40,9 @@ export default function ResetPassword() {
 
       // Redirect to sign in page after successful password reset
       router.push('/auth/signin?message=Password updated successfully')
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

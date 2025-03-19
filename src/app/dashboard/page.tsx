@@ -4,6 +4,15 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
+type GoogleAuthToken = {
+  scopes: string[]
+  client_id: string
+  token_uri: string
+  access_token: string
+  refresh_token: string
+  expires_in: number
+}
+
 type BusinessProfile = {
   business_name: string
   phone_number: string
@@ -16,7 +25,7 @@ type BusinessProfile = {
     close: string
   }
   twilio_number?: string
-  google_auth_token?: any
+  google_auth_token?: GoogleAuthToken
 }
 
 export default function Dashboard() {
@@ -44,8 +53,9 @@ export default function Dashboard() {
         if (error) throw error
 
         setProfile(data)
-      } catch (error: any) {
-        setError(error.message)
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
+        setError(errorMessage)
       } finally {
         setLoading(false)
       }

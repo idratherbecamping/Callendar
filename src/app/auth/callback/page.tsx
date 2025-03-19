@@ -72,9 +72,10 @@ export default function OAuthCallback() {
           router.push('/auth/signup?step=calendar')
         }, 1500)
         
-      } catch (err: any) {
+      } catch (err: unknown) {
         setStatus('error')
-        setError(err.message || 'An unknown error occurred')
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+        setError(errorMessage)
         
         // Redirect back to signup page after a delay
         setTimeout(() => {
