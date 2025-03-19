@@ -60,10 +60,11 @@ export async function POST(request: Request) {
       message: 'User created successfully',
       userId: user?.user?.id
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('User creation error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An error occurred while creating the user';
     return NextResponse.json(
-      { error: error.message || 'An error occurred while creating the user' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
