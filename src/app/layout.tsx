@@ -22,6 +22,11 @@ const lexendDeca = Lexend_Deca({
 export const metadata: Metadata = {
   title: "Callendar AI | Revolutionize Your Voicemail with AI-Powered Assistant",
   description: "Elevate your communication with Callendar's AI voicemail assistant. Experience personalized, efficient call management with features like call summaries, instant notifications, 24/7 availability, and smart calendar integration. Join the future of voicemail today!",
+  icons: {
+    icon: '/callendar_ai_logo_no_bg.png',
+    shortcut: '/callendar_ai_logo_no_bg.png',
+    apple: '/callendar_ai_logo_no_bg.png',
+  },
 };
 
 export default function RootLayout({

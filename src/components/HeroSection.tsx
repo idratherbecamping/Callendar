@@ -110,10 +110,10 @@ const HeroSection = () => {
 
       <div className="beesly-container relative z-10 text-center">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-heading">
-          Callendar. Your AI Voice <br /> Mail Assistant
+          Callendar AI <br /> Automated Voicemail that Books Appointments for You
         </h1>
         <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-12">
-          Elevate your communication with smart, efficient, and personalised responses.
+          "Never Miss a Call, Never Miss an Opportunity."
         </p>
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-5 mb-20">
