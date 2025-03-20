@@ -6,31 +6,42 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const supabase = createMiddlewareClient({ req, res })
 
+  console.log('Middleware - Current path:', req.nextUrl.pathname)
+  console.log('Middleware - Request headers:', Object.keys(req.headers))
+
   const {
     data: { session },
+    error: sessionError
   } = await supabase.auth.getSession()
 
-  // Define protected routes that require authentication
-  const protectedRoutes = ['/dashboard']
-  const isProtectedRoute = protectedRoutes.some(route => 
-    req.nextUrl.pathname.startsWith(route)
-  )
-
-  // If user is not signed in and trying to access a protected route,
-  // redirect the user to /auth/signin
-  if (!session && isProtectedRoute) {
-    return NextResponse.redirect(new URL('/auth/signin', req.url))
+  if (sessionError) {
+    console.error('Middleware - Session error:', sessionError)
   }
 
-  // If user is signed in and trying to access auth routes,
-  // redirect the user to /dashboard
-  if (session && req.nextUrl.pathname.startsWith('/auth/')) {
-    return NextResponse.redirect(new URL('/dashboard', req.url))
+  console.log('Middleware - Session:', session ? {
+    user: session.user.email,
+    expires_at: session.expires_at
+  } : 'Not found')
+
+  // If there's no session and the user is trying to access a protected route
+  if (!session && req.nextUrl.pathname.startsWith('/dashboard')) {
+    console.log('Middleware - No session, redirecting to sign in')
+    const redirectUrl = req.nextUrl.clone()
+    redirectUrl.pathname = '/auth/signin'
+    return NextResponse.redirect(redirectUrl)
+  }
+
+  // If there's a session and the user is trying to access auth routes
+  if (session && (req.nextUrl.pathname.startsWith('/auth'))) {
+    console.log('Middleware - Has session, redirecting to dashboard')
+    const redirectUrl = req.nextUrl.clone()
+    redirectUrl.pathname = '/dashboard'
+    return NextResponse.redirect(redirectUrl)
   }
 
   return res
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/dashboard/:path*', '/auth/:path*'],
 } 

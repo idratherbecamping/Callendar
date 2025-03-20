@@ -1,33 +1,61 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const supabase = createClientComponentClient()
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
+    // Validate inputs
+    if (!email || !password) {
+      setError('Please enter both email and password')
+      setLoading(false)
+      return
+    }
+
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      console.log('Attempting to sign in with email:', email)
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password,
       })
 
-      if (error) throw error
+      if (error) {
+        console.error('Sign in error:', error)
+        throw error
+      }
 
-      router.push('/dashboard')
-      router.refresh()
+      console.log('Sign in successful:', data)
+      
+      // Verify the session is established
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      
+      if (sessionError) {
+        console.error('Error getting session:', sessionError)
+        throw sessionError
+      }
+
+      if (!session) {
+        console.error('No session found after sign in')
+        throw new Error('Failed to establish session')
+      }
+
+      console.log('Session verified:', session)
+      
+      // Force a hard refresh to ensure the middleware picks up the new session
+      window.location.href = '/dashboard'
     } catch (error: unknown) {
+      console.error('Caught error during sign in:', error)
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
       setError(errorMessage)
     } finally {
@@ -36,17 +64,17 @@ export default function SignIn() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8" suppressHydrationWarning>
+      <div className="max-w-md w-full space-y-8" suppressHydrationWarning>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
             Sign in to your account
           </h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSignIn}>
-          <div className="space-y-6">
-            <div>
-              <label htmlFor="email-address" className="block text-lg font-medium text-gray-700 mb-2">
+        <form className="mt-8 space-y-6" onSubmit={handleSignIn} suppressHydrationWarning>
+          <div className="space-y-6" suppressHydrationWarning>
+            <div suppressHydrationWarning>
+              <label htmlFor="email-address" className="block text-lg font-medium text-foreground mb-2">
                 Email Address
               </label>
               <input
@@ -55,14 +83,15 @@ export default function SignIn() {
                 type="email"
                 autoComplete="email"
                 required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-input bg-background shadow-sm focus:border-primary focus:ring-primary text-lg p-3 text-foreground"
                 placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                suppressHydrationWarning
               />
             </div>
-            <div>
-              <label htmlFor="password" className="block text-lg font-medium text-gray-700 mb-2">
+            <div suppressHydrationWarning>
+              <label htmlFor="password" className="block text-lg font-medium text-foreground mb-2">
                 Password
               </label>
               <input
@@ -71,17 +100,18 @@ export default function SignIn() {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-input bg-background shadow-sm focus:border-primary focus:ring-primary text-lg p-3 text-foreground"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                suppressHydrationWarning
               />
             </div>
           </div>
 
           {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-700">{error}</div>
+            <div className="rounded-md bg-destructive/10 p-4">
+              <div className="text-sm text-destructive">{error}</div>
             </div>
           )}
 
@@ -89,7 +119,7 @@ export default function SignIn() {
             <div className="text-lg">
               <Link
                 href="/auth/forgot-password"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
+                className="font-medium text-primary hover:text-primary/80"
               >
                 Forgot your password?
               </Link>
@@ -100,7 +130,7 @@ export default function SignIn() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
@@ -108,11 +138,11 @@ export default function SignIn() {
         </form>
 
         <div className="text-center">
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-muted-foreground">
             Don't have an account?{' '}
             <Link
               href="/auth/signup"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-medium text-primary hover:text-primary/80"
             >
               Sign up
             </Link>
