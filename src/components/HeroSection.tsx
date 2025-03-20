@@ -110,10 +110,11 @@ const HeroSection = () => {
 
       <div className="beesly-container relative z-10 text-center">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-heading">
-          Callendar AI <br /> Automated Voicemail that Books Appointments for You
+          <span className="block">Callendar AI</span>
+          <span className="block text-3xl md:text-4xl lg:text-3xl mt-4">Automated Voicemail that Books Appointments for You</span>
         </h1>
         <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-12">
-          "Never Miss a Call, Never Miss an Opportunity."
+          Never Miss a Call, Never Miss an Opportunity.
         </p>
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-5 mb-20">
@@ -146,17 +147,17 @@ const HeroSection = () => {
         </div>
 
         {/* Hero Image - Phone */}
-        <div className="relative h-72 md:h-96 max-w-md mx-auto mb-16">
+        {/* <div className="relative h-72 md:h-96 max-w-md mx-auto mb-16">
           <Image
             src="https://web-assets.same.dev/77499892/3772306543.png"
             alt="Callendar App Interface"
             fill
             className="object-contain"
           />
-        </div>
+        </div> */}
 
         {/* Partner logos */}
-        <div className="flex flex-wrap justify-center items-center gap-8 mt-12">
+        {/* <div className="flex flex-wrap justify-center items-center gap-8 mt-12">
           <Image
             src="https://web-assets.same.dev/140580300/1058212857.png"
             alt="OE logo"
@@ -171,9 +172,9 @@ const HeroSection = () => {
             height={40}
             className="opacity-70 hover:opacity-100 transition-opacity hover-scale"
           />
-        </div>
+        </div> */}
 
-        <div className="mt-16">
+        {/* <div className="mt-16">
           <span className="beesly-section-title">Voicemail Redefined</span>
           <p className="text-gray-300 max-w-3xl mx-auto mt-5 leading-relaxed">
             Since the 1970s, voicemail technology has hardly changed, failing to keep pace with our communication evolution.
@@ -181,7 +182,7 @@ const HeroSection = () => {
             perfectly aligning with the demands of modern businesses and the busy individual.
             Welcome to the future of voicemail, where every call counts and no message goes unnoticed.
           </p>
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -19,21 +19,21 @@ const Footer = () => {
             <Link href="#HIW" className="text-gray-400 hover:text-white">
               How It Works
             </Link>
-            <Link href="#Pricing" className="text-gray-400 hover:text-white">
+            {/* <Link href="#Pricing" className="text-gray-400 hover:text-white">
               Pricing
-            </Link>
+            </Link> */}
             <Link href="#FAQs" className="text-gray-400 hover:text-white">
               FAQs
             </Link>
             <a
-              href="mailto:support@callendar.ai?subject=Callendar%20Website"
+              href="mailto:gannon@callendar.ai?subject=Callendar%20Website"
               className="text-gray-400 hover:text-white"
             >
               Email Us
             </a>
           </div>
 
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             <a
               href="https://discord.gg/fuKMKxXK4u"
               target="_blank"
@@ -100,11 +100,11 @@ const Footer = () => {
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
               </svg>
             </a>
-          </div>
+          </div> */}
         </div>
 
 
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <h3 className="text-sm font-semibold mb-4">Download Callendar AI App</h3>
           <div className="flex gap-4">
             <a
@@ -132,15 +132,16 @@ const Footer = () => {
               />
             </a>
           </div>
-        </div>
+        </div> */}
 
         <div className="mt-6 flex items-center">
           <div className="text-gray-400 font-medium mr-2">Call Callendar AI:</div>
           <a
-            href="tel:+19999999999"
+            href="tel:+18775704990
+"
             className="text-beeslyYellow hover:text-beeslyYellow/80 font-semibold"
           >
-            +1 999 999 9999
+            (877) 570-4990
           </a>
         </div>
       </div>

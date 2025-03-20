@@ -25,7 +25,7 @@ const HowItWorksSection = () => {
   const steps = [
     {
       number: 1,
-      title: "Train AI Agent",
+      title: "Input your business information",
       description:
         "Add some information about yourself or your business to give the AI Agent some context when receiving calls.",
     },
@@ -33,13 +33,13 @@ const HowItWorksSection = () => {
       number: 2,
       title: "Connect Calendar",
       description:
-        "Connect your google calendar to allow the AI agent to view, edit and create events for you when it is scheduled on the call.",
+        "Connect your google calendar to allow the AI to view, edit and create events for you when it is scheduled on the call.",
     },
     {
       number: 3,
       title: "Connect Number",
       description:
-        "Connect your phone number to Beesly so that we can answer your missed calls and send you summaries on each call.",
+        "Connect your phone number to Callendar AI so that we can answer your missed calls and book appointments for you.",
     },
   ];
 

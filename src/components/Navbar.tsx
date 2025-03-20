@@ -73,12 +73,12 @@ const Navbar = () => {
             >
               How It Works
             </Link>
-            <Link
+            {/* <Link
               href="#Pricing"
               className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >
               Pricing
-            </Link>
+            </Link> */}
             <Link
               href="#FAQs"
               className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"

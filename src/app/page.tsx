@@ -39,9 +39,9 @@ export default function Home() {
         <HowItWorksSection />
       </ScrollAnimation>
 
-      <ScrollAnimation animationClass="fade-in">
+      {/* <ScrollAnimation animationClass="fade-in">
         <PricingSection />
-      </ScrollAnimation>
+      </ScrollAnimation> */}
 
       <ScrollAnimation animationClass="slide-up">
         <FAQSection />

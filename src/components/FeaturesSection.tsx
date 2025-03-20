@@ -18,16 +18,16 @@ const FeatureCard = ({ title, description }: { title: string; description: strin
 
 const FeaturesSection = () => {
   const features = [
-    {
-      title: "Summarised Call",
-      description:
-        "Get concise summaries of your calls. Quickly catch up on missed conversations with AI-powered insights, making every message clear and actionable.",
-    },
-    {
-      title: "Get Notified",
-      description:
-        "Instant notifications for every call, with critical alerts even in silent mode. Stay connected to what's important without missing a beat.",
-    },
+    // {
+    //   title: "Summarised Call",
+    //   description:
+    //     "Get concise summaries of your calls. Quickly catch up on missed conversations with AI-powered insights, making every message clear and actionable.",
+    // },
+    // {
+    //   title: "Get Notified",
+    //   description:
+    //     "Instant notifications for every call, with critical alerts even in silent mode. Stay connected to what's important without missing a beat.",
+    // },
     {
       title: "Anytime Availability",
       description:
@@ -39,18 +39,35 @@ const FeaturesSection = () => {
         "Automate your schedule with AI that manages events during calls. Create, edit, and delete appointments instantly.",
     },
     {
-      title: "Caller Memory & Context",
+      title: "Local Appointments",
       description:
-        "Our AI remembers past callers and context, personalising responses and actions for future interactions.",
+        "We only allow bookings in your area, so you can spend your time working and not driving."
     },
+    {
+      title: "Smart Travel Planning",
+      description:
+        "Automatically accounts for travel time in your schedule, eliminating the stress of rushing between appointments."
+    },
+    {
+      title: "Customizable Greetings",
+      description:
+        "Customize your greetings to match your business and brand. We offer a range of pre-made greetings or you can create your own."
+    },
+    // {
+    //   title: "Caller Memory & Context",
+    //   description:
+    //     "Our AI remembers past callers and context, personalising responses and actions for future interactions.",
+    // },
   ];
 
   const additionalFeatures = [
-    "Unlimited Calls",
-    "train your agent",
-    "Play Back Messages",
-    "Call Summary Notification",
-    "Critical Alerts",
+    // "Book Appointments",
+    // "Customizable Greetings",
+    // "Unlimited Calls",
+    // "train your agent",
+    // "Play Back Messages",
+    // "Call Summary Notification",
+    // "Critical Alerts",
   ];
 
   return (
@@ -84,7 +101,7 @@ const FeaturesSection = () => {
           ))}
         </div>
 
-        <div className="flex flex-wrap justify-center gap-5 md:gap-10 mt-20">
+        {/* <div className="flex flex-wrap justify-center gap-5 md:gap-10 mt-20">
           {additionalFeatures.map((feature, index) => (
             <div
               key={index}
@@ -109,7 +126,7 @@ const FeaturesSection = () => {
               <span>{feature}</span>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );

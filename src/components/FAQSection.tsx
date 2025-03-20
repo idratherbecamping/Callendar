@@ -15,23 +15,13 @@ const FAQSection = () => {
     {
       question: "What is Callendar?",
       answer:
-        "Beesly is an advanced AI phone call assistant designed to function as your personal assistant. It mimics human-like conversation to handle phone calls and assist you in managing tasks efficiently.",
+        "Callendar is an advanced AI phone call assistant designed to function as your personal assistant. It mimics human-like conversation to handle phone calls and assist you in booking clients when you arent able to answer the phone.",
     },
-    {
-      question: "How does Callendar work?",
-      answer:
-        "Callendar uses cutting-edge AI technology to understand and respond to natural language during phone calls. It's equipped with a diverse range of features to make your communication seamless and productive.",
-    },
-    {
-      question: "Is Callendar compatible with both iOS and Android devices",
-      answer:
-        "Yes, Callendar is designed to seamlessly operate on both iOS and Android platforms, ensuring a smooth and consistent experience regardless of your device. Whether you're using an iPhone or an Android smartphone, Beesly is made to work effortlessly, providing you with a versatile AI assistant on the go.",
-    },
-    {
-      question: "Is there a community for Callendar?",
-      answer:
-        "Yes! You can Join our vibrant Discord channel to connect with other users, share experiences, and get timely updates and support.",
-    },
+    // {
+    //   question: "How does Callendar work?",
+    //   answer:
+    //     "Callendar uses cutting-edge AI technology to book appointments ",
+    // },
   ];
 
   return (
@@ -65,7 +55,7 @@ const FAQSection = () => {
           </Accordion>
         </div>
 
-        <div className="mt-24 bg-secondary/30 rounded-xl p-8 max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center hover:bg-secondary/40 transition-all duration-300 hover:shadow-lg">
+        {/* <div className="mt-24 bg-secondary/30 rounded-xl p-8 max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center hover:bg-secondary/40 transition-all duration-300 hover:shadow-lg">
           <div className="md:w-1/2">
             <span className="text-xs text-beeslyYellow">Join our Discord Channel</span>
             <h3 className="text-2xl font-bold mt-3 mb-4">
@@ -87,7 +77,7 @@ const FAQSection = () => {
               className="rounded-xl object-cover hover-scale transition-all duration-500"
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
