@@ -9,13 +9,16 @@ const webhookUrl = process.env.TWILIO_WEBHOOK_URL; // Your TwiML webhook URL
 
 export async function POST(request: Request) {
   try {
-    // You can extract any required data from the request if needed
-    // const { phoneNumber } = await request.json();
+    const { phoneNumber } = await request.json();
     
-    // Default phone number to call (or use the one from request)
-    const toPhoneNumber = process.env.DEFAULT_TO_PHONE_NUMBER;
+    if (!phoneNumber) {
+      return NextResponse.json(
+        { error: 'Phone number is required' },
+        { status: 400 }
+      );
+    }
     
-    if (!accountSid || !authToken || !twilioNumber || !webhookUrl || !toPhoneNumber) {
+    if (!accountSid || !authToken || !twilioNumber || !webhookUrl) {
       return NextResponse.json(
         { error: 'Missing Twilio configuration' },
         { status: 500 }
@@ -26,7 +29,7 @@ export async function POST(request: Request) {
     
     // Make the call
     const call = await client.calls.create({
-      to: toPhoneNumber,
+      to: phoneNumber,
       from: twilioNumber,
       url: webhookUrl, // This should point to your TwiML webhook
     });

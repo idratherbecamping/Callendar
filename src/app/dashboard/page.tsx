@@ -191,15 +191,21 @@ export default function Dashboard() {
               <h2 className="text-lg font-medium text-foreground mb-4">Business Hours</h2>
               <dl className="space-y-2">
                 <div className="flex justify-between">
-                  <dt className="text-sm font-medium text-muted-foreground">{profile.business_hours_local}</dt>
+                  {/* <dt className="text-sm font-medium text-muted-foreground">Opening Time</dt> */}
                   <dd className="text-sm text-foreground">
-                    {/* {profile.business_hours_local} */}
+                    {/* {JSON.stringify(profile.business_hours_local.open)} */}
                   </dd>
                 </div>
                 <div className="flex justify-between">
                   {/* <dt className="text-sm font-medium text-muted-foreground">Closing Time</dt> */}
                   <dd className="text-sm text-foreground">
                     {/* {profile.business_hours_local.close} */}
+                  </dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-sm font-medium text-muted-foreground">Business Hours</dt>
+                  <dd className="text-sm text-foreground">
+                    {JSON.stringify(profile.business_hours_local)}
                   </dd>
                 </div>
               </dl>
