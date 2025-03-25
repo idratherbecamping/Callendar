@@ -214,6 +214,22 @@ function SignUpContent() {
         throw new Error(data.error || 'Failed to create account');
       }
 
+      // Send SMS notification
+      const smsResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account-create/send-sms-twilio-link`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to_number: formData.phoneNumber
+        }),
+      });
+
+      if (!smsResponse.ok) {
+        console.error('Failed to send SMS notification');
+        // Don't throw here - we still want to proceed with account creation
+      }
+
       // Clean up localStorage
       localStorage.removeItem('signupFormData')
 
