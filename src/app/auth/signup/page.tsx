@@ -215,7 +215,7 @@ function SignUpContent() {
       }
 
       // Send SMS notification
-      const smsResponse = await fetch(`/api/twilio/send-sms`, {
+      const smsResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account-create/send-sms-twilio-link`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
