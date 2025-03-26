@@ -33,7 +33,7 @@ function SignUpContent() {
     phoneNumber: '',
     businessAddress: '',
     maxServiceDistance: '25',
-    typicalServiceTime: '60',
+    typicalServiceTime: '90',
     localTimeZone: 'US/Pacific', // Default to Pacific time
     businessHoursLocal: {
       open: '09:00:00',
@@ -440,7 +440,7 @@ function SignUpContent() {
             </div>
             <div>
               <label htmlFor="typicalServiceTime" className="block text-lg font-medium text-gray-700 mb-2">
-                Typical Service Time (minutes)
+                Typical Service Time (minutes) - Including Travel Time
               </label>
               <input
                 type="number"
