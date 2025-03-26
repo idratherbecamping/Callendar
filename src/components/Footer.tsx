@@ -25,6 +25,9 @@ const Footer = () => {
             <Link href="#FAQs" className="text-gray-400 hover:text-white">
               FAQs
             </Link>
+            <Link href="/privacy-policy" className="text-gray-400 hover:text-white">
+              Privacy Policy
+            </Link>
             <a
               href="mailto:gannon@callendar.ai?subject=Callendar%20Website"
               className="text-gray-400 hover:text-white"

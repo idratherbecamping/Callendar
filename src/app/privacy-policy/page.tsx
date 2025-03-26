@@ -1,0 +1,84 @@
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | Callendar AI",
+  description: "Privacy policy for Callendar AI",
+}
+
+export default function PrivacyPolicy() {
+  return (
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <h1 className="text-3xl font-bold mb-8 text-black">Privacy Policy for Callendar LLC</h1>
+      
+      <div className="space-y-6">
+        <div className="text-sm text-gray-500 mb-6">
+          Effective Date: 03/25/2025
+        </div>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Introduction</h2>
+          <p className="text-gray-700">
+            This Privacy Policy describes how Callendar LLC ("we," "us," "our"), operating through Callendar.ai, collects, uses, and protects your information when you use our scheduling service. Callendar.ai is an AI-powered scheduling assistant designed to streamline appointments for small businesses by integrating with Google Calendar.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Information We Collect and How We Use It</h2>
+          <p className="text-gray-700">
+            When you authorize Callendar.ai to access your Google Calendar via the Google Calendar API, you grant us permission to:
+          </p>
+          <ul className="list-disc ml-6 mt-2 text-gray-700">
+            <li>View existing calendar events to determine availability.</li>
+            <li>Create new calendar events based on scheduled appointments.</li>
+          </ul>
+          <p className="text-gray-700 mt-4">
+            We use this information solely to provide our scheduling service, specifically to find available time slots and manage appointments efficiently, considering current events and necessary commute time.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Data Storage and Security</h2>
+          <p className="text-gray-700">
+            Information retrieved via the Google Calendar API, including event details, availability, and scheduling data, is stored securely on Supabase. We adhere to industry-standard security protocols to protect your data against unauthorized access, disclosure, alteration, or destruction.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Limitations on Data Use</h2>
+          <p className="text-gray-700">
+            We do not use your calendar information for any purpose other than managing appointments and determining availability. We do not sell, share, or otherwise distribute your calendar data to third parties for marketing or advertising purposes.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Your Consent</h2>
+          <p className="text-gray-700">
+            By using Callendar.ai and authorizing access to your Google Calendar, you consent to this Privacy Policy and our collection and use of your information as described herein.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Changes to this Policy</h2>
+          <p className="text-gray-700">
+            We may occasionally update this Privacy Policy to reflect changes in our practices or applicable regulations. We encourage you to periodically review this Privacy Policy for updates. Continued use of our service after changes indicates your acceptance of the revised policy.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Contact Us</h2>
+          <p className="text-gray-700">
+            If you have questions or concerns about this Privacy Policy or our practices, please contact us at:
+          </p>
+          <div className="mt-2 text-gray-700">
+            <p>Callendar LLC</p>
+            <p>Gannon Gesiriech</p>
+            <p>gannon@callendar.ai</p>
+          </div>
+          <p className="text-gray-700 mt-4">
+            Thank you for trusting Callendar.ai with your scheduling needs.
+          </p>
+        </section>
+      </div>
+    </div>
+  )
+} 

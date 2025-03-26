@@ -574,6 +574,12 @@ function SignUpContent() {
                   Update appointment details
                 </li>
               </ul>
+              <p className="mt-4 text-sm text-gray-500">
+                By connecting your calendar, you agree to our{' '}
+                <Link href="/privacy-policy" className="text-indigo-600 hover:text-indigo-500">
+                  Privacy Policy
+                </Link>
+              </p>
             </div>
             
             {formData.calendarConnected ? (
