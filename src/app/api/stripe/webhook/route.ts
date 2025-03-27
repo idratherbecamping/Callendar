@@ -89,18 +89,18 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
     
     // If not found, check if subscription has metadata with user ID
     if (subscription.metadata && subscription.metadata.user_id) {
-      const userId = subscription.metadata.user_id;
+      const userEmail = subscription.metadata.user_id;
       
-      // Try to find user by auth_id
-      const { data: userByAuthId, error: authIdError } = await supabase
+      // Try to find user by email instead of auth_id
+      const { data: userByEmail, error: emailError } = await supabase
         .from('users')
         .select('id')
-        .eq('auth_id', userId)
+        .eq('email', userEmail)
         .single();
         
-      if (!authIdError && userByAuthId) {
-        // Found user by auth_id, update their stripe_customer_id
-        user = userByAuthId;
+      if (!emailError && userByEmail) {
+        // Found user by email, update their stripe_customer_id
+        user = userByEmail;
         
         // Update user with the stripe_customer_id
         await supabase
@@ -142,6 +142,18 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
 async function handleSubscriptionCancellation(subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string;
   
+  // First try to find the user by customer ID
+  const { data: user, error: lookupError } = await supabase
+    .from('users')
+    .select('id')
+    .eq('stripe_customer_id', customerId)
+    .single();
+  
+  if (lookupError || !user) {
+    console.error('Could not find user for subscription cancellation:', subscription.id);
+    return;
+  }
+  
   // Update the subscription status in the database
   const { error } = await supabase
     .from('users')
@@ -150,7 +162,7 @@ async function handleSubscriptionCancellation(subscription: Stripe.Subscription)
       subscription_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
       updated_at: new Date().toISOString(),
     })
-    .eq('stripe_customer_id', customerId);
+    .eq('id', user.id);
 
   if (error) {
     console.error('Error updating canceled subscription in database:', error);
@@ -161,6 +173,18 @@ async function handleSubscriptionCancellation(subscription: Stripe.Subscription)
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
   const customerId = invoice.customer as string;
   
+  // First try to find the user by customer ID
+  const { data: user, error: lookupError } = await supabase
+    .from('users')
+    .select('id')
+    .eq('stripe_customer_id', customerId)
+    .single();
+  
+  if (lookupError || !user) {
+    console.error('Could not find user for invoice payment:', invoice.id);
+    return;
+  }
+  
   // Update payment status in the database
   const { error } = await supabase
     .from('users')
@@ -169,7 +193,7 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
       last_payment_date: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
-    .eq('stripe_customer_id', customerId);
+    .eq('id', user.id);
 
   if (error) {
     console.error('Error updating payment status in database:', error);
@@ -180,6 +204,18 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
 async function handlePaymentFailed(invoice: Stripe.Invoice) {
   const customerId = invoice.customer as string;
   
+  // First try to find the user by customer ID
+  const { data: user, error: lookupError } = await supabase
+    .from('users')
+    .select('id')
+    .eq('stripe_customer_id', customerId)
+    .single();
+  
+  if (lookupError || !user) {
+    console.error('Could not find user for failed payment:', invoice.id);
+    return;
+  }
+  
   // Update payment status in the database
   const { error } = await supabase
     .from('users')
@@ -187,7 +223,7 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
       payment_status: 'failed',
       updated_at: new Date().toISOString(),
     })
-    .eq('stripe_customer_id', customerId);
+    .eq('id', user.id);
 
   if (error) {
     console.error('Error updating failed payment status in database:', error);

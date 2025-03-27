@@ -35,7 +35,6 @@ export async function POST(request: Request) {
       .insert([
         {
           id: user?.user?.id,
-          auth_id: user?.user?.id, // Add auth_id to match user with auth table
           email: userData.email,
           business_name: userData.businessName,
           phone_number: userData.phoneNumber,
