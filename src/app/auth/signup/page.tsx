@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import AddressValidator from '@/components/AddressValidator'
 
-type Step = 'account' | 'business' | 'location' | 'hours' | 'calendar'
+type Step = 'account' | 'service_type' | 'business' | 'location' | 'hours' | 'calendar'
 
 // Validation functions
 const isValidEmail = (email: string): boolean => {
@@ -41,7 +41,8 @@ function SignUpContent() {
     },
     calendarConnected: false,
     googleAuthToken: null,
-    textMessageConsent: false // Add new field for text message consent
+    textMessageConsent: false, // Add new field for text message consent
+    service_type: '' // Add new field for service type
   })
   const [addressIsValid, setAddressIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null)
@@ -58,7 +59,7 @@ function SignUpContent() {
         setFormData(parsedData)
         
         // If returning from calendar connection, set address as valid
-        if (parsedData.businessAddress) {
+        if (parsedData.businessAddress || parsedData.service_type === 'Scheduler') {
           setAddressIsValid(true)
         }
       } catch (e) {
@@ -68,7 +69,7 @@ function SignUpContent() {
 
     // Check if URL has step parameter
     const stepParam = searchParams.get('step')
-    if (stepParam && ['account', 'business', 'location', 'hours', 'calendar'].includes(stepParam as Step)) {
+    if (stepParam && ['account', 'service_type', 'business', 'location', 'hours', 'calendar'].includes(stepParam as Step)) {
       setStep(stepParam as Step)
     }
   }, [searchParams])
@@ -126,6 +127,14 @@ function SignUpContent() {
       }
     }
     
+    // Validate service type selection
+    if (step === 'service_type') {
+      if (!formData.service_type) {
+        setError('Please select a service type');
+        return;
+      }
+    }
+    
     // For the business step, validate required fields
     if (step === 'business') {
       if (!formData.businessName.trim()) {
@@ -138,6 +147,7 @@ function SignUpContent() {
         return;
       }
       
+      // Business address is required for both service types
       if (!addressIsValid) {
         setError('Please enter a valid business address');
         return;
@@ -146,10 +156,18 @@ function SignUpContent() {
     
     switch (step) {
       case 'account':
+        setStep('service_type')
+        break
+      case 'service_type':
         setStep('business')
         break
       case 'business':
-        setStep('location')
+        // Skip location step for Scheduler service type
+        if (formData.service_type === 'Scheduler') {
+          setStep('hours')
+        } else {
+          setStep('location')
+        }
         break
       case 'location':
         setStep('hours')
@@ -167,14 +185,22 @@ function SignUpContent() {
 
   const handleBack = () => {
     switch (step) {
-      case 'business':
+      case 'service_type':
         setStep('account')
+        break
+      case 'business':
+        setStep('service_type')
         break
       case 'location':
         setStep('business')
         break
       case 'hours':
-        setStep('location')
+        // Go back to location or business based on service type
+        if (formData.service_type === 'Scheduler') {
+          setStep('business')
+        } else {
+          setStep('location')
+        }
         break
       case 'calendar':
         setStep('hours')
@@ -193,6 +219,11 @@ function SignUpContent() {
     setError(null)
 
     try {
+      // If service type is Scheduler, make sure the address validation passes
+      if (formData.service_type === 'Scheduler') {
+        setAddressIsValid(true);
+      }
+      
       // Use the server API endpoint to create the user and profile
       const response = await fetch('/api/user/create', {
         method: 'POST',
@@ -337,6 +368,106 @@ function SignUpContent() {
           </div>
         )
 
+      case 'service_type':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Select Your Service Type</h3>
+              <div className="grid grid-cols-1 gap-4">
+                <div 
+                  className={`border rounded-lg p-4 cursor-pointer hover:border-indigo-500 transition-colors ${formData.service_type === 'House Call' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  onClick={() => setFormData(prev => ({ ...prev, service_type: 'House Call' }))}
+                >
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5 mt-1">
+                      <input
+                        type="radio"
+                        name="service_type"
+                        id="houseCall"
+                        checked={formData.service_type === 'House Call'}
+                        onChange={() => setFormData(prev => ({ ...prev, service_type: 'House Call' }))}
+                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                      />
+                    </div>
+                    <div className="ml-3 w-full">
+                      <div className="flex flex-wrap justify-between items-center">
+                        <label htmlFor="houseCall" className="text-lg font-medium text-gray-900">House Call</label>
+                        <span className="bg-indigo-100 text-indigo-800 text-sm font-medium px-3 py-1 rounded-full">
+                          Travel to customer locations
+                        </span>
+                      </div>
+                      <p className="text-gray-500 mt-1 text-sm">
+                        For services provided at your customers' locations (pool cleaners, plumbers, etc.)
+                      </p>
+                      
+                      <details className="mt-2 text-sm">
+                        <summary className="text-indigo-600 cursor-pointer font-medium">Read more</summary>
+                        <div className="mt-2 pl-2 border-l-2 border-gray-200 text-gray-600">
+                          Ideal for pool cleaners, electricians, plumbers, home services, etc. Customers will provide their
+                          address, and you'll be able to manage travel time and distance for optimal scheduling.
+                        </div>
+                      </details>
+                    </div>
+                  </div>
+                </div>
+                
+                <div 
+                  className={`border rounded-lg p-4 cursor-pointer hover:border-indigo-500 transition-colors ${formData.service_type === 'Scheduler' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  onClick={() => setFormData(prev => ({ ...prev, service_type: 'Scheduler' }))}
+                >
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5 mt-1">
+                      <input
+                        type="radio"
+                        name="service_type"
+                        id="scheduler"
+                        checked={formData.service_type === 'Scheduler'}
+                        onChange={() => setFormData(prev => ({ ...prev, service_type: 'Scheduler' }))}
+                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                      />
+                    </div>
+                    <div className="ml-3 w-full">
+                      <div className="flex flex-wrap justify-between items-center">
+                        <label htmlFor="scheduler" className="text-lg font-medium text-gray-900">Scheduler</label>
+                        <span className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
+                          Customers visit you or virtual
+                        </span>
+                      </div>
+                      <p className="text-gray-500 mt-1 text-sm">
+                        For services where customers come to you or meet virtually
+                      </p>
+                      
+                      <details className="mt-2 text-sm">
+                        <summary className="text-indigo-600 cursor-pointer font-medium">Read more</summary>
+                        <div className="mt-2 pl-2 border-l-2 border-gray-200 text-gray-600">
+                          Ideal for accountants, consultants, salons, or any business where clients visit your office
+                          or connect with you virtually. Focuses on calendar booking without travel calculations.
+                        </div>
+                      </details>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )
+
       case 'business':
         return (
           <div className="space-y-6">
@@ -398,7 +529,10 @@ function SignUpContent() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                This is your business location - used for estimating travel distance and time to your customers.
+                {formData.service_type === 'House Call' 
+                  ? "This is your business location - used for estimating travel distance and time to your customers."
+                  : "This is your business location - where customers will visit you or your headquarters for virtual services."
+                }
               </p>
             </div>
             <div className="flex justify-between">
@@ -638,7 +772,7 @@ function SignUpContent() {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                disabled={loading || !formData.calendarConnected || !formData.textMessageConsent}
+                disabled={loading || !formData.calendarConnected || !formData.textMessageConsent || !formData.service_type}
                 className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Creating Account...' : 'Create Account'}
@@ -657,7 +791,13 @@ function SignUpContent() {
             Create your account
           </h2>
           <p className="mt-2 text-center text-lg text-gray-600">
-            Step {['account', 'business', 'location', 'hours', 'calendar'].indexOf(step) + 1} of 5
+            {formData.service_type === 'Scheduler' ? (
+              // For Scheduler: 5 steps (account, service_type, business, hours, calendar)
+              `Step ${['account', 'service_type', 'business', 'hours', 'calendar'].indexOf(step) + 1} of 5`
+            ) : (
+              // For House Call or initial state: 6 steps (account, service_type, business, location, hours, calendar)
+              `Step ${['account', 'service_type', 'business', 'location', 'hours', 'calendar'].indexOf(step) + 1} of 6`
+            )}
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
