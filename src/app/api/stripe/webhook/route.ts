@@ -76,11 +76,13 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string;
   
   // First, try to find the user by stripe_customer_id
-  let { data: user, error } = await supabase
+  const { data, error } = await supabase
     .from('users')
     .select('id')
     .eq('stripe_customer_id', customerId)
     .single();
+    
+  let user = data;
 
   if (error || !user) {
     console.log('User not found by stripe_customer_id, attempting to match by custom metadata');
@@ -155,7 +157,7 @@ async function handleSubscriptionCancellation(subscription: Stripe.Subscription)
   }
 }
 
-// Helper function to handle successful invoice payments
+// Helper function to handle invoice payments
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
   const customerId = invoice.customer as string;
   
