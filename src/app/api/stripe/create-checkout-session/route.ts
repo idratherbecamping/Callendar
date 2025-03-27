@@ -72,7 +72,9 @@ export async function POST(req: NextRequest) {
       allow_promotion_codes: true,
       billing_address_collection: 'auto',
       client_reference_id: customer.id,
-      success_url: `${returnUrl}?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: returnUrl.includes('#') 
+        ? `${returnUrl}?session_id={CHECKOUT_SESSION_ID}` 
+        : `${returnUrl}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: returnUrl,
     });
 
