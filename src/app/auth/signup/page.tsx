@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import AddressValidator from '@/components/AddressValidator'
 
-type Step = 'account' | 'service_type' | 'business' | 'location' | 'hours' | 'calendar'
+type Step = 'account' | 'service_type' | 'business' | 'location' | 'hours' | 'calendar' | 'payment'
 
 // Validation functions
 const isValidEmail = (email: string): boolean => {
@@ -42,7 +42,10 @@ function SignUpContent() {
     calendarConnected: false,
     googleAuthToken: null,
     textMessageConsent: false, // Add new field for text message consent
-    service_type: '' // Add new field for service type
+    service_type: '', // Add new field for service type
+    subscriptionId: '', // Add field for Stripe subscription ID
+    customerId: '', // Add field for Stripe customer ID
+    paymentComplete: false // Track payment completion
   })
   const [addressIsValid, setAddressIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null)
@@ -175,6 +178,9 @@ function SignUpContent() {
       case 'hours':
         setStep('calendar')
         break
+      case 'calendar':
+        setStep('payment')
+        break
       default:
         break
     }
@@ -205,6 +211,9 @@ function SignUpContent() {
       case 'calendar':
         setStep('hours')
         break
+      case 'payment':
+        setStep('calendar')
+        break
       default:
         break
     }
@@ -225,6 +234,13 @@ function SignUpContent() {
         setAddressIsValid(true);
       }
       
+      // Verify payment is complete
+      if (!formData.paymentComplete) {
+        setError('Payment is required to create your account');
+        setLoading(false);
+        return;
+      }
+      
       // Use the server API endpoint to create the user and profile
       const response = await fetch('/api/user/create', {
         method: 'POST',
@@ -236,7 +252,11 @@ function SignUpContent() {
             email: formData.email,
             password: formData.password,
           },
-          userData: formData
+          userData: formData,
+          paymentData: {
+            customerId: formData.customerId,
+            subscriptionId: formData.subscriptionId
+          }
         }),
       });
       
@@ -318,6 +338,189 @@ function SignUpContent() {
     }));
   };
 
+  // Handle Stripe checkout session
+  const handleStripeCheckout = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Store the form data in localStorage before redirecting to Stripe
+      localStorage.setItem('signupFormData', JSON.stringify(formData));
+      
+      // Create a checkout session on the server
+      const response = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          businessName: formData.businessName,
+          service_type: formData.service_type,
+          returnUrl: `${window.location.origin}/auth/signup?step=payment`
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+      
+      // Redirect to Stripe Checkout
+      window.location.href = data.checkoutUrl;
+      
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred with payment';
+      setError(errorMessage);
+      setLoading(false);
+    }
+  };
+
+  // Check payment status from URL when returning from Stripe
+  useEffect(() => {
+    // Only run if we're on the payment step
+    if (step === 'payment') {
+      const sessionId = searchParams.get('session_id');
+      
+      if (sessionId) {
+        // Verify the payment was successful
+        const verifyPayment = async () => {
+          setLoading(true);
+          try {
+            const response = await fetch(`/api/stripe/verify-session?session_id=${sessionId}`);
+            const data = await response.json();
+            
+            if (response.ok && data.success) {
+              // Update form data with Stripe information
+              setFormData(prev => ({
+                ...prev,
+                subscriptionId: data.subscriptionId || '',
+                customerId: data.customerId || '',
+                paymentComplete: true
+              }));
+            } else {
+              setError('Payment verification failed. Please try again.');
+            }
+          } catch (error) {
+            setError('Failed to verify payment status');
+          } finally {
+            setLoading(false);
+          }
+        };
+        
+        verifyPayment();
+      }
+    }
+  }, [step, searchParams]);
+
+  // Create a new component for the payment step
+  const PaymentStep = () => {
+    return (
+      <div className="space-y-6">
+        <div className="text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+          <h3 className="mt-4 text-xl font-medium text-gray-900">Payment Information</h3>
+          <p className="mt-2 text-sm text-gray-500">
+            Subscribe to our service to continue with account creation.
+          </p>
+        </div>
+        
+        {formData.paymentComplete ? (
+          <div>
+            <div className="bg-green-50 p-4 rounded-md">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-green-800">Payment successfully processed!</p>
+                  <p className="mt-1 text-xs text-green-700">Your subscription is now active.</p>
+                </div>
+              </div>
+            </div>
+            
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full mt-4 flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              {loading ? 'Creating Account...' : 'Create Account'}
+            </button>
+          </div>
+        ) : (
+          <div>
+            <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
+              <h4 className="text-lg font-medium text-gray-700">Subscription Details</h4>
+              <p className="text-sm text-gray-500 mt-2">
+                <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">1-MONTH FREE TRIAL</span>{' '}
+                then $30.00/month
+              </p>
+              <ul className="mt-4 text-sm text-gray-600 space-y-2">
+                <li className="flex">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Unlimited appointments
+                </li>
+                <li className="flex">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Google Calendar integration
+                </li>
+                <li className="flex">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  SMS notifications
+                </li>
+                <li className="flex">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Customer management
+                </li>
+              </ul>
+              <p className="mt-4 text-xs text-gray-500">Cancel anytime during your trial or after - no commitment.</p>
+            </div>
+            
+            <button
+              type="button"
+              onClick={handleStripeCheckout}
+              disabled={loading}
+              className="w-full mt-4 flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              {loading ? 'Processing...' : 'Start Free Trial'}
+            </button>
+            <p className="text-center text-xs text-gray-500 mt-2">
+              Secure payment processing by Stripe
+            </p>
+            <div className="mt-4 flex justify-center">
+              <img src="/stripe-badges.png" alt="Secure payment methods" className="h-8" />
+            </div>
+          </div>
+        )}
+        
+        <div className="flex justify-between">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Back
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  // Update renderStep to include the payment step
   const renderStep = () => {
     switch (step) {
       case 'account':
@@ -771,16 +974,18 @@ function SignUpContent() {
                 Back
               </button>
               <button
-                type="submit"
-                onClick={handleSubmit}
-                disabled={loading || !formData.calendarConnected || !formData.textMessageConsent || !formData.service_type}
-                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                type="button"
+                onClick={handleNext}
+                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                {loading ? 'Creating Account...' : 'Create Account'}
+                Next
               </button>
             </div>
           </div>
         )
+
+      case 'payment':
+        return <PaymentStep />;
     }
   }
 
