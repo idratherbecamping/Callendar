@@ -50,8 +50,6 @@ export async function POST(request: Request) {
           stripe_customer_id: paymentData?.customerId || null,
           stripe_subscription_id: paymentData?.subscriptionId || null,
           subscription_status: 'trialing', // Default to trialing for new users
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
         },
       ]);
 

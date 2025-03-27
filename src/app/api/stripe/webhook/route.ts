@@ -106,8 +106,7 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
         await supabase
           .from('users')
           .update({ 
-            stripe_customer_id: customerId,
-            updated_at: new Date().toISOString()
+            stripe_customer_id: customerId
           })
           .eq('id', user.id);
       }
@@ -128,8 +127,7 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
       subscription_status: subscription.status,
       subscription_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
       subscription_cancel_at_period_end: subscription.cancel_at_period_end,
-      trial_end: subscription.trial_end ? new Date(subscription.trial_end * 1000).toISOString() : null,
-      updated_at: new Date().toISOString(),
+      trial_end: subscription.trial_end ? new Date(subscription.trial_end * 1000).toISOString() : null
     })
     .eq('id', user.id);
 
@@ -159,8 +157,7 @@ async function handleSubscriptionCancellation(subscription: Stripe.Subscription)
     .from('users')
     .update({
       subscription_status: 'canceled',
-      subscription_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-      updated_at: new Date().toISOString(),
+      subscription_period_end: new Date(subscription.current_period_end * 1000).toISOString()
     })
     .eq('id', user.id);
 
@@ -190,8 +187,7 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
     .from('users')
     .update({
       payment_status: 'paid',
-      last_payment_date: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      last_payment_date: new Date().toISOString()
     })
     .eq('id', user.id);
 
@@ -220,8 +216,7 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
   const { error } = await supabase
     .from('users')
     .update({
-      payment_status: 'failed',
-      updated_at: new Date().toISOString(),
+      payment_status: 'failed'
     })
     .eq('id', user.id);
 
