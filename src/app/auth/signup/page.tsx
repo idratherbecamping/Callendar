@@ -72,7 +72,7 @@ function SignUpContent() {
 
     // Check if URL has step parameter
     const stepParam = searchParams.get('step')
-    if (stepParam && ['account', 'service_type', 'business', 'location', 'hours', 'calendar'].includes(stepParam as Step)) {
+    if (stepParam && ['account', 'service_type', 'business', 'location', 'hours', 'calendar', 'payment'].includes(stepParam as Step)) {
       setStep(stepParam as Step)
     }
   }, [searchParams])
@@ -347,6 +347,11 @@ function SignUpContent() {
       // Store the form data in localStorage before redirecting to Stripe
       localStorage.setItem('signupFormData', JSON.stringify(formData));
       
+      // Using hash-based redirect to avoid URL parameter issues
+      const returnUrl = `${window.location.origin}/auth/signup#payment`;
+      
+      console.log("Creating checkout session with returnUrl:", returnUrl);
+      
       // Create a checkout session on the server
       const response = await fetch('/api/stripe/create-checkout-session', {
         method: 'POST',
@@ -357,11 +362,12 @@ function SignUpContent() {
           email: formData.email,
           businessName: formData.businessName,
           service_type: formData.service_type,
-          returnUrl: `${window.location.origin}/auth/signup?step=payment`
+          returnUrl: returnUrl
         }),
       });
       
       const data = await response.json();
+      console.log("Checkout session created:", data);
       
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create checkout session');
@@ -381,32 +387,43 @@ function SignUpContent() {
   useEffect(() => {
     // Only run if we're on the payment step
     if (step === 'payment') {
+      console.log("On payment step, checking for session_id");
+      
       // Check for session_id in URL parameters
       // First try normal way
       let sessionId = searchParams.get('session_id');
+      console.log("Session ID from normal params:", sessionId);
       
       // If not found, try to handle malformed URL with two question marks
       if (!sessionId) {
         // Parse the full URL to handle potential second ? instead of &
         const url = window.location.href;
+        console.log("Full URL:", url);
         const secondQuestionMarkIndex = url.indexOf('?', url.indexOf('?') + 1);
         
         if (secondQuestionMarkIndex !== -1) {
           const paramString = url.substring(secondQuestionMarkIndex + 1);
+          console.log("Parameter string after second ?:", paramString);
           const params = new URLSearchParams(paramString);
           sessionId = params.get('session_id');
+          console.log("Session ID from second params:", sessionId);
         }
       }
       
       if (sessionId) {
+        console.log("Found session ID, verifying payment:", sessionId);
+        
         // Verify the payment was successful
         const verifyPayment = async () => {
           setLoading(true);
           try {
+            console.log("Sending verification request for session:", sessionId);
             const response = await fetch(`/api/stripe/verify-session?session_id=${sessionId}`);
             const data = await response.json();
+            console.log("Verification response:", data);
             
             if (response.ok && data.success) {
+              console.log("Payment verified successfully");
               // Update form data with Stripe information
               const updatedFormData = {
                 ...formData,
@@ -415,10 +432,12 @@ function SignUpContent() {
                 paymentComplete: true
               };
               
+              console.log("Updated form data:", updatedFormData);
               setFormData(updatedFormData);
               
               // Automatically create the account once payment is verified
               try {
+                console.log("Attempting to create user account");
                 setError(null);
                 
                 // Use the server API endpoint to create the user and profile
@@ -441,11 +460,14 @@ function SignUpContent() {
                 });
                 
                 const createData = await createResponse.json();
+                console.log("User creation response:", createData);
                 
                 if (!createResponse.ok) {
+                  console.error("Account creation failed:", createData);
                   throw new Error(createData.error || 'Failed to create account');
                 }
                 
+                console.log("User created successfully, sending SMS");
                 // Send SMS notification
                 try {
                   const smsResponse = await fetch(`/api/proxy?endpoint=/account-create/send-sms-twilio-link`, {
@@ -461,6 +483,8 @@ function SignUpContent() {
                   if (!smsResponse.ok) {
                     console.error('Failed to send SMS notification');
                     // Don't throw here - we still want to proceed with account creation
+                  } else {
+                    console.log("SMS sent successfully");
                   }
                 } catch (smsError) {
                   console.error('SMS error:', smsError);
@@ -469,29 +493,75 @@ function SignUpContent() {
 
                 // Clean up localStorage
                 localStorage.removeItem('signupFormData');
+                console.log("Redirecting to dashboard");
 
                 // Redirect to dashboard
                 router.push('/dashboard');
                 router.refresh();
               } catch (createError: unknown) {
                 const errorMessage = createError instanceof Error ? createError.message : 'An unknown error occurred';
+                console.error("Account creation error:", errorMessage);
                 setError(`Payment verified but account creation failed: ${errorMessage}`);
                 setLoading(false);
               }
             } else {
+              console.error("Payment verification failed:", data);
               setError('Payment verification failed. Please try again.');
               setLoading(false);
             }
           } catch (error) {
+            console.error("Payment verification error:", error);
             setError('Failed to verify payment status');
             setLoading(false);
           }
         };
         
         verifyPayment();
+      } else {
+        console.log("No session ID found in URL parameters");
       }
+    } else {
+      console.log("Not on payment step, current step:", step);
     }
   }, [step, searchParams, formData, router]);
+
+  // Listen for hash changes to handle payment step
+  useEffect(() => {
+    const handleHashChange = () => {
+      console.log("Hash changed:", window.location.hash);
+      if (window.location.hash === '#payment') {
+        console.log("Setting step to payment from hash");
+        setStep('payment');
+        
+        // Extract session_id from URL parameters if present
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+        console.log("Session ID from URL params after hash change:", sessionId);
+        
+        // If session_id exists in URL, update it properly in the URL
+        if (sessionId) {
+          console.log("Updating URL with session_id:", sessionId);
+          // Replace the URL with proper parameters to avoid issues
+          window.history.replaceState(
+            null, 
+            '', 
+            `${window.location.pathname}?step=payment&session_id=${sessionId}`
+          );
+        }
+      }
+    };
+    
+    // Handle initial hash
+    handleHashChange();
+    
+    // Add event listener for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
 
   // Create a new component for the payment step
   const PaymentStep = () => {
