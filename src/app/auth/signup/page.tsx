@@ -239,6 +239,12 @@ function SignUpContent() {
         setAddressIsValid(true);
       }
       
+      // Create a modified userData object with the service_type value without quotes
+      const modifiedUserData = {
+        ...formData,
+        service_type: formData.service_type.replace(/['"]/g, '') // Remove any quotes
+      };
+      
       // Use the server API endpoint to create the user and profile
       const response = await fetch('/api/user/create', {
         method: 'POST',
@@ -250,7 +256,7 @@ function SignUpContent() {
             email: formData.email,
             password: formData.password,
           },
-          userData: formData
+          userData: modifiedUserData
         }),
       });
       
