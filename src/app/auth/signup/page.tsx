@@ -266,7 +266,7 @@ function SignUpContent() {
     // Redirect to Google OAuth URL
     const googleAuthUrl = 
       'https://accounts.google.com/o/oauth2/v2/auth?' +
-      'scope=https://www.googleapis.com/auth/calendar.events&' +
+      'scope=https://www.googleapis.com/auth/calendar&' +
       'access_type=offline&' +
       'prompt=consent&' +
       'include_granted_scopes=true&' +
