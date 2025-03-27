@@ -445,84 +445,104 @@ function SignUpContent() {
         
         if (response.ok && data.success) {
           console.log("Payment verified successfully");
-          // Update form data with Stripe information
-          const updatedFormData = {
-            ...formData,
-            subscriptionId: data.subscriptionId || '',
-            customerId: data.customerId || '',
-            paymentComplete: true
-          };
           
-          console.log("Updated form data:", updatedFormData);
-          setFormData(updatedFormData);
+          // Get the stored form data from localStorage
+          const storedDataJson = localStorage.getItem('signupFormData');
+          if (!storedDataJson) {
+            console.error("No stored form data found for account creation");
+            setError("Could not find your signup information. Please try again.");
+            setLoading(false);
+            return;
+          }
           
-          // Automatically create the account once payment is verified
+          // Parse the stored form data
           try {
-            console.log("Attempting to create user account");
-            setError(null);
+            const storedFormData = JSON.parse(storedDataJson);
+            console.log("Using stored form data for account creation:", storedFormData);
             
-            // Use the server API endpoint to create the user and profile
-            const createResponse = await fetch('/api/user/create', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                authData: {
-                  email: updatedFormData.email,
-                  password: updatedFormData.password,
-                },
-                userData: updatedFormData,
-                paymentData: {
-                  customerId: updatedFormData.customerId,
-                  subscriptionId: updatedFormData.subscriptionId
-                }
-              }),
-            });
+            // Update form data with Stripe information
+            const updatedFormData = {
+              ...storedFormData,
+              subscriptionId: data.subscriptionId || '',
+              customerId: data.customerId || '',
+              paymentComplete: true
+            };
             
-            const createData = await createResponse.json();
-            console.log("User creation response:", createData);
+            console.log("Updated form data for account creation:", updatedFormData);
+            setFormData(updatedFormData);
             
-            if (!createResponse.ok) {
-              console.error("Account creation failed:", createData);
-              throw new Error(createData.error || 'Failed to create account');
-            }
-            
-            console.log("User created successfully, sending SMS");
-            // Send SMS notification
+            // Automatically create the account once payment is verified
             try {
-              const smsResponse = await fetch(`/api/proxy?endpoint=/account-create/send-sms-twilio-link`, {
+              console.log("Attempting to create user account");
+              setError(null);
+              
+              // Use the server API endpoint to create the user and profile
+              const createResponse = await fetch('/api/user/create', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  to_number: updatedFormData.phoneNumber
+                  authData: {
+                    email: updatedFormData.email,
+                    password: updatedFormData.password,
+                  },
+                  userData: updatedFormData,
+                  paymentData: {
+                    customerId: updatedFormData.customerId,
+                    subscriptionId: updatedFormData.subscriptionId
+                  }
                 }),
               });
               
-              if (!smsResponse.ok) {
-                console.error('Failed to send SMS notification');
-                // Don't throw here - we still want to proceed with account creation
-              } else {
-                console.log("SMS sent successfully");
+              const createData = await createResponse.json();
+              console.log("User creation response:", createData);
+              
+              if (!createResponse.ok) {
+                console.error("Account creation failed:", createData);
+                throw new Error(createData.error || 'Failed to create account');
               }
-            } catch (smsError) {
-              console.error('SMS error:', smsError);
-              // Don't throw here - SMS is not critical
+              
+              console.log("User created successfully, sending SMS");
+              // Send SMS notification
+              try {
+                const smsResponse = await fetch(`/api/proxy?endpoint=/account-create/send-sms-twilio-link`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    to_number: updatedFormData.phoneNumber
+                  }),
+                });
+                
+                if (!smsResponse.ok) {
+                  console.error('Failed to send SMS notification');
+                  // Don't throw here - we still want to proceed with account creation
+                } else {
+                  console.log("SMS sent successfully");
+                }
+              } catch (smsError) {
+                console.error('SMS error:', smsError);
+                // Don't throw here - SMS is not critical
+              }
+
+              // Clean up localStorage
+              localStorage.removeItem('signupFormData');
+              console.log("Redirecting to dashboard");
+
+              // Redirect to dashboard
+              router.push('/dashboard');
+              router.refresh();
+            } catch (createError: unknown) {
+              const errorMessage = createError instanceof Error ? createError.message : 'An unknown error occurred';
+              console.error("Account creation error:", errorMessage);
+              setError(`Payment verified but account creation failed: ${errorMessage}`);
+              setLoading(false);
             }
-
-            // Clean up localStorage
-            localStorage.removeItem('signupFormData');
-            console.log("Redirecting to dashboard");
-
-            // Redirect to dashboard
-            router.push('/dashboard');
-            router.refresh();
-          } catch (createError: unknown) {
-            const errorMessage = createError instanceof Error ? createError.message : 'An unknown error occurred';
-            console.error("Account creation error:", errorMessage);
-            setError(`Payment verified but account creation failed: ${errorMessage}`);
+          } catch (parseError) {
+            console.error("Failed to parse stored form data:", parseError);
+            setError("Could not process your signup information. Please try again.");
             setLoading(false);
           }
         } else {
@@ -562,6 +582,31 @@ function SignUpContent() {
             Subscribe to our service to continue with account creation.
           </p>
         </div>
+        
+        {error && (
+          <div className="bg-red-50 p-4 rounded-md">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-red-800">{error}</p>
+                <p className="mt-1 text-xs text-red-700">Please try again or contact support.</p>
+              </div>
+            </div>
+            <div className="mt-3">
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="text-sm text-red-700 font-medium hover:text-red-900"
+              >
+                Refresh page
+              </button>
+            </div>
+          </div>
+        )}
         
         {formData.paymentComplete ? (
           <div>
