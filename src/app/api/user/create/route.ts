@@ -44,7 +44,8 @@ export async function POST(request: Request) {
           local_time_zone: userData.localTimeZone,
           business_hours_local: [userData.businessHoursLocal.open, userData.businessHoursLocal.close],
           calendar_connected: userData.calendarConnected,
-          google_auth_token: userData.googleAuthToken || null
+          google_auth_token: userData.googleAuthToken || null,
+          service_type: userData.service_type || 'House Call'
         },
       ]);
 

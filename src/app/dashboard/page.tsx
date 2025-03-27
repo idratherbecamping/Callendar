@@ -26,6 +26,7 @@ type BusinessProfile = {
   }
   twilio_number?: string
   google_auth_token?: GoogleAuthToken
+  service_type?: string
 }
 
 export default function Dashboard() {
@@ -79,7 +80,8 @@ export default function Dashboard() {
                   business_hours_local: {
                     open: '09:00',
                     close: '17:00'
-                  }
+                  },
+                  service_type: 'House Call'
                 }
               ])
               .select()
