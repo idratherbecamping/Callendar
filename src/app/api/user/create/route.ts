@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
-    const { userData, authData } = await request.json();
+    const { userData, authData, paymentData } = await request.json();
     
     if (!userData || !authData) {
       return NextResponse.json(
@@ -35,6 +35,7 @@ export async function POST(request: Request) {
       .insert([
         {
           id: user?.user?.id,
+          auth_id: user?.user?.id, // Add auth_id to match user with auth table
           email: userData.email,
           business_name: userData.businessName,
           phone_number: userData.phoneNumber,
@@ -45,7 +46,13 @@ export async function POST(request: Request) {
           business_hours_local: [userData.businessHoursLocal.open, userData.businessHoursLocal.close],
           calendar_connected: userData.calendarConnected,
           google_auth_token: userData.googleAuthToken || null,
-          service_type: userData.service_type || 'House Call'
+          service_type: userData.service_type || 'House Call',
+          // Add Stripe data if available
+          stripe_customer_id: paymentData?.customerId || null,
+          stripe_subscription_id: paymentData?.subscriptionId || null,
+          subscription_status: 'trialing', // Default to trialing for new users
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         },
       ]);
 

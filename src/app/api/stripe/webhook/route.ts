@@ -75,20 +75,64 @@ export async function POST(req: NextRequest) {
 async function handleSubscriptionChange(subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string;
   
+  // First, try to find the user by stripe_customer_id
+  let { data: user, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('stripe_customer_id', customerId)
+    .single();
+
+  if (error || !user) {
+    console.log('User not found by stripe_customer_id, attempting to match by custom metadata');
+    
+    // If not found, check if subscription has metadata with user ID
+    if (subscription.metadata && subscription.metadata.user_id) {
+      const userId = subscription.metadata.user_id;
+      
+      // Try to find user by auth_id
+      const { data: userByAuthId, error: authIdError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('auth_id', userId)
+        .single();
+        
+      if (!authIdError && userByAuthId) {
+        // Found user by auth_id, update their stripe_customer_id
+        user = userByAuthId;
+        
+        // Update user with the stripe_customer_id
+        await supabase
+          .from('users')
+          .update({ 
+            stripe_customer_id: customerId,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', user.id);
+      }
+    }
+    
+    // If still not found, log the error and return
+    if (!user) {
+      console.error('Could not find user for subscription:', subscription.id);
+      return;
+    }
+  }
+  
   // Update the subscription status in the database
-  const { error } = await supabase
+  const { error: updateError } = await supabase
     .from('users')
     .update({
       stripe_subscription_id: subscription.id,
       subscription_status: subscription.status,
       subscription_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
       subscription_cancel_at_period_end: subscription.cancel_at_period_end,
+      trial_end: subscription.trial_end ? new Date(subscription.trial_end * 1000).toISOString() : null,
       updated_at: new Date().toISOString(),
     })
-    .eq('stripe_customer_id', customerId);
+    .eq('id', user.id);
 
-  if (error) {
-    console.error('Error updating subscription in database:', error);
+  if (updateError) {
+    console.error('Error updating subscription in database:', updateError);
   }
 }
 
