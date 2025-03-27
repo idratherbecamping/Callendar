@@ -381,7 +381,22 @@ function SignUpContent() {
   useEffect(() => {
     // Only run if we're on the payment step
     if (step === 'payment') {
-      const sessionId = searchParams.get('session_id');
+      // Check for session_id in URL parameters
+      // First try normal way
+      let sessionId = searchParams.get('session_id');
+      
+      // If not found, try to handle malformed URL with two question marks
+      if (!sessionId) {
+        // Parse the full URL to handle potential second ? instead of &
+        const url = window.location.href;
+        const secondQuestionMarkIndex = url.indexOf('?', url.indexOf('?') + 1);
+        
+        if (secondQuestionMarkIndex !== -1) {
+          const paramString = url.substring(secondQuestionMarkIndex + 1);
+          const params = new URLSearchParams(paramString);
+          sessionId = params.get('session_id');
+        }
+      }
       
       if (sessionId) {
         // Verify the payment was successful
