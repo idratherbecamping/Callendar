@@ -370,7 +370,7 @@ function SignUpContent() {
       // Redirect to Stripe Checkout
       window.location.href = data.checkoutUrl;
       
-    } catch (error) {
+    } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred with payment';
       setError(errorMessage);
       setLoading(false);

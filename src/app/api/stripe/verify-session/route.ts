@@ -44,12 +44,12 @@ export async function GET(req: NextRequest) {
       customerId: customerId.id,
     });
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error verifying session:', error);
     return NextResponse.json(
       { 
         success: false,
-        error: error.message || 'Failed to verify session'
+        error: error instanceof Error ? error.message : 'Failed to verify session'
       },
       { status: 500 }
     );

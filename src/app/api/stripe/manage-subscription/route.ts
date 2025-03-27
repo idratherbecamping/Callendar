@@ -111,10 +111,10 @@ export async function POST(req: NextRequest) {
       },
     });
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error managing subscription:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to manage subscription' },
+      { error: error instanceof Error ? error.message : 'Failed to manage subscription' },
       { status: 500 }
     );
   }

@@ -29,10 +29,11 @@ export async function POST(req: NextRequest) {
         signature,
         webhookSecret
       );
-    } catch (err: any) {
-      console.error(`⚠️  Webhook signature verification failed: ${err.message}`);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      console.error(`⚠️  Webhook signature verification failed: ${errorMessage}`);
       return NextResponse.json(
-        { error: `Webhook signature verification failed: ${err.message}` },
+        { error: `Webhook signature verification failed: ${errorMessage}` },
         { status: 400 }
       );
     }
@@ -61,10 +62,10 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ received: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error handling webhook:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to process webhook' },
+      { error: error instanceof Error ? error.message : 'Failed to process webhook' },
       { status: 500 }
     );
   }

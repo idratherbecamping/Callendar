@@ -5,11 +5,30 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
+// Define types for the user and subscription data
+interface UserData {
+  id: string;
+  auth_id: string;
+  email: string;
+  stripe_customer_id?: string;
+  stripe_subscription_id?: string;
+  subscription_status?: string;
+  [key: string]: unknown; // For other properties we might access
+}
+
+interface SubscriptionData {
+  id: string;
+  status: string;
+  cancel_at_period_end: boolean;
+  current_period_end: string;
+  [key: string]: unknown; // For other properties we might access
+}
+
 export default function SubscriptionPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [subscription, setSubscription] = useState<any>(null)
-  const [user, setUser] = useState<any>(null)
+  const [subscription, setSubscription] = useState<SubscriptionData | null>(null)
+  const [user, setUser] = useState<UserData | null>(null)
   const [confirmCancel, setConfirmCancel] = useState(false)
   const router = useRouter()
   
@@ -62,9 +81,9 @@ export default function SubscriptionPage() {
           
           setSubscription(data.subscription)
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Error loading subscription:', err)
-        setError(err.message)
+        setError(err instanceof Error ? err.message : 'An error occurred loading subscription data')
       } finally {
         setLoading(false)
       }
@@ -99,9 +118,9 @@ export default function SubscriptionPage() {
       
       setSubscription(data.subscription)
       setConfirmCancel(false)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error canceling subscription:', err)
-      setError(err.message)
+      setError(err instanceof Error ? err.message : 'An error occurred while canceling subscription')
     } finally {
       setLoading(false)
     }
@@ -132,9 +151,9 @@ export default function SubscriptionPage() {
       }
       
       setSubscription(data.subscription)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error reactivating subscription:', err)
-      setError(err.message)
+      setError(err instanceof Error ? err.message : 'An error occurred while reactivating subscription')
     } finally {
       setLoading(false)
     }
