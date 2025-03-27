@@ -408,18 +408,82 @@ function SignUpContent() {
             
             if (response.ok && data.success) {
               // Update form data with Stripe information
-              setFormData(prev => ({
-                ...prev,
+              const updatedFormData = {
+                ...formData,
                 subscriptionId: data.subscriptionId || '',
                 customerId: data.customerId || '',
                 paymentComplete: true
-              }));
+              };
+              
+              setFormData(updatedFormData);
+              
+              // Automatically create the account once payment is verified
+              try {
+                setError(null);
+                
+                // Use the server API endpoint to create the user and profile
+                const createResponse = await fetch('/api/user/create', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    authData: {
+                      email: updatedFormData.email,
+                      password: updatedFormData.password,
+                    },
+                    userData: updatedFormData,
+                    paymentData: {
+                      customerId: updatedFormData.customerId,
+                      subscriptionId: updatedFormData.subscriptionId
+                    }
+                  }),
+                });
+                
+                const createData = await createResponse.json();
+                
+                if (!createResponse.ok) {
+                  throw new Error(createData.error || 'Failed to create account');
+                }
+                
+                // Send SMS notification
+                try {
+                  const smsResponse = await fetch(`/api/proxy?endpoint=/account-create/send-sms-twilio-link`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      to_number: updatedFormData.phoneNumber
+                    }),
+                  });
+                  
+                  if (!smsResponse.ok) {
+                    console.error('Failed to send SMS notification');
+                    // Don't throw here - we still want to proceed with account creation
+                  }
+                } catch (smsError) {
+                  console.error('SMS error:', smsError);
+                  // Don't throw here - SMS is not critical
+                }
+
+                // Clean up localStorage
+                localStorage.removeItem('signupFormData');
+
+                // Redirect to dashboard
+                router.push('/dashboard');
+                router.refresh();
+              } catch (createError: unknown) {
+                const errorMessage = createError instanceof Error ? createError.message : 'An unknown error occurred';
+                setError(`Payment verified but account creation failed: ${errorMessage}`);
+                setLoading(false);
+              }
             } else {
               setError('Payment verification failed. Please try again.');
+              setLoading(false);
             }
           } catch (error) {
             setError('Failed to verify payment status');
-          } finally {
             setLoading(false);
           }
         };
@@ -427,7 +491,7 @@ function SignUpContent() {
         verifyPayment();
       }
     }
-  }, [step, searchParams]);
+  }, [step, searchParams, formData, router]);
 
   // Create a new component for the payment step
   const PaymentStep = () => {
@@ -454,19 +518,17 @@ function SignUpContent() {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm font-medium text-green-800">Payment successfully processed!</p>
-                  <p className="mt-1 text-xs text-green-700">Your subscription is now active.</p>
+                  <p className="mt-1 text-xs text-green-700">Your account is being created, please wait...</p>
                 </div>
               </div>
             </div>
             
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              disabled={loading}
-              className="w-full mt-4 flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              {loading ? 'Creating Account...' : 'Create Account'}
-            </button>
+            <div className="mt-4 flex justify-center">
+              <svg className="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
           </div>
         ) : (
           <div>
@@ -503,6 +565,12 @@ function SignUpContent() {
                 </li>
               </ul>
               <p className="mt-4 text-xs text-gray-500">Cancel anytime during your trial or after - no commitment.</p>
+              <div className="mt-4 text-center text-sm bg-blue-50 p-2 rounded-md text-blue-700">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                Your account will be created automatically after payment is confirmed
+              </div>
             </div>
             
             <button
