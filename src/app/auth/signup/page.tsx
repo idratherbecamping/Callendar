@@ -8,14 +8,6 @@ import AddressValidator from '@/components/AddressValidator'
 
 type Step = 'account' | 'service_type' | 'business' | 'location' | 'hours' | 'calendar'
 
-// Service type constants to avoid string literal issues
-const SERVICE_TYPE = {
-  HOUSE_CALL: 'House Call',
-  SCHEDULER: 'Scheduler'
-} as const;
-
-type ServiceType = typeof SERVICE_TYPE[keyof typeof SERVICE_TYPE];
-
 // Validation functions
 const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -50,7 +42,7 @@ function SignUpContent() {
     calendarConnected: false,
     googleAuthToken: null,
     textMessageConsent: false, // Add new field for text message consent
-    service_type: '' as string // Add new field for service type
+    service_type: '' // Add new field for service type
   })
   const [addressIsValid, setAddressIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null)
@@ -67,7 +59,7 @@ function SignUpContent() {
         setFormData(parsedData)
         
         // If returning from calendar connection, set address as valid
-        if (parsedData.businessAddress || parsedData.service_type === SERVICE_TYPE.SCHEDULER) {
+        if (parsedData.businessAddress || parsedData.service_type === 'Scheduler') {
           setAddressIsValid(true)
         }
       } catch (e) {
@@ -121,13 +113,6 @@ function SignUpContent() {
     }))
   }
 
-  const handleServiceTypeSelect = (type: ServiceType) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      service_type: type 
-    }));
-  };
-
   const handleNext = () => {
     // Validate email and password for account step
     if (step === 'account') {
@@ -178,7 +163,7 @@ function SignUpContent() {
         break
       case 'business':
         // Skip location step for Scheduler service type
-        if (formData.service_type === SERVICE_TYPE.SCHEDULER) {
+        if (formData.service_type === 'Scheduler') {
           setStep('hours')
         } else {
           setStep('location')
@@ -211,7 +196,7 @@ function SignUpContent() {
         break
       case 'hours':
         // Go back to location or business based on service type
-        if (formData.service_type === SERVICE_TYPE.SCHEDULER) {
+        if (formData.service_type === 'Scheduler') {
           setStep('business')
         } else {
           setStep('location')
@@ -234,16 +219,11 @@ function SignUpContent() {
     setError(null)
 
     try {
+      console.log('formData', formData)
       // If service type is Scheduler, make sure the address validation passes
-      if (formData.service_type === SERVICE_TYPE.SCHEDULER) {
+      if (formData.service_type === 'Scheduler') {
         setAddressIsValid(true);
       }
-      
-      // Create a modified userData object with the service_type value without quotes
-      const modifiedUserData = {
-        ...formData,
-        service_type: formData.service_type.replace(/['"]/g, '') // Remove any quotes
-      };
       
       // Use the server API endpoint to create the user and profile
       const response = await fetch('/api/user/create', {
@@ -256,7 +236,7 @@ function SignUpContent() {
             email: formData.email,
             password: formData.password,
           },
-          userData: modifiedUserData
+          userData: formData
         }),
       });
       
@@ -396,8 +376,8 @@ function SignUpContent() {
               <h3 className="text-lg font-medium text-gray-900 mb-4">Select Your Service Type</h3>
               <div className="grid grid-cols-1 gap-4">
                 <div 
-                  className={`border rounded-lg p-4 cursor-pointer hover:border-indigo-500 transition-colors ${formData.service_type === SERVICE_TYPE.HOUSE_CALL ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
-                  onClick={() => handleServiceTypeSelect(SERVICE_TYPE.HOUSE_CALL)}
+                  className={`border rounded-lg p-4 cursor-pointer hover:border-indigo-500 transition-colors ${formData.service_type === 'House Call' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  onClick={() => setFormData(prev => ({ ...prev, service_type: 'House Call' }))}
                 >
                   <div className="flex items-start">
                     <div className="flex items-center h-5 mt-1">
@@ -405,8 +385,8 @@ function SignUpContent() {
                         type="radio"
                         name="service_type"
                         id="houseCall"
-                        checked={formData.service_type === SERVICE_TYPE.HOUSE_CALL}
-                        onChange={() => handleServiceTypeSelect(SERVICE_TYPE.HOUSE_CALL)}
+                        checked={formData.service_type === 'House Call'}
+                        onChange={() => setFormData(prev => ({ ...prev, service_type: 'House Call' }))}
                         className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
                       />
                     </div>
@@ -433,8 +413,8 @@ function SignUpContent() {
                 </div>
                 
                 <div 
-                  className={`border rounded-lg p-4 cursor-pointer hover:border-indigo-500 transition-colors ${formData.service_type === SERVICE_TYPE.SCHEDULER ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
-                  onClick={() => handleServiceTypeSelect(SERVICE_TYPE.SCHEDULER)}
+                  className={`border rounded-lg p-4 cursor-pointer hover:border-indigo-500 transition-colors ${formData.service_type === 'Scheduler' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  onClick={() => setFormData(prev => ({ ...prev, service_type: 'Scheduler' }))}
                 >
                   <div className="flex items-start">
                     <div className="flex items-center h-5 mt-1">
@@ -442,8 +422,8 @@ function SignUpContent() {
                         type="radio"
                         name="service_type"
                         id="scheduler"
-                        checked={formData.service_type === SERVICE_TYPE.SCHEDULER}
-                        onChange={() => handleServiceTypeSelect(SERVICE_TYPE.SCHEDULER)}
+                        checked={formData.service_type === 'Scheduler'}
+                        onChange={() => setFormData(prev => ({ ...prev, service_type: 'Scheduler' }))}
                         className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
                       />
                     </div>
@@ -550,7 +530,7 @@ function SignUpContent() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                {formData.service_type === SERVICE_TYPE.HOUSE_CALL 
+                {formData.service_type === 'House Call' 
                   ? "This is your business location - used for estimating travel distance and time to your customers."
                   : "This is your business location - where customers will visit you or your headquarters for virtual services."
                 }
@@ -812,7 +792,7 @@ function SignUpContent() {
             Create your account
           </h2>
           <p className="mt-2 text-center text-lg text-gray-600">
-            {formData.service_type === SERVICE_TYPE.SCHEDULER ? (
+            {formData.service_type === 'Scheduler' ? (
               // For Scheduler: 5 steps (account, service_type, business, hours, calendar)
               `Step ${['account', 'service_type', 'business', 'hours', 'calendar'].indexOf(step) + 1} of 5`
             ) : (
