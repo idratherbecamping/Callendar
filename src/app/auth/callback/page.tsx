@@ -53,7 +53,7 @@ function OAuthCallbackContent() {
         // Update the form data to include tokens and connection status
         formData.calendarConnected = true
         formData.googleAuthToken = {
-          scopes: ["https://www.googleapis.com/auth/calendar"],
+          scopes: ["https://www.googleapis.com/auth/calendar.events"],
           client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
           token_uri: "https://accounts.google.com/o/oauth2/token",
           access_token: tokenData.tokens.access_token,
