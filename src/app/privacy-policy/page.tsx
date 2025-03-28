@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
       
       <div className="space-y-6">
         <div className="text-sm text-gray-500 mb-6">
-          Effective Date: 03/25/2025
+          Effective Date: 03/28/2025
         </div>
 
         <section>
@@ -40,6 +40,13 @@ export default function PrivacyPolicy() {
           <h2 className="text-2xl font-semibold mb-4 text-black">Data Storage and Security</h2>
           <p className="text-gray-700">
             Information retrieved via the Google Calendar API, including event details, availability, and scheduling data, is stored securely on Supabase. We adhere to industry-standard security protocols to protect your data against unauthorized access, disclosure, alteration, or destruction.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Data Retention and Deletion</h2>
+          <p className="text-gray-700">
+            We store your personal information for a period of time that is consistent with our business purposes. We will retain your personal information for the length of time needed to fulfill the purposes outlined in this Privacy Policy unless a longer retention period is required or permitted by law. When the data retention period expires for a given type of data, we will delete or destroy it. You may request that your personal data be deleted by contacting us at gannon@callendar.ai.
           </p>
         </section>
 
