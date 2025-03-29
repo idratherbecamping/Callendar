@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
       
       <div className="space-y-6">
         <div className="text-sm text-gray-500 mb-6">
-          Effective Date: 03/28/2025
+          Effective Date: 03/29/2025
         </div>
 
         <section>
@@ -63,7 +63,7 @@ export default function PrivacyPolicy() {
             We confirm that any user data obtained through Google Workspace APIs is used exclusively to facilitate scheduling and calendar management. Under no circumstances is this data used to develop, improve, or train generalized or non-personalized AI and/or machine learning models. Additionally, we do not transfer or share this data with any third-party AI tools for any AI/ML model development purposes.
           </p>
         </section>
-        
+
         <section>
           <h2 className="text-2xl font-semibold mb-4 text-black">Your Consent</h2>
           <p className="text-gray-700">
