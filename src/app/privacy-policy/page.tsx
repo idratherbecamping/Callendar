@@ -53,10 +53,17 @@ export default function PrivacyPolicy() {
         <section>
           <h2 className="text-2xl font-semibold mb-4 text-black">Limitations on Data Use</h2>
           <p className="text-gray-700">
-            We do not use your calendar information for any purpose other than managing appointments and determining availability. We do not sell, share, or otherwise distribute your calendar data to third parties for marketing or advertising purposes.
+          We do not use your calendar information for any purposes other than managing appointments and determining availability. We neither sell nor share your calendar data for marketing, advertising, or for the development, improvement, or training of AI/ML models.
           </p>
         </section>
 
+        <section>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Use of Google Workspace Data for AI/ML Purposes</h2>
+          <p className="text-gray-700">
+            We confirm that any user data obtained through Google Workspace APIs is used exclusively to facilitate scheduling and calendar management. Under no circumstances is this data used to develop, improve, or train generalized or non-personalized AI and/or machine learning models. Additionally, we do not transfer or share this data with any third-party AI tools for any AI/ML model development purposes.
+          </p>
+        </section>
+        
         <section>
           <h2 className="text-2xl font-semibold mb-4 text-black">Your Consent</h2>
           <p className="text-gray-700">
