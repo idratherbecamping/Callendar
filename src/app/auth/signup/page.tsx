@@ -253,6 +253,12 @@ function SignUpContent() {
         return;
       }
       
+      // Temporarily store email and password for session recovery
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('userEmail', formData.email);
+        window.localStorage.setItem('tempUserPassword', formData.password);
+      }
+      
       // Use the server API endpoint to create the user and profile
       const response = await fetch('/api/user/create', {
         method: 'POST',
@@ -278,6 +284,61 @@ function SignUpContent() {
         throw new Error(data.error || 'Failed to create account');
       }
 
+      console.log('Account created successfully, signing in user', data);
+      
+      // Sign in the user using the server API endpoint
+      const signInResponse = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+      
+      const signInData = await signInResponse.json();
+      
+      if (!signInResponse.ok) {
+        console.error('Failed to sign in after account creation', signInData);
+        // Continue anyway, we might still be able to proceed
+      } else {
+        console.log('User signed in successfully after account creation');
+      }
+      
+      // Force Supabase to refresh the local session information
+      try {
+        const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+        if (refreshError) {
+          console.error('Error refreshing session after sign in:', refreshError);
+        } else {
+          console.log('Session refreshed after sign in:', refreshData.session ? 'success' : 'no session');
+        }
+      } catch (refreshErr) {
+        console.error('Error during session refresh:', refreshErr);
+      }
+      
+      // Store auth token in localStorage with the correct key
+      try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        if (supabaseUrl && signInData.tokenData) {
+          const cookieKeyName = `sb-${supabaseUrl.replace(/^https?:\/\//, '')}-auth-token`;
+          
+          // Store token in exact format Supabase expects
+          localStorage.setItem(cookieKeyName, JSON.stringify(signInData.tokenData));
+          console.log('Manually set auth token in localStorage with key:', cookieKeyName);
+          
+          // Also store session data
+          if (signInData.session) {
+            localStorage.setItem(`sb-${supabaseUrl.replace(/^https?:\/\//, '')}-session`, 
+              JSON.stringify(signInData.session));
+          }
+        }
+      } catch (storageErr) {
+        console.error('Error setting localStorage token:', storageErr);
+      }
+      
       // Send SMS notification
       const smsResponse = await fetch(`/api/proxy?endpoint=/account-create/send-sms-twilio-link`, {
         method: 'POST',
@@ -292,13 +353,23 @@ function SignUpContent() {
       if (!smsResponse.ok) {
         console.error('Failed to send SMS notification');
         // Don't throw here - we still want to proceed with account creation
+      } else {
+        console.log("SMS sent successfully");
       }
-
+      
       // Clean up localStorage
-      localStorage.removeItem('signupFormData')
-
-      router.push('/dashboard')
-      router.refresh()
+      localStorage.removeItem('signupFormData');
+      
+      // Remove credentials after a delay to give time for session to be established
+      setTimeout(() => {
+        if (typeof window !== 'undefined') {
+          window.localStorage.removeItem('userEmail');
+          window.localStorage.removeItem('tempUserPassword');
+        }
+      }, 30000); // Keep for 30 seconds to help with recovery if needed
+      
+      // Use a hard redirect instead of router.push to ensure full page reload with cookies
+      window.location.href = '/dashboard';
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
       setError(errorMessage)
@@ -503,7 +574,61 @@ function SignUpContent() {
                 throw new Error(createData.error || 'Failed to create account');
               }
               
-              console.log("User created successfully, sending SMS");
+              console.log("User created successfully, signing in...");
+              
+              // Sign in the user using the server-side API to ensure cookie is set
+              const signInResponse = await fetch('/api/auth/signin', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  email: updatedFormData.email,
+                  password: updatedFormData.password,
+                }),
+              });
+              
+              const signInData = await signInResponse.json();
+              
+              if (!signInResponse.ok) {
+                console.error("Sign in failed:", signInData);
+                throw new Error(signInData.error || 'Failed to sign in');
+              }
+              
+              console.log("User signed in successfully, sending SMS...");
+              
+              // Force Supabase to refresh the local session information
+              try {
+                const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+                if (refreshError) {
+                  console.error('Error refreshing session after sign in:', refreshError);
+                } else {
+                  console.log('Session refreshed after sign in:', refreshData.session ? 'success' : 'no session');
+                }
+              } catch (refreshErr) {
+                console.error('Error during session refresh:', refreshErr);
+              }
+              
+              // Store auth token in localStorage with the correct key
+              try {
+                const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+                if (supabaseUrl && signInData.tokenData) {
+                  const cookieKeyName = `sb-${supabaseUrl.replace(/^https?:\/\//, '')}-auth-token`;
+                  
+                  // Store token in exact format Supabase expects
+                  localStorage.setItem(cookieKeyName, JSON.stringify(signInData.tokenData));
+                  console.log('Manually set auth token in localStorage with key:', cookieKeyName);
+                  
+                  // Also store session data
+                  if (signInData.session) {
+                    localStorage.setItem(`sb-${supabaseUrl.replace(/^https?:\/\//, '')}-session`, 
+                      JSON.stringify(signInData.session));
+                  }
+                }
+              } catch (storageErr) {
+                console.error('Error setting localStorage token:', storageErr);
+              }
+              
               // Send SMS notification
               try {
                 const smsResponse = await fetch(`/api/proxy?endpoint=/account-create/send-sms-twilio-link`, {
@@ -531,9 +656,8 @@ function SignUpContent() {
               localStorage.removeItem('signupFormData');
               console.log("Redirecting to dashboard");
 
-              // Redirect to dashboard
-              router.push('/dashboard');
-              router.refresh();
+              // Use a hard redirect instead of router.push to ensure full page reload with cookies
+              window.location.href = '/dashboard';
             } catch (createError: unknown) {
               const errorMessage = createError instanceof Error ? createError.message : 'An unknown error occurred';
               console.error("Account creation error:", errorMessage);

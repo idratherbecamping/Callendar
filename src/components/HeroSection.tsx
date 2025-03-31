@@ -113,10 +113,15 @@ const HeroSection = () => {
           <span className="block">Callendar AI</span>
           <span className="block text-3xl md:text-4xl lg:text-3xl mt-4">Automated Voicemail that Books Appointments for You</span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-12">
-          Never Miss a Call, Never Miss an Opportunity.
+        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-5">
+          Never Miss a Call, Never Miss an Opportunity
         </p>
-
+        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-5">
+          Service <span className="font-bold">pays for itself</span> with just one missed opportunity
+        </p>
+        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-12">
+          <span className="font-bold">FREE</span> first month, then just <span className="font-bold">$45 /month</span>  
+        </p>
         <div className="flex flex-col md:flex-row items-center justify-center gap-5 mb-20">
           <Button 
             className="beesly-button beesly-button-secondary w-48 h-12"

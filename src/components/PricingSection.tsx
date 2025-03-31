@@ -3,16 +3,16 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 const PricingSection = () => {
   const features = [
-    "Unlimited Calls",
-    "Integrate Calendar",
-    "AI Remembers previous Calls",
-    "Add Followup context",
-    "Playback Messages",
-    "Call summary & Transcript",
-    "Critical/Emergency Call Alerts"
+    "First 30 days FREE",
+    "Cancel anytime",
+    "Pays for itself with 1 missed call",
+    "No contracts",
+    "Big business tools, small business price",
+    
   ];
 
   return (
@@ -23,19 +23,19 @@ const PricingSection = () => {
             Pricing
           </span>
           <h2 className="beesly-section-heading">
-            Introducing Our Limitless Pro Plan
+            Introducing Our Pro Plan
           </h2>
           <div className="flex flex-wrap justify-center gap-10 mt-8">
             <div className="max-w-[200px]">
-              <h3 className="font-semibold text-lg">For Personal Use</h3>
+              {/* <h3 className="font-semibold text-lg">For Personal Use</h3>
               <p className="text-gray-400 text-sm mt-3">
                 Ideal for streamlining your day-to-day life.
-              </p>
+              </p> */}
             </div>
             <div className="max-w-[200px]">
-              <h3 className="font-semibold text-lg">For Small Businesses</h3>
+              <h3 className="font-semibold text-lg">For Small Businesses like yours!</h3>
               <p className="text-gray-400 text-sm mt-3">
-                Perfect for enhancing efficiency in your business operations.
+                Never miss an opportunity again.
               </p>
             </div>
           </div>
@@ -47,10 +47,10 @@ const PricingSection = () => {
               Free Plan
             </span>
             <CardTitle className="mt-3 text-2xl">
-              Download Callendar AI for free now and Unlock more features!
+              Signup for Callendar AI for free now!
             </CardTitle>
             <div className="mt-6 flex justify-center items-baseline">
-              <span className="text-4xl font-bold">FREE</span>
+              <span className="text-4xl font-bold">45</span>
               <span className="text-gray-400 ml-1">/mo</span>
             </div>
             <p className="text-sm text-gray-400 mt-2">For a Limited time!</p>
@@ -81,7 +81,9 @@ const PricingSection = () => {
             </ul>
 
             <Button className="w-full mt-10 beesly-button-yellow h-12 text-base">
-              Download now
+              <Link href="/auth/signup" className="w-full">
+                Signup Now
+              </Link>
             </Button>
           </CardContent>
         </Card>

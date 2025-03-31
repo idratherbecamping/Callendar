@@ -19,9 +19,9 @@ const Footer = () => {
             <Link href="#HIW" className="text-gray-400 hover:text-white">
               How It Works
             </Link>
-            {/* <Link href="#Pricing" className="text-gray-400 hover:text-white">
+            <Link href="#Pricing" className="text-gray-400 hover:text-white">
               Pricing
-            </Link> */}
+            </Link>
             <Link href="#FAQs" className="text-gray-400 hover:text-white">
               FAQs
             </Link>

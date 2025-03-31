@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import { Session } from '@supabase/supabase-js'
 
 type GoogleAuthToken = {
   scopes: string[]
@@ -40,20 +41,256 @@ export default function Dashboard() {
     const fetchProfile = async () => {
       try {
         console.log('Fetching user session...')
-        const { data: { user }, error: userError } = await supabase.auth.getUser()
         
-        if (userError) {
-          console.error('Error getting user:', userError)
-          throw userError
+        // Get Supabase domain for consistent key naming
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+        const domain = supabaseUrl.replace(/^https?:\/\//, '');
+        
+        // Fetch session directly from Supabase
+        const sessionResponse = await supabase.auth.getSession();
+        console.log('Raw Supabase.auth.getSession() response:', sessionResponse);
+        
+        // Use a mutable variable for the session
+        let currentSession = sessionResponse.data.session;
+        
+        // Parse browser cookies
+        const parseCookies = () => {
+          const cookiesObj: Record<string, string> = {};
+          const cookieStr = document.cookie;
+          if (cookieStr) {
+            cookieStr.split(';').forEach(pair => {
+              const [key, value] = pair.trim().split('=');
+              try {
+                cookiesObj[key] = decodeURIComponent(value);
+              } catch (e) {
+                console.error('Error decoding cookie value:', e);
+                cookiesObj[key] = value;
+              }
+            });
+          }
+          return cookiesObj;
+        };
+        
+        const cookies = parseCookies();
+        console.log('Document cookies:', document.cookie);
+        console.log('Parsed cookies:', cookies);
+        
+        // Check for any auth-related localStorage items
+        const localStorageKeys = Object.keys(localStorage);
+        console.log('All localStorage keys:', localStorageKeys);
+        
+        const supabaseKeys = localStorageKeys.filter(key => 
+          key.includes('supabase') || 
+          key.includes('sb-') || 
+          key.includes('auth')
+        );
+        
+        console.log('Found potential auth keys in localStorage:', supabaseKeys);
+        
+        // Check both possible formats
+        const cookieKeyName = `sb-${domain}-auth-token`;
+        const tokenKeyName = `sb-${domain}.supabase.co-auth-token`;
+        const alternativeCookieKeyName = domain.includes('.') ? 
+          `sb-${domain.split('.')[0]}-auth-token` : null;
+        
+        console.log('Expected Supabase cookie key (primary):', cookieKeyName);
+        if (alternativeCookieKeyName) {
+          console.log('Alternative Supabase cookie key:', alternativeCookieKeyName);
+        }
+        console.log('Expected localStorage key:', tokenKeyName);
+        
+        // Try to read localStorage value for debugging
+        let storedTokenValue = null;
+        storedTokenValue = localStorage.getItem(tokenKeyName);
+        console.log('Value in localStorage for key:', tokenKeyName, storedTokenValue ? 'exists' : 'not found');
+        
+        // Check for any token format
+        const hasLocalSession = storedTokenValue !== null;
+        
+        console.log('Local session exists:', hasLocalSession);
+        
+        // Add function to manually set session using existing token
+        const manuallySetSession = async () => {
+          try {
+            // Get token from localStorage
+            const tokenStr = localStorage.getItem(tokenKeyName);
+            
+            if (!tokenStr) {
+              console.log('No token found in localStorage for manual session setup');
+              return false;
+            }
+            
+            // Parse token array: [access_token, refresh_token]
+            const tokens = JSON.parse(tokenStr);
+            if (!Array.isArray(tokens) || tokens.length < 2) {
+              console.log('Invalid token format in localStorage');
+              return false;
+            }
+            
+            console.log('Manually setting session with tokens from localStorage');
+            
+            // Use setSession method to directly set the session
+            const { data, error } = await supabase.auth.setSession({
+              access_token: tokens[0],
+              refresh_token: tokens[1]
+            });
+            
+            if (error) {
+              console.error('Error manually setting session:', error);
+              return false;
+            }
+            
+            console.log('Session manually set successfully:', data.session ? 'exists' : 'null');
+            return !!data.session;
+          } catch (e) {
+            console.error('Error in manual session setup:', e);
+            return false;
+          }
+        };
+        
+        // If we detect Supabase tokens in the cookies but not in localStorage,
+        // let's copy them over and try to establish a session
+        if (!hasLocalSession && document.cookie.includes('-auth-token=')) {
+          console.log('Auth token found in cookies but not in localStorage - attempting recovery');
+          
+          // Extract cookie from different possible formats
+          const cookieValue = cookies[cookieKeyName] || 
+                             (alternativeCookieKeyName ? cookies[alternativeCookieKeyName] : null);
+          
+          if (cookieValue) {
+            console.log('Found token cookie - trying to use for auth');
+            
+            try {
+              // Clean the token - make sure it's in the correct format
+              let tokenToStore;
+              try {
+                const parsedToken = JSON.parse(cookieValue);
+                tokenToStore = JSON.stringify(parsedToken);
+              } catch (e) {
+                // If it fails to parse, use as is
+                tokenToStore = cookieValue;
+              }
+              
+              // Store in localStorage
+              localStorage.setItem(tokenKeyName, tokenToStore);
+              console.log('Copied token from cookie to localStorage with key:', tokenKeyName);
+              
+              // Try manual session setting
+              const manualSuccess = await manuallySetSession();
+              if (manualSuccess) {
+                console.log('Successfully established session from cookie');
+                // Reload session
+                const { data: { session: recoveredSession } } = await supabase.auth.getSession();
+                if (recoveredSession) {
+                  currentSession = recoveredSession;
+                  console.log('Session successfully recovered from cookie');
+                }
+              }
+            } catch (e) {
+              console.error('Error recovering session from cookie:', e);
+            }
+          }
         }
         
-        if (!user) {
-          console.log('No user found, redirecting to sign in')
-          router.push('/auth/signin')
+        console.log('Session from getSession():', currentSession ? 'exists' : 'null');
+        
+        // If we have a local session but getSession() returned null, try to refresh the session
+        if (!currentSession && hasLocalSession) {
+          console.log('Local session exists but getSession returned null - trying to refresh session');
+          
+          try {
+            // Try our manual method first
+            console.log('Attempting manual session setup with stored token');
+            const manualSuccess = await manuallySetSession();
+            
+            if (manualSuccess) {
+              console.log('Manual session setup successful, retrieving new session');
+              // Re-fetch the session after manual setup
+              const newSessionResponse = await supabase.auth.getSession();
+              const { data: { session: newSession } } = newSessionResponse;
+              
+              if (newSession) {
+                console.log('Successfully established new session with manual method');
+                // Update the session variable to continue with the authenticated flow
+                currentSession = newSession;
+              }
+            } else {
+              // If manual method fails, try supabase's refreshSession
+              console.log('Manual method failed, trying Supabase refreshSession');
+              const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+              
+              console.log('Session refresh attempt:', refreshError ? 'failed' : 'succeeded');
+              
+              if (refreshError) {
+                console.error('Session refresh error:', refreshError);
+              } else if (refreshData.session) {
+                console.log('Session refreshed successfully');
+                currentSession = refreshData.session;
+              }
+            }
+          } catch (refreshErr) {
+            console.error('Error during session refresh:', refreshErr);
+          }
+        }
+        
+        // Use either the retrieved session or check if we have a local session
+        if (!currentSession && !hasLocalSession) {
+          console.log('No session found, redirecting to sign in')
+          setError("Auth session missing! Please sign in again.")
+          setTimeout(() => {
+            router.push('/auth/signin')
+          }, 2000)
           return
         }
-
-        console.log('User found:', user.id)
+        
+        // Force reload user data if session exists but getSession() failed
+        let userResponse;
+        try {
+          userResponse = await supabase.auth.getUser();
+          console.log('User response:', userResponse);
+        } catch (getUserErr) {
+          console.error('Error getting user data:', getUserErr);
+          
+          // Last resort fallback - try to sign in again if localStorage has credentials
+          if (hasLocalSession && typeof window !== 'undefined') {
+            const storedEmail = localStorage.getItem('userEmail');
+            const storedPassword = localStorage.getItem('tempUserPassword');
+            
+            if (storedEmail && storedPassword) {
+              console.log('Attempting recovery sign-in with stored credentials');
+              try {
+                // Try to sign in with stored credentials as a last resort
+                userResponse = await fetch('/api/auth/signin', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email: storedEmail, password: storedPassword })
+                }).then(res => res.json());
+                
+                if (userResponse.success) {
+                  console.log('Recovery sign-in successful');
+                  // Reload page to refresh session
+                  window.location.reload();
+                  return;
+                }
+              } catch (signInErr) {
+                console.error('Recovery sign-in failed:', signInErr);
+              }
+            }
+          }
+        }
+        
+        if (!userResponse || !userResponse.data || !userResponse.data.user) {
+          console.log('No user found, redirecting to sign in');
+          setError("User not found! Please sign in again.");
+          setTimeout(() => {
+            router.push('/auth/signin');
+          }, 2000);
+          return;
+        }
+        
+        const user = userResponse.data.user;
+        
+        console.log('User found:', user.id);
         console.log('Fetching user profile...')
         const { data, error } = await supabase
           .from('users')
@@ -129,8 +366,19 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center text-red-500">{error}</div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="bg-card shadow rounded-lg p-8 max-w-md w-full text-center">
+          <div className="text-red-500 mb-4 text-xl">{error}</div>
+          <p className="text-muted-foreground mb-6">
+            There was a problem loading your dashboard. This might be due to an authentication issue.
+          </p>
+          <button
+            onClick={() => router.push('/auth/signin')}
+            className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+          >
+            Go to Sign In
+          </button>
+        </div>
       </div>
     )
   }

@@ -1,10 +1,20 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const supabase = createMiddlewareClient({ req, res })
+
+  // Log cookies for debugging
+  console.log('Middleware - Request cookies:', req.cookies.getAll().map(c => c.name));
+  
+  // Refresh session if expired
+  try {
+    await supabase.auth.getSession()
+  } catch (error) {
+    console.error('Middleware - Error refreshing session:', error)
+  }
 
   console.log('Middleware - Current path:', req.nextUrl.pathname)
   console.log('Middleware - Request headers:', Object.keys(req.headers))
@@ -42,6 +52,16 @@ export async function middleware(req: NextRequest) {
   return res
 }
 
+// This ensures the middleware runs for all routes
 export const config = {
-  matcher: ['/dashboard/:path*', '/auth/:path*'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
 } 

@@ -63,7 +63,11 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: 'User created successfully',
-      userId: user?.user?.id
+      userId: user?.user?.id,
+      user: {
+        id: user?.user?.id,
+        email: userData.email
+      }
     });
   } catch (error: unknown) {
     console.error('User creation error:', error);
