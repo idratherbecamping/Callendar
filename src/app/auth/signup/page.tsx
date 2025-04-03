@@ -1251,7 +1251,7 @@ function SignUpContent() {
               </svg>
               <h3 className="mt-4 text-xl font-medium text-gray-900">Connect Your Calendar</h3>
               <p className="mt-2 text-sm text-gray-500">
-                Choose one calendar service to manage your appointments. 
+                Choose one calendar service to manage your appointments. You can only connect one calendar service.
               </p>
               {(formData.calendarConnected || formData.acuityConnected) && (
                 <div className="mt-2 text-sm text-indigo-600 font-medium">
@@ -1352,6 +1352,45 @@ function SignUpContent() {
                   </div>
                 </div>
               </div>
+            </div>
+            
+            <div className="flex items-start">
+              <div className="flex items-center h-5">
+                <input
+                  id="textMessageConsent"
+                  name="textMessageConsent"
+                  type="checkbox"
+                  required
+                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                  checked={formData.textMessageConsent}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label htmlFor="textMessageConsent" className="font-medium text-gray-700">
+                  I consent to receive text messages
+                </label>
+                <p className="text-gray-500">
+                  You agree to receive text messages about your account. Message and data rates may apply.
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex justify-between">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Next
+              </button>
             </div>
           </div>
         )
