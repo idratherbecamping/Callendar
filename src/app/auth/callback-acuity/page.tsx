@@ -2,9 +2,8 @@
 
 import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
 
-function OAuthCallbackContent() {
+function AcuityCallbackContent() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -18,7 +17,7 @@ function OAuthCallbackContent() {
         const state = searchParams.get('state')
         
         if (!code) {
-          throw new Error('No authorization code received')
+          throw new Error('No authorization code received from Acuity')
         }
         
         // Check if this is from the signup flow
@@ -34,59 +33,28 @@ function OAuthCallbackContent() {
         
         const formData = JSON.parse(storedFormData)
         
-        // Determine which OAuth provider we're handling
-        const isAcuity = window.location.pathname.includes('callback-acuity')
+        // Exchange the authorization code for tokens
+        const tokenResponse = await fetch('/api/acuity/exchange-token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ code }),
+        })
         
-        if (isAcuity) {
-          // Handle Acuity callback
-          const tokenResponse = await fetch('/api/acuity/exchange-token', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ code }),
-          })
-          
-          if (!tokenResponse.ok) {
-            throw new Error('Failed to exchange authorization code for Acuity tokens')
-          }
-          
-          const tokenData = await tokenResponse.json()
-          
-          // Update the form data to include Acuity tokens and connection status
-          formData.acuityConnected = true
-          formData.acuityAuthToken = {
-            access_token: tokenData.access_token,
-            token_type: tokenData.token_type,
-            expires_in: tokenData.expires_in,
-            created_at: new Date().toISOString()
-          }
-        } else {
-          // Handle Google callback
-          const tokenResponse = await fetch('/api/google/exchange-token', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ code }),
-          })
-          
-          if (!tokenResponse.ok) {
-            throw new Error('Failed to exchange authorization code for Google tokens')
-          }
-          
-          const tokenData = await tokenResponse.json()
-          
-          // Update the form data to include Google tokens and connection status
-          formData.calendarConnected = true
-          formData.googleAuthToken = {
-            scopes: ["https://www.googleapis.com/auth/calendar"],
-            client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-            token_uri: "https://accounts.google.com/o/oauth2/token",
-            access_token: tokenData.tokens.access_token,
-            refresh_token: tokenData.tokens.refresh_token,
-            expires_in: tokenData.tokens.expires_in
-          }
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to exchange authorization code for Acuity tokens')
+        }
+        
+        const tokenData = await tokenResponse.json()
+        
+        // Update the form data to include Acuity tokens and connection status
+        formData.acuityConnected = true
+        formData.acuityAuthToken = {
+          access_token: tokenData.access_token,
+          token_type: tokenData.token_type,
+          expires_in: tokenData.expires_in,
+          created_at: new Date().toISOString()
         }
         
         // Store updated form data
@@ -125,7 +93,7 @@ function OAuthCallbackContent() {
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             <h2 className="mt-6 text-center text-xl font-medium text-gray-900">
-              Connecting your calendar...
+              Connecting your Acuity account...
             </h2>
           </>
         )}
@@ -138,7 +106,7 @@ function OAuthCallbackContent() {
               </svg>
             </div>
             <h2 className="mt-6 text-center text-xl font-medium text-gray-900">
-              Calendar connected successfully!
+              Acuity account connected successfully!
             </h2>
             <p className="mt-2 text-sm text-gray-600">
               Redirecting you back to complete your signup...
@@ -154,7 +122,7 @@ function OAuthCallbackContent() {
               </svg>
             </div>
             <h2 className="mt-6 text-center text-xl font-medium text-gray-900">
-              Failed to connect calendar
+              Failed to connect Acuity account
             </h2>
             <p className="mt-2 text-sm text-red-600">
               {error || 'An unknown error occurred'}
@@ -177,10 +145,10 @@ function Loading() {
   )
 }
 
-export default function OAuthCallback() {
+export default function AcuityCallback() {
   return (
     <Suspense fallback={<Loading />}>
-      <OAuthCallbackContent />
+      <AcuityCallbackContent />
     </Suspense>
   )
 } 

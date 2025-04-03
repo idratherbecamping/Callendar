@@ -45,7 +45,8 @@ function SignUpContent() {
     service_type: '', // Add new field for service type
     subscriptionId: '', // Add field for Stripe subscription ID
     customerId: '', // Add field for Stripe customer ID
-    paymentComplete: false // Track payment completion
+    paymentComplete: false, // Track payment completion
+    acuityConnected: false, // Add new field for Acuity connection
   })
   const [addressIsValid, setAddressIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null)
@@ -413,11 +414,55 @@ function SignUpContent() {
     window.location.href = googleAuthUrl;
   };
 
+  const handleConnectAcuity = () => {
+    // Store the form data in localStorage before redirecting
+    localStorage.setItem('signupFormData', JSON.stringify(formData));
+    
+    // Get the client ID from environment variables
+    const clientId = process.env.NEXT_PUBLIC_ACUITY_CLIENT_ID;
+    const redirectUri = process.env.NEXT_PUBLIC_ACUITY_REDIRECT_URI;
+    
+    if (!clientId || !redirectUri) {
+      setError('Acuity OAuth configuration is missing. Please contact support.');
+      return;
+    }
+    
+    console.log('Initiating Acuity OAuth flow with:', {
+      clientId: clientId.substring(0, 5) + '...',
+      redirectUri
+    });
+    
+    // Generate a random state parameter for security
+    const state = Math.random().toString(36).substring(2, 15);
+    
+    // Store state in localStorage for verification
+    localStorage.setItem('acuity_oauth_state', state);
+    
+    // Construct the authorization URL
+    const authUrl = new URL('https://acuityscheduling.com/oauth2/authorize');
+    authUrl.searchParams.append('response_type', 'code');
+    authUrl.searchParams.append('scope', 'api-v1');
+    authUrl.searchParams.append('client_id', clientId);
+    authUrl.searchParams.append('redirect_uri', redirectUri);
+    authUrl.searchParams.append('state', state);
+    
+    // Redirect to Acuity's authorization page
+    window.location.href = authUrl.toString();
+  };
+
   // Add calendar connected state setter
   const setCalendarConnected = (connected: boolean) => {
     setFormData(prev => ({
       ...prev,
       calendarConnected: connected
+    }));
+  };
+
+  // Add Acuity connected state setter
+  const setAcuityConnected = (connected: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      acuityConnected: connected
     }));
   };
 
@@ -1196,60 +1241,79 @@ function SignUpContent() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <h3 className="mt-4 text-xl font-medium text-gray-900">Connect Google Calendar</h3>
+              <h3 className="mt-4 text-xl font-medium text-gray-900">Connect Your Calendar</h3>
               <p className="mt-2 text-sm text-gray-500">
-                Connect your Google Calendar to manage your appointments. We'll need access to:
-              </p>
-              <ul className="mt-4 text-left text-sm text-gray-700 space-y-2">
-                <li className="flex items-start">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  View your Calendar settings
-                </li>
-                <li className="flex items-start">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  View and edit events on all your calendars
-                </li>
-                <li className="flex items-start">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  View your availability in your calendars
-                </li>
-              </ul>
-              <p className="mt-4 text-sm text-gray-500">
-                By connecting your calendar, you agree to our{' '}
-                <Link href="/privacy-policy" className="text-indigo-600 hover:text-indigo-500">
-                  Privacy Policy
-                </Link>
+                Choose your preferred calendar service to manage your appointments.
               </p>
             </div>
-            
-            {formData.calendarConnected ? (
-              <div className="bg-green-50 p-4 rounded-md">
-                <div className="flex">
+
+            <div className="grid grid-cols-1 gap-4">
+              {/* Google Calendar Option */}
+              <div className={`border rounded-lg p-4 ${formData.calendarConnected ? 'border-green-500 bg-green-50' : 'border-gray-300'}`}>
+                <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    <svg className="h-6 w-6 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm0 2c5.535 0 10 4.465 10 10s-4.465 10-10 10S2 17.535 2 12 6.465 2 12 2zm0 4c-3.313 0-6 2.687-6 6s2.687 6 6 6 6-2.687 6-6-2.687-6-6-6zm0 2c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"/>
                     </svg>
                   </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-green-800">Google Calendar successfully connected</p>
+                  <div className="ml-3 flex-1">
+                    <h4 className="text-lg font-medium text-gray-900">Google Calendar</h4>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Connect your Google Calendar to manage appointments. We'll need access to view and edit your calendar events.
+                    </p>
+                    {formData.calendarConnected ? (
+                      <div className="mt-2 flex items-center text-green-600">
+                        <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-sm font-medium">Connected</span>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleConnectCalendar}
+                        className="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      >
+                        Connect Google Calendar
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
-            ) : (
-              <button
-                type="button"
-                onClick={handleConnectCalendar}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Connect Google Calendar
-              </button>
-            )}
+
+              {/* Acuity Option */}
+              <div className={`border rounded-lg p-4 ${formData.acuityConnected ? 'border-green-500 bg-green-50' : 'border-gray-300'}`}>
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <svg className="h-6 w-6 text-indigo-600" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    </svg>
+                  </div>
+                  <div className="ml-3 flex-1">
+                    <h4 className="text-lg font-medium text-gray-900">Acuity Scheduling</h4>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Connect your Acuity Scheduling account to manage appointments and availability.
+                    </p>
+                    {formData.acuityConnected ? (
+                      <div className="mt-2 flex items-center text-green-600">
+                        <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-sm font-medium">Connected</span>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleConnectAcuity}
+                        className="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        Connect Acuity
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div className="flex items-start">
               <div className="flex items-center h-5">
