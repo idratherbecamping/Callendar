@@ -2,6 +2,37 @@ import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase';
 import { supabase } from '@/lib/supabase';
 
+// Helper function to delay execution
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Helper function to create user profile with retries
+async function createUserProfile(supabaseAdmin: any, profileData: any, maxRetries = 3): Promise<{ error: any | null }> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    console.log(`Attempting to create user profile (attempt ${attempt}/${maxRetries})`);
+    
+    const { error } = await supabaseAdmin
+      .from('users')
+      .insert([profileData]);
+    
+    if (!error) {
+      console.log('User profile created successfully');
+      return { error: null };
+    }
+    
+    console.error(`Profile creation attempt ${attempt} failed:`, error);
+    
+    if (attempt < maxRetries) {
+      // Exponential backoff: 1s, 2s, 4s
+      const delayMs = Math.pow(2, attempt - 1) * 1000;
+      console.log(`Waiting ${delayMs}ms before retry...`);
+      await delay(delayMs);
+    }
+  }
+  
+  // If we've exhausted all retries, return the last error
+  return { error: new Error('Failed to create user profile after all retries') };
+}
+
 export async function POST(request: Request) {
   try {
     const { userData, authData, paymentData } = await request.json();
@@ -25,33 +56,44 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
+
+    if (!user?.user?.id) {
+      return NextResponse.json(
+        { error: 'Auth user created but ID is missing' },
+        { status: 500 }
+      );
+    }
+
+    // Add a small delay to ensure auth user is fully propagated
+    console.log('Auth user created, waiting for propagation...');
+    await delay(1000);
     
     // Get admin client that bypasses RLS
     const supabaseAdmin = createAdminClient();
     
-    // Create user profile with admin client (bypasses RLS)
-    const { error: profileError } = await supabaseAdmin
-      .from('users')
-      .insert([
-        {
-          id: user?.user?.id,
-          email: userData.email,
-          business_name: userData.businessName,
-          phone_number: userData.phoneNumber,
-          business_address: userData.businessAddress,
-          max_service_distance: userData.maxServiceDistance,
-          typical_service_time: userData.typicalServiceTime,
-          local_time_zone: userData.localTimeZone,
-          business_hours_local: [userData.businessHoursLocal.open, userData.businessHoursLocal.close],
-          calendar_connected: userData.calendarConnected,
-          google_auth_token: userData.googleAuthToken || null,
-          service_type: userData.service_type || 'House Call',
-          // Add Stripe data if available
-          stripe_customer_id: paymentData?.customerId || null,
-          stripe_subscription_id: paymentData?.subscriptionId || null,
-          subscription_status: 'trialing', // Default to trialing for new users
-        },
-      ]);
+    // Prepare profile data
+    const profileData = {
+      id: user.user.id,
+      email: userData.email,
+      business_name: userData.businessName,
+      phone_number: userData.phoneNumber,
+      business_address: userData.businessAddress,
+      max_service_distance: userData.maxServiceDistance,
+      typical_service_time: userData.typicalServiceTime,
+      local_time_zone: userData.localTimeZone,
+      business_hours_local: [userData.businessHoursLocal.open, userData.businessHoursLocal.close],
+      calendar_connected: userData.calendarConnected,
+      google_auth_token: userData.googleAuthToken || null,
+      acuity_auth_token: userData.acuityAuthToken || null,
+      service_type: userData.service_type || 'House Call',
+      // Add Stripe data if available
+      stripe_customer_id: paymentData?.customerId || null,
+      stripe_subscription_id: paymentData?.subscriptionId || null,
+      subscription_status: 'trialing', // Default to trialing for new users
+    };
+
+    // Create user profile with retries
+    const { error: profileError } = await createUserProfile(supabaseAdmin, profileData);
 
     if (profileError) {
       return NextResponse.json(
@@ -63,9 +105,9 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: 'User created successfully',
-      userId: user?.user?.id,
+      userId: user.user.id,
       user: {
-        id: user?.user?.id,
+        id: user.user.id,
         email: userData.email
       }
     });
