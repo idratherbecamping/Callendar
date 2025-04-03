@@ -1,12 +1,53 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase';
 import { supabase } from '@/lib/supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
+
+// Define types for profile data
+type AcuityAuthToken = {
+  access_token: string;
+  token_type: string;
+  expires_in?: number;
+  created_at: string;
+};
+
+type GoogleAuthToken = {
+  scopes: string[];
+  client_id: string;
+  token_uri: string;
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+};
+
+type UserProfileData = {
+  id: string;
+  email: string;
+  business_name: string;
+  phone_number: string;
+  business_address: string;
+  max_service_distance: number | string;
+  typical_service_time: number | string;
+  local_time_zone: string;
+  business_hours_local: [string, string];
+  calendar_connected: boolean;
+  google_auth_token: GoogleAuthToken | null;
+  acuity_auth_token: AcuityAuthToken | null;
+  service_type: string;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  subscription_status: string;
+};
 
 // Helper function to delay execution
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Helper function to create user profile with retries
-async function createUserProfile(supabaseAdmin: any, profileData: any, maxRetries = 3): Promise<{ error: any | null }> {
+async function createUserProfile(
+  supabaseAdmin: SupabaseClient,
+  profileData: UserProfileData,
+  maxRetries = 3
+): Promise<{ error: Error | null }> {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     console.log(`Attempting to create user profile (attempt ${attempt}/${maxRetries})`);
     
@@ -72,7 +113,7 @@ export async function POST(request: Request) {
     const supabaseAdmin = createAdminClient();
     
     // Prepare profile data
-    const profileData = {
+    const profileData: UserProfileData = {
       id: user.user.id,
       email: userData.email,
       business_name: userData.businessName,
