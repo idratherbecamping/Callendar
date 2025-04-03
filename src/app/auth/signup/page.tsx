@@ -814,7 +814,7 @@ function SignUpContent() {
               <h4 className="text-lg font-medium text-gray-700">Subscription Details</h4>
               <p className="text-sm text-gray-500 mt-2">
                 <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">1-MONTH FREE TRIAL</span>{' '}
-                then $30.00/month
+                then $45.00/month
               </p>
               <ul className="mt-4 text-sm text-gray-600 space-y-2">
                 <li className="flex">
