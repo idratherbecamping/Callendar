@@ -20,10 +20,15 @@ function AcuityCallbackContent() {
           throw new Error('No authorization code received from Acuity')
         }
         
-        // Check if this is from the signup flow
-        if (state !== 'signup') {
-          throw new Error('Invalid state parameter')
+        // Verify the state parameter
+        const storedState = localStorage.getItem('acuity_oauth_state')
+        if (!storedState || storedState !== state) {
+          console.error('State mismatch:', { storedState, receivedState: state })
+          throw new Error('Invalid state parameter. This may be due to a session timeout or security issue.')
         }
+        
+        // Clear the stored state after verification
+        localStorage.removeItem('acuity_oauth_state')
         
         // Retrieve saved form data
         const storedFormData = localStorage.getItem('signupFormData')

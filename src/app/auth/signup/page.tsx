@@ -399,6 +399,13 @@ function SignUpContent() {
       redirectUri
     });
     
+    // Generate a random state parameter for security
+    const state = Math.random().toString(36).substring(2, 15);
+    
+    // Store state in localStorage for verification
+    localStorage.setItem('google_oauth_state', state);
+    console.log('Stored Google OAuth state:', state);
+    
     // Redirect to Google OAuth URL
     const googleAuthUrl = 
       'https://accounts.google.com/o/oauth2/v2/auth?' +
@@ -407,7 +414,7 @@ function SignUpContent() {
       'prompt=consent&' +
       'include_granted_scopes=true&' +
       'response_type=code&' +
-      'state=signup&' +
+      `state=${state}&` +
       `redirect_uri=${encodeURIComponent(redirectUri)}&` +
       `client_id=${clientId}`;
     
@@ -437,6 +444,7 @@ function SignUpContent() {
     
     // Store state in localStorage for verification
     localStorage.setItem('acuity_oauth_state', state);
+    console.log('Stored Acuity OAuth state:', state);
     
     // Construct the authorization URL according to Acuity documentation
     const authUrl = new URL('https://acuityscheduling.com/oauth2/authorize');
