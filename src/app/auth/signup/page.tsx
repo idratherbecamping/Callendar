@@ -438,7 +438,7 @@ function SignUpContent() {
     // Store state in localStorage for verification
     localStorage.setItem('acuity_oauth_state', state);
     
-    // Construct the authorization URL
+    // Construct the authorization URL according to Acuity documentation
     const authUrl = new URL('https://acuityscheduling.com/oauth2/authorize');
     authUrl.searchParams.append('response_type', 'code');
     authUrl.searchParams.append('scope', 'api-v1');

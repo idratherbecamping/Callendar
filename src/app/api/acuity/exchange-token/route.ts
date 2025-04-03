@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 // Get credentials from environment variables (server-side only)
 const ACUITY_CLIENT_ID = process.env.ACUITY_CLIENT_ID;
-const ACUITY_CLIENT_SECRET = process.env.ACUITY_SECRET;
+const ACUITY_CLIENT_SECRET = process.env.ACUITY_CLIENT_SECRET;
 const REDIRECT_URI = process.env.ACUITY_REDIRECT_URI;
 
 export async function POST(request: Request) {
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       redirectUri: REDIRECT_URI
     });
 
-    // Exchange the authorization code for tokens
+    // Exchange the authorization code for tokens according to Acuity documentation
     const tokenResponse = await fetch('https://acuityscheduling.com/oauth2/token', {
       method: 'POST',
       headers: {
@@ -39,9 +39,9 @@ export async function POST(request: Request) {
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        client_id: process.env.ACUITY_CLIENT_ID!,
-        client_secret: process.env.ACUITY_CLIENT_SECRET!,
-        redirect_uri: process.env.ACUITY_REDIRECT_URI!,
+        client_id: ACUITY_CLIENT_ID,
+        client_secret: ACUITY_CLIENT_SECRET,
+        redirect_uri: REDIRECT_URI,
       }),
     });
 
