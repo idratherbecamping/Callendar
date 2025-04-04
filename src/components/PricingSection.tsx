@@ -9,7 +9,7 @@ const PricingSection = () => {
   const features = [
     "First 30 days FREE",
     "Cancel anytime",
-    "Pays for itself with 1 missed call",
+    "Pays for itself with 1 missed opportunity",
     "No contracts",
     "Big business tools, small business price",
     
@@ -50,7 +50,7 @@ const PricingSection = () => {
               Signup for Callendar AI for free now!
             </CardTitle>
             <div className="mt-6 flex justify-center items-baseline">
-              <span className="text-4xl font-bold">45</span>
+              <span className="text-4xl font-bold">$45</span>
               <span className="text-gray-400 ml-1">/mo</span>
             </div>
             <p className="text-sm text-gray-400 mt-2">For a Limited time!</p>
