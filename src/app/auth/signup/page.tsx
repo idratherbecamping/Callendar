@@ -47,6 +47,7 @@ function SignUpContent() {
     customerId: '', // Add field for Stripe customer ID
     paymentComplete: false, // Track payment completion
     acuityConnected: false, // Add new field for Acuity connection
+    with_work_description: false, // Add new field for work description
   })
   const [addressIsValid, setAddressIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null)
@@ -1100,6 +1101,38 @@ function SignUpContent() {
                 }
               </p>
             </div>
+            
+            {/* Add Work Description option for Scheduler service type */}
+            {formData.service_type === 'Scheduler' && (
+              <div className="mt-4">
+                <div className="flex items-start">
+                  <div className="flex items-center h-5">
+                    <input
+                      id="with_work_description"
+                      name="with_work_description"
+                      type="checkbox"
+                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                      checked={formData.with_work_description === true}
+                      onChange={(e) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          with_work_description: e.target.checked
+                        }));
+                      }}
+                    />
+                  </div>
+                  <div className="ml-3 text-sm">
+                    <label htmlFor="with_work_description" className="font-medium text-gray-700">
+                      Ask customers for a work description
+                    </label>
+                    <p className="text-gray-500">
+                      When enabled, customers will be prompted to provide a description of their needs when booking appointments.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <div className="flex justify-between">
               <button
                 type="button"
