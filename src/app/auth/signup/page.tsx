@@ -48,6 +48,7 @@ function SignUpContent() {
     paymentComplete: false, // Track payment completion
     acuityConnected: false, // Add new field for Acuity connection
     with_work_description: false, // Add new field for work description
+    phone_carrier: '', // Add new field for phone carrier
   })
   const [addressIsValid, setAddressIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null)
@@ -161,6 +162,11 @@ function SignUpContent() {
       
       if (!formData.phoneNumber.trim()) {
         setError('Phone number is required');
+        return;
+      }
+      
+      if (!formData.phone_carrier) {
+        setError('Please select your phone carrier');
         return;
       }
       
@@ -1078,6 +1084,67 @@ function SignUpContent() {
                 </svg>
                 This number needs to be the primary number for your business and also able to receive text messages.
               </p>
+            </div>
+            <div>
+              <label htmlFor="phone_carrier" className="block text-lg font-medium text-gray-700 mb-2">
+                Phone Carrier
+              </label>
+              <div className="grid grid-cols-3 gap-3">
+                <div 
+                  className={`border rounded-lg p-3 cursor-pointer hover:border-indigo-500 transition-colors ${formData.phone_carrier === 'Verizon' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  onClick={() => setFormData(prev => ({ ...prev, phone_carrier: 'Verizon' }))}
+                >
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      name="phone_carrier"
+                      id="verizon"
+                      checked={formData.phone_carrier === 'Verizon'}
+                      onChange={() => setFormData(prev => ({ ...prev, phone_carrier: 'Verizon' }))}
+                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                    />
+                    <label htmlFor="verizon" className="ml-2 block text-sm font-medium text-gray-700">
+                      Verizon
+                    </label>
+                  </div>
+                </div>
+                <div 
+                  className={`border rounded-lg p-3 cursor-pointer hover:border-indigo-500 transition-colors ${formData.phone_carrier === 'ATT' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  onClick={() => setFormData(prev => ({ ...prev, phone_carrier: 'ATT' }))}
+                >
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      name="phone_carrier"
+                      id="att"
+                      checked={formData.phone_carrier === 'ATT'}
+                      onChange={() => setFormData(prev => ({ ...prev, phone_carrier: 'ATT' }))}
+                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                    />
+                    <label htmlFor="att" className="ml-2 block text-sm font-medium text-gray-700">
+                      AT&T
+                    </label>
+                  </div>
+                </div>
+                <div 
+                  className={`border rounded-lg p-3 cursor-pointer hover:border-indigo-500 transition-colors ${formData.phone_carrier === 'Other' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  onClick={() => setFormData(prev => ({ ...prev, phone_carrier: 'Other' }))}
+                >
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      name="phone_carrier"
+                      id="other"
+                      checked={formData.phone_carrier === 'Other'}
+                      onChange={() => setFormData(prev => ({ ...prev, phone_carrier: 'Other' }))}
+                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                    />
+                    <label htmlFor="other" className="ml-2 block text-sm font-medium text-gray-700">
+                      Other
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
             <div>
               <label htmlFor="businessAddress" className="block text-lg font-medium text-gray-700 mb-2">
