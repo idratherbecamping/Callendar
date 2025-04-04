@@ -68,6 +68,12 @@ const Navbar = () => {
               Features
             </Link>
             <Link
+              href="#WhoItsFor"
+              className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
+            >
+              Who It's For
+            </Link>
+            <Link
               href="#HIW"
               className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >

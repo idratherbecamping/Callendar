@@ -16,6 +16,9 @@ const Footer = () => {
             <Link href="#Features" className="text-gray-400 hover:text-white">
               Features
             </Link>
+            <Link href="#WhoItsFor" className="text-gray-400 hover:text-white">
+              Who It's For
+            </Link>
             <Link href="#HIW" className="text-gray-400 hover:text-white">
               How It Works
             </Link>

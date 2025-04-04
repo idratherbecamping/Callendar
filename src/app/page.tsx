@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
+import WhoItsForSection from "@/components/WhoItsForSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import PricingSection from "@/components/PricingSection";
 import FAQSection from "@/components/FAQSection";
@@ -33,6 +34,10 @@ export default function Home() {
 
       <ScrollAnimation animationClass="fade-in">
         <FeaturesSection />
+      </ScrollAnimation>
+
+      <ScrollAnimation animationClass="slide-up">
+        <WhoItsForSection />
       </ScrollAnimation>
 
       <ScrollAnimation animationClass="slide-up">

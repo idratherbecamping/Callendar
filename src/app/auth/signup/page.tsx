@@ -1006,7 +1006,7 @@ function SignUpContent() {
                       <details className="mt-2 text-sm">
                         <summary className="text-indigo-600 cursor-pointer font-medium">Read more</summary>
                         <div className="mt-2 pl-2 border-l-2 border-gray-200 text-gray-600">
-                          Ideal for accountants, consultants, salons, or any business where clients visit your office
+                          Ideal for barbers, salons, accountants, consultants, or any business where clients visit your office
                           or connect with you virtually. Focuses on calendar booking without travel calculations.
                         </div>
                       </details>

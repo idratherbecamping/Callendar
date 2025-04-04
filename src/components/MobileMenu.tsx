@@ -65,6 +65,13 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
             Features
           </Link>
           <Link
+            href="#WhoItsFor"
+            className="text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
+            onClick={onClose}
+          >
+            Who It's For
+          </Link>
+          <Link
             href="#HIW"
             className="text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
             onClick={onClose}
