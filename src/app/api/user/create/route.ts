@@ -25,6 +25,7 @@ type UserProfileData = {
   email: string;
   business_name: string;
   phone_number: string;
+  phone_carrier: string;
   business_address: string;
   max_service_distance: number | string;
   typical_service_time: number | string;
@@ -118,6 +119,7 @@ export async function POST(request: Request) {
       email: userData.email,
       business_name: userData.businessName,
       phone_number: userData.phoneNumber,
+      phone_carrier: userData.phone_carrier || 'Other',
       business_address: userData.businessAddress,
       max_service_distance: userData.maxServiceDistance,
       typical_service_time: userData.typicalServiceTime,
