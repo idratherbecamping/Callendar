@@ -354,7 +354,8 @@ function SignUpContent() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          to_number: formData.phoneNumber
+          to_number: formData.phoneNumber,
+          phone_carrier: formData.phone_carrier
         }),
       });
 
@@ -697,7 +698,8 @@ function SignUpContent() {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    to_number: updatedFormData.phoneNumber
+                    to_number: updatedFormData.phoneNumber,
+                    phone_carrier: updatedFormData.phone_carrier
                   }),
                 });
                 
