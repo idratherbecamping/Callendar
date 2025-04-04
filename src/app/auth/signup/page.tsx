@@ -1091,7 +1091,7 @@ function SignUpContent() {
               <label htmlFor="phone_carrier" className="block text-lg font-medium text-gray-700 mb-2">
                 Phone Carrier
               </label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div 
                   className={`border rounded-lg p-3 cursor-pointer hover:border-indigo-500 transition-colors ${formData.phone_carrier === 'Verizon' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
                   onClick={() => setFormData(prev => ({ ...prev, phone_carrier: 'Verizon' }))}
@@ -1125,6 +1125,24 @@ function SignUpContent() {
                     />
                     <label htmlFor="att" className="ml-2 block text-sm font-medium text-gray-700">
                       AT&T
+                    </label>
+                  </div>
+                </div>
+                <div 
+                  className={`border rounded-lg p-3 cursor-pointer hover:border-indigo-500 transition-colors ${formData.phone_carrier === 'TMobile' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  onClick={() => setFormData(prev => ({ ...prev, phone_carrier: 'TMobile' }))}
+                >
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      name="phone_carrier"
+                      id="tmobile"
+                      checked={formData.phone_carrier === 'TMobile'}
+                      onChange={() => setFormData(prev => ({ ...prev, phone_carrier: 'TMobile' }))}
+                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                    />
+                    <label htmlFor="tmobile" className="ml-2 block text-sm font-medium text-gray-700">
+                      T-Mobile
                     </label>
                   </div>
                 </div>
