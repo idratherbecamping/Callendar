@@ -128,7 +128,7 @@ const HeroSection = () => {
             onClick={() => setShowPhoneDialog(true)}
             disabled={isCallLoading}
           >
-            {isCallLoading ? 'Calling...' : 'Test Call'}
+            {isCallLoading ? 'Calling...' : 'Try It Now'}
           </Button>
           {/* <Button className="beesly-button beesly-button-primary w-48 h-12 flex items-center gap-2">
             Download the Callendar app
