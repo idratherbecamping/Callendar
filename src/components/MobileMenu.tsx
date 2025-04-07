@@ -95,6 +95,17 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
         </nav>
 
         <div className="mt-8 space-y-4">
+          <a
+            href="mailto:gannon@callendar.ai?subject=Demo%20Request%20for%20Callendar.ai"
+            className="block"
+            onClick={onClose}
+          >
+            <Button
+              className="beesly-button beesly-button-secondary w-full"
+            >
+              Schedule a Demo
+            </Button>
+          </a>
           <Link href="/auth/signin" onClick={onClose}>
             <Button
               variant="outline"

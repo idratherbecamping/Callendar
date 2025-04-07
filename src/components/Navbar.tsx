@@ -94,6 +94,12 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex space-x-4">
+            <a
+              href="mailto:gannon@callendar.ai?subject=Demo%20Request%20for%20Callendar.ai"
+              className="beesly-button beesly-button-secondary rounded-xl px-6 py-2"
+            >
+              Schedule a Demo
+            </a>
             <Link href="/auth/signin">
               <Button
                 variant="outline"
