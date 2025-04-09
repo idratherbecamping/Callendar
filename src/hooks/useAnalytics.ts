@@ -4,13 +4,21 @@ import { trackPageView, trackNavigation, NavigationProperties } from '@/lib/anal
 
 export const useAnalytics = () => {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  
+  // Safely get search params with error handling
+  let searchParamsString = '';
+  try {
+    const searchParams = useSearchParams();
+    searchParamsString = searchParams?.toString() ? `?${searchParams.toString()}` : '';
+  } catch (error) {
+    console.warn('useSearchParams failed, continuing without search params');
+  }
 
   useEffect(() => {
     // Track page view on initial load and route changes
-    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
+    const url = pathname + searchParamsString;
     trackPageView(url);
-  }, [pathname, searchParams]);
+  }, [pathname, searchParamsString]);
 
   return {
     trackNavigation: (from: string, to: string, properties?: Omit<NavigationProperties, 'from' | 'to'>) => {
