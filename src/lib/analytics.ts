@@ -1,12 +1,17 @@
 import { track } from '@vercel/analytics';
 
+// Define a type for analytics data
+export type AnalyticsData = {
+  [key: string]: string | number | boolean | null;
+};
+
 // Track page view time
 export const trackPageView = (pageName: string) => {
   track('Page View', { page: pageName });
 };
 
 // Track button clicks
-export const trackButtonClick = (buttonName: string, additionalData?: Record<string, any>) => {
+export const trackButtonClick = (buttonName: string, additionalData?: AnalyticsData) => {
   track('Button Click', { 
     button: buttonName,
     ...additionalData
@@ -14,7 +19,7 @@ export const trackButtonClick = (buttonName: string, additionalData?: Record<str
 };
 
 // Track sign up events
-export const trackSignUp = (step: string, additionalData?: Record<string, any>) => {
+export const trackSignUp = (step: string, additionalData?: AnalyticsData) => {
   track('Sign Up', {
     step,
     ...additionalData
