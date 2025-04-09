@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Poppins, Lexend_Deca } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 
@@ -36,9 +37,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
-      <ClientBody>
-        <div className="dark">{children}</div>
-      </ClientBody>
+      <body className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
+        <ClientBody>
+          <div className="dark">{children}</div>
+          <Analytics />
+        </ClientBody>
+      </body>
     </html>
   );
 }
