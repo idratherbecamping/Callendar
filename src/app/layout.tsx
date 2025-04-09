@@ -3,6 +3,7 @@ import { Inter, Poppins, Lexend_Deca } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import ClientBody from "./ClientBody";
+import { AnalyticsProvider } from "./providers/AnalyticsProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -38,10 +39,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
       <body className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
-        <ClientBody>
-          <div className="dark">{children}</div>
-          <Analytics />
-        </ClientBody>
+        <AnalyticsProvider>
+          <ClientBody>
+            <div className="dark">{children}</div>
+            <Analytics />
+          </ClientBody>
+        </AnalyticsProvider>
       </body>
     </html>
   );
