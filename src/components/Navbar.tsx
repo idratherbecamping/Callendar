@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import MobileMenu from "./MobileMenu";
+import { trackButtonClick, trackDemoRequest } from "@/lib/analytics";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -39,6 +40,14 @@ const Navbar = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleDemoClick = () => {
+    trackDemoRequest('navbar');
+  };
+
+  const handleSignUpClick = () => {
+    trackButtonClick('Sign Up', { location: 'navbar' });
   };
 
   return (
@@ -97,6 +106,7 @@ const Navbar = () => {
             <a
               href="mailto:gannon@callendar.ai?subject=Demo%20Request%20for%20Callendar.ai"
               className="beesly-button beesly-button-secondary rounded-xl px-6 py-2"
+              onClick={handleDemoClick}
             >
               Schedule a Demo
             </a>
@@ -108,7 +118,7 @@ const Navbar = () => {
                 Sign In
               </Button>
             </Link>
-            <Link href="/auth/signup">
+            <Link href="/auth/signup" onClick={handleSignUpClick}>
               <Button
                 className="beesly-button beesly-button-primary rounded-xl px-6 py-2"
               >

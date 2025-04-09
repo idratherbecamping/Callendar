@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { trackButtonClick, trackDemoRequest } from "@/lib/analytics";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -10,6 +11,18 @@ interface MobileMenuProps {
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
+  const handleDemoClick = () => {
+    trackDemoRequest('mobile_menu');
+    onClose();
+  };
+
+  const handleSignUpClick = () => {
+    trackButtonClick('Sign Up', { location: 'mobile_menu' });
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
   return (
     <>
       {/* Overlay */}
@@ -98,7 +111,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
           <a
             href="mailto:gannon@callendar.ai?subject=Demo%20Request%20for%20Callendar.ai"
             className="block"
-            onClick={onClose}
+            onClick={handleDemoClick}
           >
             <Button
               className="beesly-button beesly-button-secondary w-full"
@@ -114,7 +127,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
               Sign In
             </Button>
           </Link>
-          <Link href="/auth/signup" onClick={onClose}>
+          <Link href="/auth/signup" onClick={handleSignUpClick}>
             <Button
               className="beesly-button beesly-button-primary w-full"
             >

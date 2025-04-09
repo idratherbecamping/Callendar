@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { trackButtonClick } from "@/lib/analytics";
 
 const HeroSection = () => {
   const [isCallLoading, setIsCallLoading] = useState(false);
@@ -58,6 +59,11 @@ const HeroSection = () => {
     } finally {
       setIsCallLoading(false);
     }
+  };
+
+  const handleTryItNow = () => {
+    trackButtonClick('Try It Now', { location: 'hero' });
+    setShowPhoneDialog(true);
   };
 
   return (
@@ -128,7 +134,7 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row items-start gap-5">
               <Button 
                 className="beesly-button beesly-button-secondary w-48 h-12"
-                onClick={() => setShowPhoneDialog(true)}
+                onClick={handleTryItNow}
                 disabled={isCallLoading}
               >
                 {isCallLoading ? 'Calling...' : 'Try It Now'}
