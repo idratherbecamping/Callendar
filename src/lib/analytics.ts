@@ -24,32 +24,33 @@ export type NavigationProperties = {
   duration?: number;
 };
 
-export const trackPageView = (url: string) => {
+export const trackPageView = (url: string, flags?: string[]) => {
   track('page_view', {
     url,
     timestamp: new Date().toISOString(),
-  });
+  }, { flags });
 };
 
 export const trackUserInteraction = (
   eventName: string,
-  properties: Record<string, string | number | boolean>
+  properties: Record<string, string | number | boolean>,
+  flags?: string[]
 ) => {
   track(eventName, {
     ...properties,
     timestamp: new Date().toISOString(),
-  });
+  }, { flags });
 };
 
 // Common interaction events
-export const trackButtonClick = (buttonName: string, properties?: Omit<ButtonClickProperties, 'button_name'>) => {
+export const trackButtonClick = (buttonName: string, properties?: Omit<ButtonClickProperties, 'button_name'>, flags?: string[]) => {
   trackUserInteraction('button_click', {
     button_name: buttonName,
     ...(properties || {}),
-  });
+  }, flags);
 };
 
-export const trackFormSubmission = (formName: string, properties?: Omit<FormSubmissionProperties, 'form_name'>) => {
+export const trackFormSubmission = (formName: string, properties?: Omit<FormSubmissionProperties, 'form_name'>, flags?: string[]) => {
   // Convert form_fields array to comma-separated string if it exists
   const processedProperties = properties ? {
     ...properties,
@@ -64,13 +65,13 @@ export const trackFormSubmission = (formName: string, properties?: Omit<FormSubm
   trackUserInteraction('form_submission', {
     form_name: formName,
     ...cleanProperties,
-  });
+  }, flags);
 };
 
-export const trackNavigation = (from: string, to: string, properties?: Omit<NavigationProperties, 'from' | 'to'>) => {
+export const trackNavigation = (from: string, to: string, properties?: Omit<NavigationProperties, 'from' | 'to'>, flags?: string[]) => {
   trackUserInteraction('navigation', {
     from,
     to,
     ...(properties || {}),
-  });
+  }, flags);
 }; 

@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
       <body className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
-        <AnalyticsProvider>
+        <AnalyticsProvider flags={['production', 'v1']}>
           <ClientBody>
             <div className="dark">{children}</div>
             <Analytics />
