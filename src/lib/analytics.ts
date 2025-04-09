@@ -3,22 +3,22 @@ import { track } from '@vercel/analytics';
 // Define types for analytics events
 export type AnalyticsEventProperties = {
   timestamp: string;
-  [key: string]: string | number | boolean | undefined;
+  [key: string]: string | number | boolean;
 };
 
-export type ButtonClickProperties = AnalyticsEventProperties & {
+export type ButtonClickProperties = {
   button_name: string;
   location?: string;
   success?: boolean;
 };
 
-export type FormSubmissionProperties = AnalyticsEventProperties & {
+export type FormSubmissionProperties = {
   form_name: string;
   form_fields?: string[];
   success?: boolean;
 };
 
-export type NavigationProperties = AnalyticsEventProperties & {
+export type NavigationProperties = {
   from: string;
   to: string;
   duration?: number;
@@ -31,9 +31,9 @@ export const trackPageView = (url: string) => {
   });
 };
 
-export const trackUserInteraction = <T extends AnalyticsEventProperties>(
+export const trackUserInteraction = (
   eventName: string,
-  properties: T
+  properties: Record<string, string | number | boolean>
 ) => {
   track(eventName, {
     ...properties,
@@ -42,27 +42,35 @@ export const trackUserInteraction = <T extends AnalyticsEventProperties>(
 };
 
 // Common interaction events
-export const trackButtonClick = (buttonName: string, properties?: Omit<ButtonClickProperties, 'button_name' | 'timestamp'>) => {
+export const trackButtonClick = (buttonName: string, properties?: Omit<ButtonClickProperties, 'button_name'>) => {
   trackUserInteraction('button_click', {
     button_name: buttonName,
-    timestamp: new Date().toISOString(),
-    ...properties,
+    ...(properties || {}),
   });
 };
 
-export const trackFormSubmission = (formName: string, properties?: Omit<FormSubmissionProperties, 'form_name' | 'timestamp'>) => {
+export const trackFormSubmission = (formName: string, properties?: Omit<FormSubmissionProperties, 'form_name'>) => {
+  // Convert form_fields array to comma-separated string if it exists
+  const processedProperties = properties ? {
+    ...properties,
+    form_fields: properties.form_fields ? properties.form_fields.join(',') : undefined,
+  } : {};
+  
+  // Remove undefined values
+  const cleanProperties = Object.fromEntries(
+    Object.entries(processedProperties).filter(([_, value]) => value !== undefined)
+  ) as Record<string, string | number | boolean>;
+  
   trackUserInteraction('form_submission', {
     form_name: formName,
-    timestamp: new Date().toISOString(),
-    ...properties,
+    ...cleanProperties,
   });
 };
 
-export const trackNavigation = (from: string, to: string, properties?: Omit<NavigationProperties, 'from' | 'to' | 'timestamp'>) => {
+export const trackNavigation = (from: string, to: string, properties?: Omit<NavigationProperties, 'from' | 'to'>) => {
   trackUserInteraction('navigation', {
     from,
     to,
-    timestamp: new Date().toISOString(),
-    ...properties,
+    ...(properties || {}),
   });
 }; 

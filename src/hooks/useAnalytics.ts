@@ -13,7 +13,7 @@ export const useAnalytics = () => {
   }, [pathname, searchParams]);
 
   return {
-    trackNavigation: (from: string, to: string, properties?: Omit<NavigationProperties, 'from' | 'to' | 'timestamp'>) => {
+    trackNavigation: (from: string, to: string, properties?: Omit<NavigationProperties, 'from' | 'to'>) => {
       trackNavigation(from, to, properties);
     },
   };
