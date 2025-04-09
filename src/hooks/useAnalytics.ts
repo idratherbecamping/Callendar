@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { trackPageView, trackNavigation } from '@/lib/analytics';
+import { trackPageView, trackNavigation, NavigationProperties } from '@/lib/analytics';
 
 export const useAnalytics = () => {
   const pathname = usePathname();
@@ -13,7 +13,7 @@ export const useAnalytics = () => {
   }, [pathname, searchParams]);
 
   return {
-    trackNavigation: (from: string, to: string, properties?: Record<string, any>) => {
+    trackNavigation: (from: string, to: string, properties?: Omit<NavigationProperties, 'from' | 'to' | 'timestamp'>) => {
       trackNavigation(from, to, properties);
     },
   };

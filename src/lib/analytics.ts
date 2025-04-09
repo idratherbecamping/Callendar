@@ -1,5 +1,29 @@
 import { track } from '@vercel/analytics';
 
+// Define types for analytics events
+export type AnalyticsEventProperties = {
+  timestamp: string;
+  [key: string]: string | number | boolean | undefined;
+};
+
+export type ButtonClickProperties = AnalyticsEventProperties & {
+  button_name: string;
+  location?: string;
+  success?: boolean;
+};
+
+export type FormSubmissionProperties = AnalyticsEventProperties & {
+  form_name: string;
+  form_fields?: string[];
+  success?: boolean;
+};
+
+export type NavigationProperties = AnalyticsEventProperties & {
+  from: string;
+  to: string;
+  duration?: number;
+};
+
 export const trackPageView = (url: string) => {
   track('page_view', {
     url,
@@ -7,9 +31,9 @@ export const trackPageView = (url: string) => {
   });
 };
 
-export const trackUserInteraction = (
+export const trackUserInteraction = <T extends AnalyticsEventProperties>(
   eventName: string,
-  properties?: Record<string, any>
+  properties: T
 ) => {
   track(eventName, {
     ...properties,
@@ -18,24 +42,27 @@ export const trackUserInteraction = (
 };
 
 // Common interaction events
-export const trackButtonClick = (buttonName: string, properties?: Record<string, any>) => {
+export const trackButtonClick = (buttonName: string, properties?: Omit<ButtonClickProperties, 'button_name' | 'timestamp'>) => {
   trackUserInteraction('button_click', {
     button_name: buttonName,
+    timestamp: new Date().toISOString(),
     ...properties,
   });
 };
 
-export const trackFormSubmission = (formName: string, properties?: Record<string, any>) => {
+export const trackFormSubmission = (formName: string, properties?: Omit<FormSubmissionProperties, 'form_name' | 'timestamp'>) => {
   trackUserInteraction('form_submission', {
     form_name: formName,
+    timestamp: new Date().toISOString(),
     ...properties,
   });
 };
 
-export const trackNavigation = (from: string, to: string, properties?: Record<string, any>) => {
+export const trackNavigation = (from: string, to: string, properties?: Omit<NavigationProperties, 'from' | 'to' | 'timestamp'>) => {
   trackUserInteraction('navigation', {
     from,
     to,
+    timestamp: new Date().toISOString(),
     ...properties,
   });
 }; 
