@@ -25,9 +25,9 @@ const Footer = () => {
             <Link href="#Pricing" className="text-gray-400 hover:text-white">
               Pricing
             </Link>
-            <Link href="#FAQs" className="text-gray-400 hover:text-white">
+            {/* <Link href="#FAQs" className="text-gray-400 hover:text-white">
               FAQs
-            </Link>
+            </Link> */}
             <Link href="/privacy-policy" className="text-gray-400 hover:text-white">
               Privacy Policy
             </Link>

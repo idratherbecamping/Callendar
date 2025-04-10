@@ -9,6 +9,21 @@ import { trackButtonClick, trackDemoRequest } from "@/lib/analytics";
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [whoItsForDropdownOpen, setWhoItsForDropdownOpen] = useState(false);
+
+  // Define the industry categories for the dropdown menu
+  const industryCategories = {
+    officeVirtual: [
+      { name: "Barbers & Salons", path: "/services/office" },
+      { name: "Financial Advisors", path: "/services/office" },
+      { name: "Accountants", path: "/services/office" },
+    ],
+    houseCalls: [
+      { name: "Pool Cleaners", path: "/services/house-call" },
+      { name: "Plumbers", path: "/services/house-call" },
+    ],
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,8 +53,36 @@ const Navbar = () => {
     };
   }, [isMobileMenuOpen]);
 
+  useEffect(() => {
+    // Close the dropdowns when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.services-dropdown')) {
+        setServicesDropdownOpen(false);
+      }
+      if (!target.closest('.who-its-for-dropdown')) {
+        setWhoItsForDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const toggleServicesDropdown = () => {
+    setServicesDropdownOpen(!servicesDropdownOpen);
+    if (whoItsForDropdownOpen) setWhoItsForDropdownOpen(false);
+  };
+
+  const toggleWhoItsForDropdown = () => {
+    setWhoItsForDropdownOpen(!whoItsForDropdownOpen);
+    if (servicesDropdownOpen) setServicesDropdownOpen(false);
   };
 
   const handleDemoClick = () => {
@@ -70,36 +113,140 @@ const Navbar = () => {
           </Link>
 
           <div className="hidden md:flex space-x-8 items-center">
-            <Link
+            {/* <Link
               href="#Features"
               className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >
               Features
-            </Link>
+            </Link> */}
+            
+            {/* Services Dropdown */}
+            <div className="relative services-dropdown">
+              <button 
+                onClick={toggleServicesDropdown}
+                className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow flex items-center"
+              >
+                Services
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className={`h-4 w-4 ml-1 transition-transform ${servicesDropdownOpen ? 'rotate-180' : ''}`} 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {servicesDropdownOpen && (
+                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                  <div className="py-1" role="menu" aria-orientation="vertical">
+                    <Link
+                      href="/services/office"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-100"
+                      onClick={() => setServicesDropdownOpen(false)}
+                    >
+                      Office & Virtual Services
+                    </Link>
+                    <Link
+                      href="/services/house-call"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-100"
+                      onClick={() => setServicesDropdownOpen(false)}
+                    >
+                      House Call Services
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* Who It's For Dropdown */}
+            <div className="relative who-its-for-dropdown">
+              <button 
+                onClick={toggleWhoItsForDropdown}
+                className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow flex items-center"
+              >
+                Who It's For
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className={`h-4 w-4 ml-1 transition-transform ${whoItsForDropdownOpen ? 'rotate-180' : ''}`} 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {whoItsForDropdownOpen && (
+                <div className="absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                  <div className="py-2 px-3" role="menu" aria-orientation="vertical">
+                    <div className="border-b border-gray-200 pb-2 mb-1">
+                      <Link 
+                        href="/services/office" 
+                        className="block mb-1"
+                        onClick={() => setWhoItsForDropdownOpen(false)}
+                      >
+                        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700">Office & Virtual</span>
+                      </Link>
+                      <div className="mt-1 grid grid-cols-2 gap-1">
+                        {industryCategories.officeVirtual.map((industry, index) => (
+                          <Link
+                            key={index}
+                            href={industry.path}
+                            className="block px-2 py-1 text-sm text-gray-700 hover:bg-green-100 rounded"
+                            onClick={() => setWhoItsForDropdownOpen(false)}
+                          >
+                            {industry.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Link 
+                        href="/services/house-call" 
+                        className="block mb-1"
+                        onClick={() => setWhoItsForDropdownOpen(false)}
+                      >
+                        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700">House Call Services</span>
+                      </Link>
+                      <div className="mt-1 grid grid-cols-2 gap-1">
+                        {industryCategories.houseCalls.map((industry, index) => (
+                          <Link
+                            key={index}
+                            href={industry.path}
+                            className="block px-2 py-1 text-sm text-gray-700 hover:bg-indigo-100 rounded"
+                            onClick={() => setWhoItsForDropdownOpen(false)}
+                          >
+                            {industry.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
             <Link
-              href="#WhoItsFor"
-              className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
-            >
-              Who It's For
-            </Link>
-            <Link
-              href="#HIW"
+              href="/#HIW"
               className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >
               How It Works
             </Link>
             <Link
-              href="#Pricing"
+              href="/#Pricing"
               className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >
               Pricing
             </Link>
-            <Link
+            {/* <Link
               href="#FAQs"
               className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >
               FAQs
-            </Link>
+            </Link> */}
           </div>
 
           <div className="hidden md:flex space-x-4">
@@ -158,6 +305,7 @@ const Navbar = () => {
       <MobileMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
+        industryCategories={industryCategories}
       />
     </>
   );

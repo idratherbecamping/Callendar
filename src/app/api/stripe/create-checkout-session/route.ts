@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
               name: 'Callendar AI Subscription - Pilot Program',
               description: 'Monthly subscription to Callendar scheduling service',
             },
-            unit_amount: 4500, // $45.00
+            unit_amount: 3000, // $30.00
             recurring: {
               interval: 'month',
               interval_count: 1,
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       ],
       mode: 'subscription',
       subscription_data: {
-        trial_period_days: 30, // Add 1-month free trial
+        trial_period_days: 14, // Add 14 day free trial
         metadata: {
           user_id: email, // Use email as a way to identify the user in webhooks
           service_type: service_type || 'Unknown'

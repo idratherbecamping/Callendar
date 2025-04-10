@@ -119,8 +119,8 @@ const HeroSection = () => {
           {/* Left column - Text content */}
           <div className="text-left md:w-1/2">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-heading">
-              <span className="block">Callendar AI</span>
-              <span className="block text-3xl md:text-4xl lg:text-3xl mt-4">Automated Voicemail that Books Appointments for You</span>
+              {/* <span className="block">Automated Voicemail that Books Appointments for You</span> */}
+              <span className="block text-3xl md:text-4xl lg:text-3xl mt-4"> Voicemail that Books Appointments for You</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-5">
               Never Miss a Call, Never Miss an Opportunity
@@ -129,7 +129,7 @@ const HeroSection = () => {
               Service <span className="font-bold">pays for itself</span> with just one missed opportunity
             </p>
             <p className="text-lg md:text-xl text-gray-300 mb-8">
-              <span className="font-bold">FREE</span> first month, then just <span className="font-bold">$45 /month</span>  
+              {/* <span className="font-bold">FREE</span> first month, then just <span className="font-bold">$45 /month</span>   */}
             </p>
             <div className="flex flex-col sm:flex-row items-start gap-5">
               <Button 
@@ -144,13 +144,13 @@ const HeroSection = () => {
           
           {/* Right column - Image */}
           <div className="md:w-1/2 flex justify-center">
-            <div className="relative w-full max-w-md">
+            <div className="relative w-full max-w-sm">
               <Image
-                src="/ad_barber.png"
-                alt="Callendar AI Barber Service"
-                width={500}
-                height={500}
-                className="object-contain rounded-lg shadow-xl"
+                src="/ad_generic.png"
+                alt="Callendar AI Generic Service"
+                width={400}
+                height={400}
+                className="object-contain rounded-lg shadow-xl w-4/5 mx-auto"
                 priority
               />
             </div>
