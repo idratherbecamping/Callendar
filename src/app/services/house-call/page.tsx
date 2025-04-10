@@ -30,7 +30,10 @@ export default function HouseCallServicesPage() {
                 House Call Services
               </h1>
               <p className="text-lg md:text-xl text-gray-300 mb-5">
-                For professionals who travel to their customers' locations
+              Voicemail that Books Appointments for You
+              </p>
+              <p className="text-lg text-gray-300 mb-8">
+                Callendar is an <span className="text-beeslyYellow font-semibold">AI-powered voicemail system</span> that automatically books appointments for your business. When clients call, they're routed to our <span className="text-beeslyYellow font-semibold">AI scheduling assistant</span> that checks your calendar availability, and books the appointment for you - <span className="text-beeslyYellow font-semibold">all without you having to pick up the phone</span>.
               </p>
               <p className="text-lg text-gray-300 mb-8">
                 Ideal for pool cleaners, electricians, plumbers, home services, and other businesses
@@ -102,7 +105,7 @@ export default function HouseCallServicesPage() {
               </div>
               <h3 className="text-xl font-medium text-heading mb-3">Travel Optimization</h3>
               <p className="text-gray-400">
-                Set your maximum service distance and typical service time. We'll help you create the most efficient route between appointments.
+                Set your maximum service distance and typical service time. We only allow bookings in your area, so you can spend your time working and not driving.
               </p>
             </div>
 
@@ -182,7 +185,7 @@ export default function HouseCallServicesPage() {
               <h3 className="text-xl font-medium text-heading mb-6">Key Benefits</h3>
               <ul className="space-y-4">
                 {[
-                  'Captures every booking opportunity—even when you’re tied up',
+                  'Captures every booking opportunity—even when you\'re tied up',
                   'Frees you to focus on the revenue-driving not scheduling',
                   'Minimize drive time between appointments',
                   'Set service boundaries with maximum travel distance',

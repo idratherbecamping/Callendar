@@ -26,11 +26,16 @@ export default function OfficeServicesPage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-left md:w-1/2">
               <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-heading">
-                Shop, Office & Virtual Pros
+              Voicemail that Books Appointments for You
               </h1>
-              <p className="text-lg md:text-xl text-gray-300 mb-5">
-                For professionals who serve clients at their office or virtually
+              {/* <p className="text-lg md:text-xl text-gray-300 mb-5">
+                Voicemail that Books Appointments for You
+              </p> */}
+
+              <p className="text-lg text-gray-300 mb-8">
+              Callendar is an <span className="text-beeslyYellow font-semibold">AI-powered voicemail system</span> that automatically books appointments for your business. When clients call, they're routed to our <span className="text-beeslyYellow font-semibold">AI scheduling assistant</span> that checks your calendar availability, and books the appointment for you - <span className="text-beeslyYellow font-semibold">all without you having to pick up the phone</span>.
               </p>
+              
               <p className="text-lg text-gray-300 mb-8">
                 Ideal for barbers, salons, estheticians, accountants, consultants, or any business where clients visit 
                 your office or connect with you virtually. Simple calendar booking without the hassle.
@@ -99,7 +104,7 @@ export default function OfficeServicesPage() {
               </div>
               <h3 className="text-xl font-medium text-heading mb-3">Client Self-Booking</h3>
               <p className="text-gray-400">
-                Let clients <span className="text-beeslyYellow font-semibold">book their own appointments</span>  based on your availability. Reduce back-and-forth communication and phone calls.
+                Let clients <span className="text-beeslyYellow font-semibold">book their own appointments over the phone </span>  based on your availability. Reduce back-and-forth communication and phone calls.
               </p>
             </div>
 
@@ -131,11 +136,10 @@ export default function OfficeServicesPage() {
               </p>
               <ul className="space-y-4">
                 {[
-                  'Easy online booking system',
                   'Automated appointment reminders',
-                  'Calendar synchronization',
-                  'Client management tools',
-                  'Flexible scheduling options'
+                  'Flexible scheduling options',
+                  'Client self-booking',
+                  'Links to your Acuity or Google Calendar'
                 ].map((item, i) => (
                   <li key={i} className="flex items-center text-gray-300">
                     <CheckIcon className="h-5 w-5 text-beeslyYellow mr-3" />

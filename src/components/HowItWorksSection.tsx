@@ -55,6 +55,12 @@ const HowItWorksSection = () => {
           </h2>
         </div>
 
+        <div className="text-center mb-12 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-300">
+            Callendar is an <span className="text-beeslyYellow font-semibold">AI-powered voicemail system</span> that automatically books appointments for your business. When clients call, they're routed to our <span className="text-beeslyYellow font-semibold">AI scheduling assistant</span> that checks your calendar availability, and books the appointment for you - <span className="text-beeslyYellow font-semibold">all without you having to pick up the phone</span>.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {steps.map((step) => (
             <StepCard
