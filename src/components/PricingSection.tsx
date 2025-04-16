@@ -50,7 +50,7 @@ const PricingSection = () => {
               Signup for Callendar AI for free now!
             </CardTitle>
             <div className="mt-6 flex justify-center items-baseline">
-              <span className="text-4xl font-bold">$30</span>
+              <span className="text-4xl font-bold">$40</span>
               <span className="text-gray-400 ml-1">/mo</span>
             </div>
             <p className="text-sm text-gray-400 mt-2">For a Limited time!</p>

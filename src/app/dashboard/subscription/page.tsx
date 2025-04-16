@@ -266,7 +266,7 @@ export default function SubscriptionPage() {
                       <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         {formatDate(subscription.current_period_end)}
                         <span className="ml-2 text-xs text-gray-500">
-                          (You'll be charged $30.00/month after trial ends)
+                          (You'll be charged $40.00/month after trial ends)
                         </span>
                       </dd>
                     </div>

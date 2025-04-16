@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
               name: 'Callendar AI Subscription - Pilot Program',
               description: 'Monthly subscription to Callendar scheduling service',
             },
-            unit_amount: 3000, // $30.00
+            unit_amount: 4000, // $40.00
             recurring: {
               interval: 'month',
               interval_count: 1,
