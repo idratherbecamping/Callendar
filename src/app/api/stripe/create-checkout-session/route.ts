@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, businessName, service_type, returnUrl } = body;
+    const { email, businessName, service_type, returnUrl, quantity = 1 } = body;
 
     if (!email || !returnUrl) {
       return NextResponse.json(
@@ -58,7 +58,12 @@ export async function POST(req: NextRequest) {
               interval_count: 1,
             },
           },
-          quantity: 1,
+          quantity: quantity,
+          adjustable_quantity: {
+            enabled: true,
+            minimum: 1,
+            maximum: 10
+          }
         },
       ],
       mode: 'subscription',
