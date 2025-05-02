@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       ],
       mode: 'subscription',
       subscription_data: {
-        trial_period_days: 14, // Add 14 day free trial
+        trial_period_days: 7, // Add 7 day free trial
         metadata: {
           user_id: email, // Use email as a way to identify the user in webhooks
           service_type: service_type || 'Unknown'

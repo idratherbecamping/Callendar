@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const PricingSection = () => {
   const features = [
-    "First 14 days FREE",
+    "First 7 days FREE",
     "Cancel anytime",
     "Pays for itself with 1 missed opportunity",
     "No contracts",
