@@ -6,18 +6,23 @@ import * as fbq from '@/lib/fpixel';
 
 export default function FacebookPixel() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   
-  // Conditionally use search params to avoid issues with static generation
+  // State to track if component is mounted
   const [mounted, setMounted] = useState(false);
+  
+  // Effect to set mounted state
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Initial pageview on mount
   useEffect(() => {
     // This pageview only triggers the first time the component mounts
     fbq.pageview();
   }, []);
 
+  // Track pathname changes
   useEffect(() => {
     if (!mounted) return;
     
@@ -25,15 +30,13 @@ export default function FacebookPixel() {
     fbq.pageview();
   }, [pathname, mounted]);
 
-  // Only use searchParams on the client side
-  if (mounted) {
-    const searchParams = useSearchParams();
+  // Track searchParams changes
+  useEffect(() => {
+    if (!mounted) return;
     
-    useEffect(() => {
-      // Track changes when search params change
-      fbq.pageview();
-    }, [searchParams]);
-  }
+    // Only track page views when search params change after component is mounted
+    fbq.pageview();
+  }, [searchParams, mounted]);
 
   return null;
 } 
