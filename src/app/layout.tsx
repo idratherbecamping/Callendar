@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import { trackPageView } from "@/lib/analytics";
-import FacebookPixelWrapper from "./FacebookPixelWrapper";
+import FacebookPixelWrapper from "@/components/FacebookPixelWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -45,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
       <body className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
-        {/* Facebook Pixel is loaded in a client component */}
+        {/* Facebook Pixel */}
         <FacebookPixelWrapper />
         <ClientBody>
           <div className="dark">{children}</div>
