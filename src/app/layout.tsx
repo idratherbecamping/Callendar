@@ -3,8 +3,8 @@ import { Inter, Poppins, Lexend_Deca } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import ClientBody from "./ClientBody";
-import { trackPageView } from "@/lib/analytics";
 import FacebookPixel from "@/components/FacebookPixel";
+import PageViewTracker from "@/components/PageViewTracker";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -37,11 +37,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Track page view on client side
-  if (typeof window !== 'undefined') {
-    trackPageView(window.location.pathname);
-  }
-
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
       <body className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
@@ -49,6 +44,7 @@ export default function RootLayout({
           <div className="dark">{children}</div>
           <Analytics />
           <FacebookPixel />
+          <PageViewTracker />
         </ClientBody>
       </body>
     </html>

@@ -5,14 +5,16 @@ import ReactPixel from 'react-facebook-pixel';
 
 const FacebookPixel = (): null => {
   useEffect(() => {
-    // Initialize the Facebook Pixel
-    ReactPixel.init('1706068603634026', undefined, {
-      autoConfig: true,
-      debug: false,
-    });
+    if (typeof window !== 'undefined') {
+      // Initialize the Facebook Pixel
+      ReactPixel.init('1706068603634026', undefined, {
+        autoConfig: true,
+        debug: false,
+      });
 
-    // Track page view
-    ReactPixel.pageView();
+      // Track page view
+      ReactPixel.pageView();
+    }
   }, []);
 
   return null;
