@@ -9,8 +9,8 @@ import Script from "next/script";
 // Add type declaration for fbq
 declare global {
   interface Window {
-    fbq: Function & {
-      callMethod?: Function;
+    fbq: ((method: string, eventName: string, ...params: unknown[]) => void) & {
+      callMethod?: (method: string, ...params: unknown[]) => void;
       queue?: Array<unknown>;
       loaded?: boolean;
       version?: string;
