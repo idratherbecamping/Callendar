@@ -4,20 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import { trackPageView } from "@/lib/analytics";
-import Script from "next/script";
-
-// Add type declaration for fbq
-declare global {
-  interface Window {
-    fbq: ((method: string, eventName: string, ...params: unknown[]) => void) & {
-      callMethod?: (method: string, ...params: unknown[]) => void;
-      queue?: Array<unknown>;
-      loaded?: boolean;
-      version?: string;
-    };
-    _fbq?: Window['fbq'];
-  }
-}
+import FacebookPixelWrapper from "./FacebookPixelWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -57,23 +44,9 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
-      {/* Meta Pixel Code */}
-      <Script 
-        id="facebook-pixel"
-        strategy="lazyOnload"
-        src="https://connect.facebook.net/en_US/fbevents.js"
-        onLoad={() => {
-          window.fbq = window.fbq || function() {};
-          window.fbq('init', '1706068603634026');
-          window.fbq('track', 'PageView');
-        }}
-      />
-      <noscript dangerouslySetInnerHTML={{
-        __html: `<img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=1706068603634026&ev=PageView&noscript=1"
-        />`
-      }} />
       <body className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
+        {/* Facebook Pixel is loaded in a client component */}
+        <FacebookPixelWrapper />
         <ClientBody>
           <div className="dark">{children}</div>
           <Analytics />
