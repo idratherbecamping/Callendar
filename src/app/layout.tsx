@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import { trackPageView } from "@/lib/analytics";
+import MetaPixel from "@/components/MetaPixel";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -47,6 +48,7 @@ export default function RootLayout({
         <ClientBody>
           <div className="dark">{children}</div>
           <Analytics />
+          <MetaPixel />
         </ClientBody>
       </body>
     </html>
