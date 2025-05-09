@@ -1,23 +1,30 @@
 'use client';
 
 import { useEffect } from 'react';
-import ReactPixel from 'react-facebook-pixel';
+import dynamic from 'next/dynamic';
 
 const FacebookPixel = (): null => {
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Initialize the Facebook Pixel
-      ReactPixel.init('1706068603634026', undefined, {
-        autoConfig: true,
-        debug: false,
-      });
+    const loadPixel = async () => {
+      if (typeof window !== 'undefined') {
+        const ReactPixel = (await import('react-facebook-pixel')).default;
+        
+        // Initialize the Facebook Pixel
+        ReactPixel.init('1706068603634026', undefined, {
+          autoConfig: true,
+          debug: false,
+        });
 
-      // Track page view
-      ReactPixel.pageView();
-    }
+        // Track page view
+        ReactPixel.pageView();
+      }
+    };
+
+    loadPixel();
   }, []);
 
   return null;
 };
 
-export default FacebookPixel; 
+// Use dynamic import with ssr disabled
+export default dynamic(() => Promise.resolve(FacebookPixel), { ssr: false }); 
