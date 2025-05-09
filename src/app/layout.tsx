@@ -44,11 +44,13 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
+      <head>
+        <MetaPixel />
+      </head>
       <body className={`${inter.variable} ${poppins.variable} ${lexendDeca.variable}`}>
         <ClientBody>
           <div className="dark">{children}</div>
           <Analytics />
-          <MetaPixel />
         </ClientBody>
       </body>
     </html>
