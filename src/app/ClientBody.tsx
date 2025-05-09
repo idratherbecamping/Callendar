@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import FacebookPixel from "./FacebookPixel";
+import FacebookPixelNoScript from "@/components/FacebookPixelNoScript";
 
 export default function ClientBody({
   children,
@@ -15,6 +17,8 @@ export default function ClientBody({
 
   return (
     <body className="antialiased" suppressHydrationWarning>
+      <FacebookPixelNoScript />
+      <FacebookPixel />
       {children}
     </body>
   );

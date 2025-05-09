@@ -34,3 +34,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Facebook Pixel Integration
+
+This project includes Facebook Pixel integration with the Pixel ID: `1706068603634026`.
+
+### Implementation Details
+
+The Facebook Pixel is implemented using:
+
+1. Root Layout (`src/app/layout.tsx`): Injects the Facebook Pixel base code into the HTML head using Next.js Script component.
+2. Client Component (`src/app/FacebookPixel.tsx`): Tracks route changes and sends page views to Facebook.
+3. Utility functions (`src/lib/fpixel.ts`): Contains helper functions for tracking custom events.
+
+### Usage
+
+To track custom events, import the fpixel utility and use the event function in a client component:
+
+```javascript
+'use client';
+
+import * as fbq from '@/lib/fpixel'
+
+// Track a custom event
+fbq.event('ButtonClick', { button: 'example' })
+```
+
+For more information, see the [Facebook Pixel documentation](https://developers.facebook.com/docs/facebook-pixel/implementation).
