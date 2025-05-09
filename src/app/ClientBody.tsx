@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import FacebookPixel from "./FacebookPixel";
 import FacebookPixelNoScript from "@/components/FacebookPixelNoScript";
+
+// Create a fallback component for Suspense
+const FacebookPixelFallback = () => null;
 
 export default function ClientBody({
   children,
@@ -18,7 +21,9 @@ export default function ClientBody({
   return (
     <body className="antialiased" suppressHydrationWarning>
       <FacebookPixelNoScript />
-      <FacebookPixel />
+      <Suspense fallback={<FacebookPixelFallback />}>
+        <FacebookPixel />
+      </Suspense>
       {children}
     </body>
   );
