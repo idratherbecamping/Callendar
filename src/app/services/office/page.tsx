@@ -51,12 +51,12 @@ export default function OfficeServicesPage() {
               </div>
             </div>
             <div className="md:w-1/2 flex justify-center">
-              <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden shadow-xl">
+              <div className="relative w-full h-80 md:h-[500px] rounded-lg overflow-hidden shadow-xl">
                 {/* Display office image */}
                 <img 
-                  src="/office.png" 
+                  src="/ad_barber.png" 
                   alt="Office services" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
             </div>
@@ -92,9 +92,13 @@ export default function OfficeServicesPage() {
                 <CalendarIcon className="h-6 w-6 text-black" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-medium text-heading mb-3">Simple Calendar Management</h3>
-              <p className="text-gray-400">
+              <p className="text-gray-400 mb-4">
                 Works with your existing <span className="text-beeslyYellow font-semibold">Acuity Scheduling</span> or <span className="text-beeslyYellow font-semibold">Google Calendar</span>. 
               </p>
+              <div className="flex items-center justify-center space-x-4 mt-2">
+                <img src="/acuity-logo-final.svg" alt="Acuity Scheduling" className="h-8 filter brightness-500 invert" />
+                <img src="/gmail_logo.png" alt="Google Calendar" className="h-8 filter brightness-150" />
+              </div>
             </div>
 
             {/* Feature 2 */}
@@ -125,8 +129,8 @@ export default function OfficeServicesPage() {
       {/* Barber Services Section */}
       <section className="beesly-section bg-beeslyDark relative py-16">
         <div className="beesly-container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="md:w-1/2">
+          <div className="flex flex-col items-center justify-center gap-8">
+            <div className="w-full md:w-3/4 text-center">
               <h2 className="text-3xl font-bold text-heading mb-6">
                 Perfect for Barbers and Salons
               </h2>
@@ -134,7 +138,7 @@ export default function OfficeServicesPage() {
                 Streamline your booking process and focus on what matters most - your clients. 
                 Let them book appointments 24/7, even when you're busy with other clients.
               </p>
-              <ul className="space-y-4">
+              <ul className="space-y-4 max-w-xl mx-auto text-left">
                 {[
                   'Automated appointment reminders',
                   'Flexible scheduling options',
@@ -147,13 +151,6 @@ export default function OfficeServicesPage() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="md:w-1/2">
-              <img 
-                src="/ad_barber.png" 
-                alt="Barber services" 
-                className="w-3/4 mx-auto h-auto rounded-lg shadow-xl"
-              />
             </div>
           </div>
         </div>
