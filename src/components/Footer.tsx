@@ -10,30 +10,30 @@ const Footer = () => {
       <div className="beesly-container">
         <div className="flex justify-between flex-col md:flex-row gap-8 mb-12">
           <div className="flex gap-4">
-            <Link href="#Hero" className="text-gray-400 hover:text-white">
+            <Link href="#Hero" className="text-gray-600 hover:text-white">
               Back To Top
             </Link>
-            <Link href="#Features" className="text-gray-400 hover:text-white">
+            <Link href="#Features" className="text-gray-600 hover:text-white">
               Features
             </Link>
-            <Link href="#WhoItsFor" className="text-gray-400 hover:text-white">
+            <Link href="#WhoItsFor" className="text-gray-600 hover:text-white">
               Who It's For
             </Link>
-            <Link href="#HIW" className="text-gray-400 hover:text-white">
+            <Link href="#HIW" className="text-gray-600 hover:text-white">
               How It Works
             </Link>
-            <Link href="#Pricing" className="text-gray-400 hover:text-white">
+            <Link href="#Pricing" className="text-gray-600 hover:text-white">
               Pricing
             </Link>
             {/* <Link href="#FAQs" className="text-gray-400 hover:text-white">
               FAQs
             </Link> */}
-            <Link href="/privacy-policy" className="text-gray-400 hover:text-white">
+            <Link href="/privacy-policy" className="text-gray-600 hover:text-white">
               Privacy Policy
             </Link>
             <a
               href="mailto:gannon@callendar.ai?subject=Callendar%20Website"
-              className="text-gray-400 hover:text-white"
+              className="text-gray-600 hover:text-white"
             >
               Email Us
             </a>
@@ -141,7 +141,7 @@ const Footer = () => {
         </div> */}
 
         <div className="mt-6 flex items-center">
-          <div className="text-gray-400 font-medium mr-2">Call Callendar AI:</div>
+          <div className="text-gray-600 font-medium mr-2">Call Callendar AI:</div>
           <a
             href="tel:+18775704990
 "

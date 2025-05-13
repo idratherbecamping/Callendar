@@ -28,15 +28,15 @@ export default function OfficeServicesPage() {
               <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-heading">
               Voicemail that Books Appointments for You
               </h1>
-              {/* <p className="text-lg md:text-xl text-gray-300 mb-5">
+              {/* <p className="text-lg md:text-xl text-gray-700 mb-5">
                 Voicemail that Books Appointments for You
               </p> */}
 
-              <p className="text-lg text-gray-300 mb-8">
+              <p className="text-lg text-gray-700 mb-8">
               Callendar is an <span className="text-beeslyYellow font-semibold">AI-powered voicemail system</span> that automatically books appointments for your business. When clients call, they're routed to our <span className="text-beeslyYellow font-semibold">AI scheduling assistant</span> that checks your calendar availability, and books the appointment for you - <span className="text-beeslyYellow font-semibold">all without you having to pick up the phone</span>.
               </p>
               
-              <p className="text-lg text-gray-300 mb-8">
+              <p className="text-lg text-gray-700 mb-8">
                 Ideal for barbers, salons, estheticians, accountants, consultants, or any business where clients visit 
                 your office or connect with you virtually. Simple calendar booking without the hassle.
               </p>
@@ -51,7 +51,7 @@ export default function OfficeServicesPage() {
               </div>
             </div>
             <div className="md:w-1/2 flex justify-center">
-              <div className="relative w-full h-80 md:h-[500px] rounded-lg overflow-hidden shadow-xl">
+              <div className="relative w-full h-80 md:h-[500px] rounded-lg overflow-hidden">
                 {/* Display office image */}
                 <img 
                   src="/ad_barber3.png" 
@@ -92,12 +92,12 @@ export default function OfficeServicesPage() {
                 <CalendarIcon className="h-6 w-6 text-black" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-medium text-heading mb-3">Simple Calendar Management</h3>
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-700 mb-4">
                 Works with your existing <span className="text-beeslyYellow font-semibold">Acuity Scheduling</span> or <span className="text-beeslyYellow font-semibold">Google Calendar</span>. 
               </p>
               <div className="flex items-center justify-center space-x-4 mt-2">
-                <img src="/acuity-logo-final.svg" alt="Acuity Scheduling" className="h-8 filter brightness-500 invert" />
-                <img src="/gmail_logo.png" alt="Google Calendar" className="h-8 filter brightness-150" />
+                <img src="/acuity-logo-final.svg" alt="Acuity Scheduling" className="h-8 filter brightness-100" />
+                <img src="/gmail_logo.png" alt="Google Calendar" className="h-8 filter brightness-300" />
               </div>
             </div>
 
@@ -107,7 +107,7 @@ export default function OfficeServicesPage() {
                 <UsersIcon className="h-6 w-6 text-black" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-medium text-heading mb-3">Client Self-Booking</h3>
-              <p className="text-gray-400">
+              <p className="text-gray-700">
                 Let clients <span className="text-beeslyYellow font-semibold">book their own appointments over the phone </span>  based on your availability. Reduce back-and-forth communication and phone calls.
               </p>
             </div>
@@ -134,7 +134,7 @@ export default function OfficeServicesPage() {
               <h2 className="text-3xl font-bold text-heading mb-6">
                 Perfect for Barbers and Salons
               </h2>
-              <p className="text-lg text-gray-300 mb-6">
+              <p className="text-lg text-gray-700 mb-6">
                 Streamline your booking process and focus on what matters most - your clients. 
                 Let them book appointments 24/7, even when you're busy with other clients.
               </p>
@@ -145,7 +145,7 @@ export default function OfficeServicesPage() {
                   'Client self-booking',
                   'Links to your Acuity or Google Calendar'
                 ].map((item, i) => (
-                  <li key={i} className="flex items-center text-gray-300">
+                  <li key={i} className="flex items-center text-gray-700">
                     <CheckIcon className="h-5 w-5 text-beeslyYellow mr-3" />
                     {item}
                   </li>
@@ -208,7 +208,7 @@ export default function OfficeServicesPage() {
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span className="text-gray-300">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -247,7 +247,7 @@ export default function OfficeServicesPage() {
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span className="text-gray-300">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -273,7 +273,7 @@ export default function OfficeServicesPage() {
               <h2 className="text-3xl font-extrabold text-heading sm:text-4xl mb-6">
                 Ready to streamline your booking process?
               </h2>
-              <p className="mt-4 text-lg leading-6 text-gray-300 max-w-3xl mx-auto mb-8">
+              <p className="mt-4 text-lg leading-6 text-gray-700 max-w-3xl mx-auto mb-8">
                 Start your free trial today and see how our Office & Virtual service can help you manage appointments effortlessly.
               </p>
               <Link

@@ -30,7 +30,7 @@ export default function ServicesPage() {
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
                 Choose Your Service Type
               </h1>
-              <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">
+              <p className="mt-4 text-xl text-gray-700 max-w-3xl mx-auto">
                 We offer specialized solutions for different business models. Select the option that best fits your needs.
               </p>
             </div>
@@ -51,13 +51,13 @@ export default function ServicesPage() {
                 </div>
                 <div className="p-6">
                   <h2 className="text-2xl font-bold text-white">House Call Services</h2>
-                  <p className="mt-2 text-gray-300">
+                  <p className="mt-2 text-gray-700">
                     For services provided at your customers' locations (pool cleaners, plumbers, etc.). 
                     Manage travel time and distance for optimal scheduling.
                   </p>
                   <div className="mt-6 border-t border-gray-700 pt-6">
                     <p className="font-medium text-white">Ideal for:</p>
-                    <ul className="mt-2 space-y-1 text-sm text-gray-300">
+                    <ul className="mt-2 space-y-1 text-sm text-gray-700">
                       <li>• Pool cleaners and maintenance</li>
                       <li>• Plumbers and electricians</li>
                       <li>• Home cleaning services</li>
@@ -84,13 +84,13 @@ export default function ServicesPage() {
                 </div>
                 <div className="p-6">
                   <h2 className="text-2xl font-bold text-white">Office & Virtual Services</h2>
-                  <p className="mt-2 text-gray-300">
+                  <p className="mt-2 text-gray-700">
                     For services where customers come to you or meet virtually. Focuses on calendar 
                     booking without travel calculations.
                   </p>
                   <div className="mt-6 border-t border-gray-700 pt-6">
                     <p className="font-medium text-white">Ideal for:</p>
-                    <ul className="mt-2 space-y-1 text-sm text-gray-300">
+                    <ul className="mt-2 space-y-1 text-sm text-gray-700">
                       <li>• Hair salons and barbers</li>
                       <li>• Consultants and coaches</li>
                       <li>• Financial advisors</li>
@@ -134,28 +134,28 @@ export default function ServicesPage() {
                 <tbody className="divide-y divide-gray-700 bg-beeslyDark/50">
                   <tr>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">Customer location</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">You travel to them</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">They come to you / Virtual</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">You travel to them</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">They come to you / Virtual</td>
                   </tr>
                   <tr>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">Travel optimization</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">Yes</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">No</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">Yes</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">No</td>
                   </tr>
                   <tr>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">Calendar management</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">Yes</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">Yes</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">Yes</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">Yes</td>
                   </tr>
                   <tr>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">Client booking</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">Yes</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">Yes</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">Yes</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">Yes</td>
                   </tr>
                   <tr>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">Video call integration</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">No</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">Yes</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">No</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">Yes</td>
                   </tr>
                 </tbody>
               </table>
@@ -171,7 +171,7 @@ export default function ServicesPage() {
             <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
               <span className="block">Still not sure which to choose?</span>
             </h2>
-            <p className="mt-4 text-lg leading-6 text-gray-300">
+            <p className="mt-4 text-lg leading-6 text-gray-700">
               Contact our team for a personalized recommendation based on your business needs.
             </p>
             <a

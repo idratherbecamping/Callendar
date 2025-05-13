@@ -8,49 +8,50 @@
   }
 
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --background: 60 13% 97%;
+    --foreground: 0 0% 0%;
+    --card: 60 13% 97%;
+    --card-foreground: 0 0% 0%;
+    --popover: 60 13% 97%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 58 77% 64%;   /* Keep the light green color */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 60 13% 93%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 60 13% 93%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 0%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --border: 60 13% 85%;
+    --input: 60 13% 90%;
+    --ring: 58 77% 64%;
     --radius: 0.5rem;
+    --heading-text: 0 0% 0%;  /* Black for headlines */
   }
 
   .dark {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --background: 60 13% 97%;
+    --foreground: 0 0% 0%;
+    --card: 60 13% 97%;
+    --card-foreground: 0 0% 0%;
+    --popover: 60 13% 97%;
+    --popover-foreground: 0 0% 0%;
     --primary: 58 77% 64%;   /* Callendar's yellow-green */
     --primary-foreground: 0 0% 0%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --secondary: 60 13% 93%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 60 13% 93%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 0%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --heading-text: 0 0% 92%;  /* Light gray for headlines */
+    --border: 60 13% 85%;
+    --input: 60 13% 90%;
+    --ring: 58 77% 64%;
+    --heading-text: 0 0% 0%;  /* Black for headlines */
   }
 }
 
@@ -82,7 +83,7 @@
   }
 
   .beesly-button-secondary {
-    @apply bg-secondary/50 text-white border border-gray-700 hover:bg-secondary/70 hover:border-gray-600 hover:shadow-lg hover:shadow-secondary/10 hover:-translate-y-0.5;
+    @apply bg-secondary/50 text-black border border-gray-200 hover:bg-secondary/70 hover:border-gray-300 hover:shadow-lg hover:shadow-secondary/10 hover:-translate-y-0.5;
   }
 
   .beesly-button-yellow {
@@ -90,11 +91,11 @@
   }
 
   .beesly-card {
-    @apply bg-secondary/30 backdrop-blur-sm rounded-xl p-6 border border-gray-800 transition-all duration-300;
+    @apply bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200 transition-all duration-300;
   }
 
   .beesly-card-hover {
-    @apply hover:bg-secondary/40 hover:border-gray-700 hover:shadow-lg hover:shadow-secondary/5 hover:-translate-y-1;
+    @apply hover:bg-white hover:border-gray-300 hover:shadow-lg hover:shadow-secondary/5 hover:-translate-y-1;
   }
 
   .beesly-section {
@@ -136,7 +137,7 @@
 
   /* Mobile menu */
   .mobile-menu {
-    @apply fixed top-0 right-0 bottom-0 flex flex-col w-[75%] max-w-sm py-6 px-6 bg-beeslyDark border-l border-gray-800 overflow-y-auto transition-all duration-300 transform shadow-xl z-50;
+    @apply fixed top-0 right-0 bottom-0 flex flex-col w-[75%] max-w-sm py-6 px-6 bg-white/90 border-l border-gray-200 overflow-y-auto transition-all duration-300 transform shadow-xl z-50;
   }
 
   .mobile-menu-overlay {

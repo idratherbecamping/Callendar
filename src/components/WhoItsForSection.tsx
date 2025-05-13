@@ -29,9 +29,9 @@ const ProfileCard = ({ title, description, icon, isExpanded, onToggle }: {
       </CardHeader>
       <CardContent className={`transition-all duration-300 ${isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
         {typeof description === 'string' ? (
-          <p className="text-gray-300">{description}</p>
+          <p className="text-gray-700">{description}</p>
         ) : (
-          <ul className="list-none space-y-3 text-gray-300">
+          <ul className="list-none space-y-3 text-gray-700">
             {description.map((item, index) => (
               <li key={index} className="flex items-start">
                 <div className="mr-2 mt-1 text-beeslyYellow">•</div>
@@ -246,7 +246,7 @@ const WhoItsForSection = () => {
           <h2 className="beesly-section-heading">
             Perfect Solutions for Your Industry
           </h2>
-          <p className="text-gray-300 mt-6 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-700 mt-6 max-w-2xl mx-auto text-lg">
             Click on any industry card below to learn how Callendar.ai can transform your scheduling experience
           </p>
         </div>

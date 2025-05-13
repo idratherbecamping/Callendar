@@ -97,7 +97,7 @@ const Navbar = () => {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? "bg-beeslyDark/80 backdrop-blur-md py-2 shadow-lg" : "py-4"
+          scrolled ? "bg-beeslyDark/90 backdrop-blur-md py-2 shadow-lg" : "py-4"
         }`}
       >
         <div className="beesly-container flex justify-between items-center">
@@ -109,13 +109,13 @@ const Navbar = () => {
               height={30}
               className="mr-2"
             />
-            <span className="text-xl font-bold text-white">Callendar.ai</span>
+            <span className="text-xl font-bold text-black">Callendar.ai</span>
           </Link>
 
           <div className="hidden md:flex space-x-8 items-center">
             {/* <Link
               href="#Features"
-              className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
+              className="text-gray-700 hover:text-black transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >
               Features
             </Link> */}
@@ -124,7 +124,7 @@ const Navbar = () => {
             {/* <div className="relative services-dropdown">
               <button 
                 onClick={toggleServicesDropdown}
-                className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow flex items-center"
+                className="text-gray-700 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow flex items-center"
               >
                 Services
                 <svg 
@@ -164,7 +164,7 @@ const Navbar = () => {
             <div className="relative who-its-for-dropdown">
               <button 
                 onClick={toggleWhoItsForDropdown}
-                className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow flex items-center"
+                className="text-gray-700 hover:text-black transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow flex items-center"
               >
                 Who It's For
                 <svg 
@@ -231,19 +231,19 @@ const Navbar = () => {
             
             <Link
               href="/#HIW"
-              className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
+              className="text-gray-700 hover:text-black transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >
               How It Works
             </Link>
             <Link
               href="/#Pricing"
-              className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
+              className="text-gray-700 hover:text-black transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >
               Pricing
             </Link>
             {/* <Link
               href="#FAQs"
-              className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
+              className="text-gray-700 hover:text-black transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow"
             >
               FAQs
             </Link> */}
@@ -278,7 +278,7 @@ const Navbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-secondary/40 hover:text-beeslyYellow transition-all duration-300"
+              className="text-black hover:bg-secondary/40 hover:text-beeslyYellow transition-all duration-300"
               onClick={toggleMobileMenu}
             >
               <svg

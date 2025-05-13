@@ -47,7 +47,7 @@ const FAQSection = () => {
                 <AccordionTrigger className="px-6 py-4 hover:bg-secondary/40 text-left accordion-trigger">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="px-6 py-4 text-gray-300">
+                <AccordionContent className="px-6 py-4 text-gray-700">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -61,7 +61,7 @@ const FAQSection = () => {
             <h3 className="text-2xl font-bold mt-3 mb-4">
               "No more hiring assistants—try our AI assistant for simplified solutions."
             </h3>
-            <p className="text-gray-300 mb-8">
+            <p className="text-gray-700 mb-8">
               A truly innovative approach to gameplay that sets this agency apart from its peers within the broader industry
             </p>
             <Button className="beesly-button beesly-button-yellow h-12">

@@ -45,7 +45,7 @@ export default {
   			ring: 'hsl(var(--ring))',
             beeslyYellow: '#c3c785',
             beeslyGray: '#67635d',
-            beeslyDark: '#0f0f0f',
+            beeslyDark: '#f8f7f2',
   		},
         fontFamily: {
             poppins: ['var(--font-poppins)'],

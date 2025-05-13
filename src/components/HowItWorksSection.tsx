@@ -15,7 +15,7 @@ const StepCard = ({ number, title, description }: { number: number; title: strin
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-300">{description}</p>
+        <p className="text-gray-700">{description}</p>
       </CardContent>
     </Card>
   );
@@ -56,7 +56,7 @@ const HowItWorksSection = () => {
         </div>
 
         <div className="text-center mb-12 max-w-3xl mx-auto">
-          <p className="text-lg text-gray-300">
+          <p className="text-lg text-gray-700">
             Callendar is an <span className="text-beeslyYellow font-semibold">AI-powered voicemail system</span> that automatically books appointments for your business. When clients call, they're routed to our <span className="text-beeslyYellow font-semibold">AI scheduling assistant</span> that checks your calendar availability, and books the appointment for you - <span className="text-beeslyYellow font-semibold">all without you having to pick up the phone</span>.
           </p>
         </div>

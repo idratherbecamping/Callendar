@@ -96,13 +96,13 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, industryCatego
               height={24}
               className="mr-2"
             />
-            <span className="text-lg font-bold text-white">Callendar.ai</span>
+            <span className="text-lg font-bold text-black">Callendar.ai</span>
           </div>
           <Button
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="text-gray-400 hover:text-white"
+            className="text-gray-500 hover:text-black"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, industryCatego
         <nav className="flex flex-col space-y-4">
           <Link
             href="#Features"
-            className="text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
+            className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all"
             onClick={onClose}
           >
             Features
@@ -133,7 +133,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, industryCatego
           {/* Services section with submenu */}
           <div>
             <button
-              className="text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all w-full text-left flex justify-between items-center"
+              className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all w-full text-left flex justify-between items-center"
               onClick={toggleServicesExpanded}
             >
               <span>Services</span>
@@ -149,17 +149,17 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, industryCatego
             </button>
             
             {servicesExpanded && (
-              <div className="ml-4 mt-2 space-y-2 border-l-2 border-secondary/30 pl-4">
+              <div className="ml-4 mt-2 space-y-2 border-l-2 border-gray-200 pl-4">
                 <Link
                   href="/services/office"
-                  className="text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all block"
+                  className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all block"
                   onClick={onClose}
                 >
                   Office & Virtual Services
                 </Link>
                 <Link
                   href="/services/house-call"
-                  className="text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all block"
+                  className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all block"
                   onClick={onClose}
                 >
                   House Call Services
@@ -276,21 +276,21 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, industryCatego
           
           <Link
             href="#HIW"
-            className="text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
+            className="text-gray-700 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
             onClick={onClose}
           >
             How It Works
           </Link>
           <Link
             href="#Pricing"
-            className="text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
+            className="text-gray-700 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
             onClick={onClose}
           >
             Pricing
           </Link>
           {/* <Link
             href="#FAQs"
-            className="text-gray-300 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
+            className="text-gray-700 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
             onClick={onClose}
           >
             FAQs

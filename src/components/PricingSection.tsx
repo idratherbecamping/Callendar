@@ -34,7 +34,7 @@ const PricingSection = () => {
             </div>
             <div className="max-w-[200px]">
               <h3 className="font-semibold text-lg">For Small Businesses like yours!</h3>
-              <p className="text-gray-400 text-sm mt-3">
+              <p className="text-gray-600 text-sm mt-3">
                 Never miss an opportunity again.
               </p>
             </div>
@@ -51,9 +51,9 @@ const PricingSection = () => {
             </CardTitle>
             <div className="mt-6 flex justify-center items-baseline">
               <span className="text-4xl font-bold">$40</span>
-              <span className="text-gray-400 ml-1">/mo</span>
+              <span className="text-gray-600 ml-1">/mo</span>
             </div>
-            <p className="text-sm text-gray-400 mt-2">For a Limited time!</p>
+            <p className="text-sm text-gray-600 mt-2">For a Limited time!</p>
           </CardHeader>
           <CardContent>
             <ul className="space-y-4">
@@ -75,7 +75,7 @@ const PricingSection = () => {
                       <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
                   </div>
-                  <span className="text-gray-300 group-hover:text-white transition-colors duration-300">{feature}</span>
+                  <span className="text-gray-700 group-hover:text-white transition-colors duration-300">{feature}</span>
                 </li>
               ))}
             </ul>

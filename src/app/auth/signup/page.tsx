@@ -79,12 +79,14 @@ function SignUpContent() {
     }
 
     // Check if URL has step parameter
-    const stepParam = searchParams.get('step')
-    console.log("Step parameter from URL:", stepParam);
-    
-    if (stepParam && ['account', 'service_type', 'business', 'location', 'hours', 'calendar', 'payment'].includes(stepParam as Step)) {
-      console.log("Setting step from URL parameter:", stepParam);
-      setStep(stepParam as Step)
+    if (searchParams) {
+      const stepParam = searchParams.get('step')
+      console.log("Step parameter from URL:", stepParam);
+      
+      if (stepParam && ['account', 'service_type', 'business', 'location', 'hours', 'calendar', 'payment'].includes(stepParam as Step)) {
+        console.log("Setting step from URL parameter:", stepParam);
+        setStep(stepParam as Step)
+      }
     } else if (window.location.hash === '#payment') {
       // Also check for hash-based navigation
       console.log("Setting payment step from URL hash");
@@ -758,7 +760,7 @@ function SignUpContent() {
   // Create a new component for the payment step
   const PaymentStep = () => {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm">
         <div className="text-center">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -822,37 +824,37 @@ function SignUpContent() {
             <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
               <h4 className="text-lg font-medium text-gray-700">Subscription Details</h4>
               <p className="text-sm text-gray-500 mt-2">
-                <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">7 Day FREE TRIAL</span>{' '}
+                <span className="bg-beeslyYellow/20 text-gray-800 px-2 py-1 rounded text-xs font-bold">7 Day FREE TRIAL</span>{' '}
                 then $40.00/month
               </p>
               <ul className="mt-4 text-sm text-gray-600 space-y-2">
                 <li className="flex">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-beeslyYellow mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   Unlimited appointments
                 </li>
                 <li className="flex">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-beeslyYellow mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   Google Calendar integration
                 </li>
                 <li className="flex">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-beeslyYellow mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   SMS notifications
                 </li>
                 <li className="flex">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-beeslyYellow mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   Customer management
                 </li>
               </ul>
               <p className="mt-4 text-xs text-gray-500">Cancel anytime during your trial or after - no commitment.</p>
-              <div className="mt-4 text-center text-sm bg-blue-50 p-2 rounded-md text-blue-700">
+              <div className="mt-4 text-center text-sm bg-beeslyYellow/20 p-2 rounded-md text-beeslyYellow">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
@@ -864,7 +866,7 @@ function SignUpContent() {
               type="button"
               onClick={handleStripeCheckout}
               disabled={loading}
-              className="w-full mt-4 flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full mt-4 flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-black bg-beeslyYellow hover:bg-beeslyYellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
             >
               {loading ? 'Processing...' : 'Start Free Trial'}
             </button>
@@ -881,7 +883,7 @@ function SignUpContent() {
           <button
             type="button"
             onClick={handleBack}
-            className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
           >
             Back
           </button>
@@ -906,7 +908,7 @@ function SignUpContent() {
                 id="email"
                 required
                 placeholder="Enter your email address"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                 value={formData.email}
                 onChange={handleInputChange}
               />
@@ -921,7 +923,7 @@ function SignUpContent() {
                 id="password"
                 required
                 placeholder="Enter your password"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                 value={formData.password}
                 onChange={handleInputChange}
               />
@@ -935,7 +937,7 @@ function SignUpContent() {
             <button
               type="button"
               onClick={handleNext}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-black bg-beeslyYellow hover:bg-beeslyYellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
             >
               Next
             </button>
@@ -949,7 +951,7 @@ function SignUpContent() {
               <h3 className="text-lg font-medium text-gray-900 mb-4">Select Your Service Type</h3>
               <div className="grid grid-cols-1 gap-4">
                 <div 
-                  className={`border rounded-lg p-4 cursor-pointer hover:border-indigo-500 transition-colors ${formData.service_type === 'House Call' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  className={`border rounded-lg p-4 cursor-pointer hover:border-beeslyYellow transition-colors ${formData.service_type === 'House Call' ? 'border-beeslyYellow bg-beeslyYellow/10' : 'border-gray-300'}`}
                   onClick={() => setFormData(prev => ({ ...prev, service_type: 'House Call' }))}
                 >
                   <div className="flex items-start">
@@ -960,13 +962,13 @@ function SignUpContent() {
                         id="houseCall"
                         checked={formData.service_type === 'House Call'}
                         onChange={() => setFormData(prev => ({ ...prev, service_type: 'House Call' }))}
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                        className="focus:ring-beeslyYellow h-4 w-4 text-beeslyYellow border-gray-300"
                       />
                     </div>
                     <div className="ml-3 w-full">
                       <div className="flex flex-wrap justify-between items-center">
                         <label htmlFor="houseCall" className="text-lg font-medium text-gray-900">House Call</label>
-                        <span className="bg-indigo-100 text-indigo-800 text-sm font-medium px-3 py-1 rounded-full">
+                        <span className="bg-beeslyYellow/20 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
                           Travel to customer locations
                         </span>
                       </div>
@@ -975,7 +977,7 @@ function SignUpContent() {
                       </p>
                       
                       <details className="mt-2 text-sm">
-                        <summary className="text-indigo-600 cursor-pointer font-medium">Read more</summary>
+                        <summary className="text-gray-700 cursor-pointer font-medium">Read more</summary>
                         <div className="mt-2 pl-2 border-l-2 border-gray-200 text-gray-600">
                           Ideal for pool cleaners, electricians, plumbers, home services, etc. Customers will provide their
                           address, and you'll be able to manage travel time and distance for optimal scheduling.
@@ -986,7 +988,7 @@ function SignUpContent() {
                 </div>
                 
                 <div 
-                  className={`border rounded-lg p-4 cursor-pointer hover:border-indigo-500 transition-colors ${formData.service_type === 'Scheduler' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  className={`border rounded-lg p-4 cursor-pointer hover:border-beeslyYellow transition-colors ${formData.service_type === 'Scheduler' ? 'border-beeslyYellow bg-beeslyYellow/10' : 'border-gray-300'}`}
                   onClick={() => setFormData(prev => ({ ...prev, service_type: 'Scheduler' }))}
                 >
                   <div className="flex items-start">
@@ -997,13 +999,13 @@ function SignUpContent() {
                         id="scheduler"
                         checked={formData.service_type === 'Scheduler'}
                         onChange={() => setFormData(prev => ({ ...prev, service_type: 'Scheduler' }))}
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                        className="focus:ring-beeslyYellow h-4 w-4 text-beeslyYellow border-gray-300"
                       />
                     </div>
                     <div className="ml-3 w-full">
                       <div className="flex flex-wrap justify-between items-center">
                         <label htmlFor="scheduler" className="text-lg font-medium text-gray-900">Scheduler</label>
-                        <span className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
+                        <span className="bg-beeslyYellow/20 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">
                           Customers visit you or virtual
                         </span>
                       </div>
@@ -1012,7 +1014,7 @@ function SignUpContent() {
                       </p>
                       
                       <details className="mt-2 text-sm">
-                        <summary className="text-indigo-600 cursor-pointer font-medium">Read more</summary>
+                        <summary className="text-gray-700 cursor-pointer font-medium">Read more</summary>
                         <div className="mt-2 pl-2 border-l-2 border-gray-200 text-gray-600">
                           Ideal for barbers, salons, accountants, consultants, or any business where clients visit your office
                           or connect with you virtually. Focuses on calendar booking without travel calculations.
@@ -1027,14 +1029,14 @@ function SignUpContent() {
               <button
                 type="button"
                 onClick={handleBack}
-                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Back
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-black bg-beeslyYellow hover:bg-beeslyYellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Next
               </button>
@@ -1055,7 +1057,7 @@ function SignUpContent() {
                 id="businessName"
                 required
                 placeholder="Enter your business name"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                 value={formData.businessName}
                 onChange={handleInputChange}
               />
@@ -1076,7 +1078,7 @@ function SignUpContent() {
                 id="phoneNumber"
                 required
                 placeholder="Enter your phone number"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                 value={formData.phoneNumber}
                 onChange={handleInputChange}
               />
@@ -1093,7 +1095,7 @@ function SignUpContent() {
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <div 
-                  className={`border rounded-lg p-3 cursor-pointer hover:border-indigo-500 transition-colors ${formData.phone_carrier === 'Verizon' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  className={`border rounded-lg p-3 cursor-pointer hover:border-beeslyYellow transition-colors ${formData.phone_carrier === 'Verizon' ? 'border-beeslyYellow bg-beeslyYellow/10' : 'border-gray-300'}`}
                   onClick={() => setFormData(prev => ({ ...prev, phone_carrier: 'Verizon' }))}
                 >
                   <div className="flex items-center">
@@ -1103,7 +1105,7 @@ function SignUpContent() {
                       id="verizon"
                       checked={formData.phone_carrier === 'Verizon'}
                       onChange={() => setFormData(prev => ({ ...prev, phone_carrier: 'Verizon' }))}
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                      className="focus:ring-beeslyYellow h-4 w-4 text-beeslyYellow border-gray-300"
                     />
                     <label htmlFor="verizon" className="ml-2 block text-sm font-medium text-gray-700">
                       Verizon
@@ -1111,7 +1113,7 @@ function SignUpContent() {
                   </div>
                 </div>
                 <div 
-                  className={`border rounded-lg p-3 cursor-pointer hover:border-indigo-500 transition-colors ${formData.phone_carrier === 'ATT' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  className={`border rounded-lg p-3 cursor-pointer hover:border-beeslyYellow transition-colors ${formData.phone_carrier === 'ATT' ? 'border-beeslyYellow bg-beeslyYellow/10' : 'border-gray-300'}`}
                   onClick={() => setFormData(prev => ({ ...prev, phone_carrier: 'ATT' }))}
                 >
                   <div className="flex items-center">
@@ -1121,7 +1123,7 @@ function SignUpContent() {
                       id="att"
                       checked={formData.phone_carrier === 'ATT'}
                       onChange={() => setFormData(prev => ({ ...prev, phone_carrier: 'ATT' }))}
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                      className="focus:ring-beeslyYellow h-4 w-4 text-beeslyYellow border-gray-300"
                     />
                     <label htmlFor="att" className="ml-2 block text-sm font-medium text-gray-700">
                       AT&T
@@ -1129,7 +1131,7 @@ function SignUpContent() {
                   </div>
                 </div>
                 <div 
-                  className={`border rounded-lg p-3 cursor-pointer hover:border-indigo-500 transition-colors ${formData.phone_carrier === 'TMobile' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  className={`border rounded-lg p-3 cursor-pointer hover:border-beeslyYellow transition-colors ${formData.phone_carrier === 'TMobile' ? 'border-beeslyYellow bg-beeslyYellow/10' : 'border-gray-300'}`}
                   onClick={() => setFormData(prev => ({ ...prev, phone_carrier: 'TMobile' }))}
                 >
                   <div className="flex items-center">
@@ -1139,7 +1141,7 @@ function SignUpContent() {
                       id="tmobile"
                       checked={formData.phone_carrier === 'TMobile'}
                       onChange={() => setFormData(prev => ({ ...prev, phone_carrier: 'TMobile' }))}
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                      className="focus:ring-beeslyYellow h-4 w-4 text-beeslyYellow border-gray-300"
                     />
                     <label htmlFor="tmobile" className="ml-2 block text-sm font-medium text-gray-700">
                       T-Mobile
@@ -1147,7 +1149,7 @@ function SignUpContent() {
                   </div>
                 </div>
                 <div 
-                  className={`border rounded-lg p-3 cursor-pointer hover:border-indigo-500 transition-colors ${formData.phone_carrier === 'Other' ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'}`}
+                  className={`border rounded-lg p-3 cursor-pointer hover:border-beeslyYellow transition-colors ${formData.phone_carrier === 'Other' ? 'border-beeslyYellow bg-beeslyYellow/10' : 'border-gray-300'}`}
                   onClick={() => setFormData(prev => ({ ...prev, phone_carrier: 'Other' }))}
                 >
                   <div className="flex items-center">
@@ -1157,7 +1159,7 @@ function SignUpContent() {
                       id="other"
                       checked={formData.phone_carrier === 'Other'}
                       onChange={() => setFormData(prev => ({ ...prev, phone_carrier: 'Other' }))}
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                      className="focus:ring-beeslyYellow h-4 w-4 text-beeslyYellow border-gray-300"
                     />
                     <label htmlFor="other" className="ml-2 block text-sm font-medium text-gray-700">
                       Other
@@ -1175,7 +1177,7 @@ function SignUpContent() {
                 value={formData.businessAddress}
                 onChange={handleAddressChange}
                 placeholder="Enter your business address"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                 required
               />
               <p className="mt-2 text-sm text-gray-500">
@@ -1198,7 +1200,7 @@ function SignUpContent() {
                       id="with_work_description"
                       name="with_work_description"
                       type="checkbox"
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                      className="focus:ring-beeslyYellow h-4 w-4 text-beeslyYellow border-gray-300 rounded"
                       checked={formData.with_work_description === true}
                       onChange={(e) => {
                         setFormData((prev) => ({
@@ -1224,14 +1226,14 @@ function SignUpContent() {
               <button
                 type="button"
                 onClick={handleBack}
-                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Back
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-black bg-beeslyYellow hover:bg-beeslyYellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Next
               </button>
@@ -1252,7 +1254,7 @@ function SignUpContent() {
                 id="maxServiceDistance"
                 required
                 placeholder="Enter maximum service distance"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                 value={formData.maxServiceDistance}
                 onChange={handleInputChange}
               />
@@ -1267,7 +1269,7 @@ function SignUpContent() {
                 id="typicalServiceTime"
                 required
                 placeholder="Enter typical service time"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                 value={formData.typicalServiceTime}
                 onChange={handleInputChange}
               />
@@ -1276,14 +1278,14 @@ function SignUpContent() {
               <button
                 type="button"
                 onClick={handleBack}
-                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Back
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-black bg-beeslyYellow hover:bg-beeslyYellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Next
               </button>
@@ -1302,7 +1304,7 @@ function SignUpContent() {
                 name="localTimeZone"
                 id="localTimeZone"
                 required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                 value={formData.localTimeZone}
                 onChange={handleInputChange}
               >
@@ -1324,7 +1326,7 @@ function SignUpContent() {
                   <input
                     type="time"
                     id="openTime"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                     value={formData.businessHoursLocal.open}
                     onChange={(e) => handleHoursChange('open', e.target.value)}
                   />
@@ -1336,7 +1338,7 @@ function SignUpContent() {
                   <input
                     type="time"
                     id="closeTime"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg p-3"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-beeslyYellow focus:ring-beeslyYellow text-lg p-3"
                     value={formData.businessHoursLocal.close}
                     onChange={(e) => handleHoursChange('close', e.target.value)}
                   />
@@ -1347,14 +1349,14 @@ function SignUpContent() {
               <button
                 type="button"
                 onClick={handleBack}
-                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Back
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-black bg-beeslyYellow hover:bg-beeslyYellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Next
               </button>
@@ -1481,7 +1483,7 @@ function SignUpContent() {
                   name="textMessageConsent"
                   type="checkbox"
                   required
-                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                  className="focus:ring-beeslyYellow h-4 w-4 text-beeslyYellow border-gray-300 rounded"
                   checked={formData.textMessageConsent}
                   onChange={handleInputChange}
                 />
@@ -1500,14 +1502,14 @@ function SignUpContent() {
               <button
                 type="button"
                 onClick={handleBack}
-                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-gray-300 rounded-md shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Back
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="py-3 px-6 border border-transparent rounded-md shadow-sm text-lg font-medium text-black bg-beeslyYellow hover:bg-beeslyYellow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beeslyYellow"
               >
                 Next
               </button>
@@ -1521,20 +1523,25 @@ function SignUpContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-beeslyDark py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
+          <img
+            className="mx-auto h-12 w-auto"
+            src="/callendar_ai_logo_no_bg.png"
+            alt="Callendar.ai Logo"
+          />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-lg text-gray-600">
-            {formData.service_type === 'Scheduler' ? (
-              // For Scheduler: 5 steps (account, service_type, business, hours, calendar)
-              `Step ${['account', 'service_type', 'business', 'hours', 'calendar'].indexOf(step) + 1} of 5`
-            ) : (
-              // For House Call or initial state: 6 steps (account, service_type, business, location, hours, calendar)
-              `Step ${['account', 'service_type', 'business', 'location', 'hours', 'calendar'].indexOf(step) + 1} of 6`
-            )}
+          <p className="mt-2 text-center text-sm text-gray-600">
+            {step === 'account' && "Let's get started with your Callendar.ai account"}
+            {step === 'service_type' && "What type of service do you provide?"}
+            {step === 'business' && "Tell us about your business"}
+            {step === 'location' && "Configure your service location settings"}
+            {step === 'hours' && "Set your business hours"}
+            {step === 'calendar' && "Connect your preferred calendar"}
+            {step === 'payment' && "Start your free trial"}
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
@@ -1561,12 +1568,13 @@ function SignUpContent() {
 // Loading component
 function Loading() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 text-center">
-        <svg className="animate-spin h-10 w-10 text-indigo-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
+    <div className="min-h-screen flex items-center justify-center bg-beeslyDark py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <img
+          className="mx-auto h-12 w-auto"
+          src="/callendar_ai_logo_no_bg.png"
+          alt="Callendar.ai Logo"
+        />
         <h2 className="mt-6 text-center text-xl font-medium text-gray-900">
           Loading...
         </h2>

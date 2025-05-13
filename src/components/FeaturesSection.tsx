@@ -10,7 +10,7 @@ const FeatureCard = ({ title, description }: { title: string; description: strin
         <CardTitle className="text-xl font-bold">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-300">{description}</p>
+        <p className="text-gray-700">{description}</p>
       </CardContent>
     </Card>
   );
@@ -105,7 +105,7 @@ const FeaturesSection = () => {
           {additionalFeatures.map((feature, index) => (
             <div
               key={index}
-              className="flex items-center gap-2 text-gray-300 hover-lift hover-bright"
+              className="flex items-center gap-2 text-gray-600 hover-lift hover-bright"
             >
               <div className="w-4 h-4 bg-beeslyYellow rounded-full flex items-center justify-center">
                 <svg

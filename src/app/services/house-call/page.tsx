@@ -29,13 +29,13 @@ export default function HouseCallServicesPage() {
               <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-heading">
                 House Call Services
               </h1>
-              <p className="text-lg md:text-xl text-gray-300 mb-5">
+              <p className="text-lg md:text-xl text-gray-700 mb-5">
               Voicemail that Books Appointments for You
               </p>
-              <p className="text-lg text-gray-300 mb-8">
+              <p className="text-lg text-gray-700 mb-8">
                 Callendar is an <span className="text-beeslyYellow font-semibold">AI-powered voicemail system</span> that automatically books appointments for your business. When clients call, they're routed to our <span className="text-beeslyYellow font-semibold">AI scheduling assistant</span> that checks your calendar availability, and books the appointment for you - <span className="text-beeslyYellow font-semibold">all without you having to pick up the phone</span>.
               </p>
-              <p className="text-lg text-gray-300 mb-8">
+              <p className="text-lg text-gray-700 mb-8">
                 Ideal for pool cleaners, electricians, plumbers, home services, and other businesses
                 where you go to your customers. Manage travel time and optimize your schedule.
               </p>
@@ -93,7 +93,7 @@ export default function HouseCallServicesPage() {
                 <MapPinIcon className="h-6 w-6 text-black" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-medium text-heading mb-3">Location-Based Scheduling</h3>
-              <p className="text-gray-400">
+              <p className="text-gray-600">
                 Customers provide their address, and we help you manage appointments based on location to minimize travel time.
               </p>
             </div>
@@ -104,7 +104,7 @@ export default function HouseCallServicesPage() {
                 <TruckIcon className="h-6 w-6 text-black" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-medium text-heading mb-3">Travel Optimization</h3>
-              <p className="text-gray-400">
+              <p className="text-gray-600">
                 Set your maximum service distance and typical service time. We only allow bookings in your area, so you can spend your time working and not driving.
               </p>
             </div>
@@ -115,7 +115,7 @@ export default function HouseCallServicesPage() {
                 <ClockIcon className="h-6 w-6 text-black" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-medium text-heading mb-3">Buffer Time Management</h3>
-              <p className="text-gray-400">
+              <p className="text-gray-600">
                 Account for travel time between appointments. Never double-book yourself or arrive late to an appointment again.
               </p>
             </div>
@@ -175,7 +175,7 @@ export default function HouseCallServicesPage() {
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span className="text-gray-300">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -209,7 +209,7 @@ export default function HouseCallServicesPage() {
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span className="text-gray-300">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -235,7 +235,7 @@ export default function HouseCallServicesPage() {
               <h2 className="text-3xl font-extrabold text-heading sm:text-4xl mb-6">
                 Ready to streamline your mobile service business?
               </h2>
-              <p className="mt-4 text-lg leading-6 text-gray-300 max-w-3xl mx-auto mb-8">
+              <p className="mt-4 text-lg leading-6 text-gray-700 max-w-3xl mx-auto mb-8">
                 Start your free trial today and see how our House Call service can help you save time, reduce travel costs, and serve more customers.
               </p>
               <Link
