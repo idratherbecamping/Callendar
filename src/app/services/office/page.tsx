@@ -54,7 +54,7 @@ export default function OfficeServicesPage() {
               <div className="relative w-full h-80 md:h-[500px] rounded-lg overflow-hidden shadow-xl">
                 {/* Display office image */}
                 <img 
-                  src="/ad_barber.png" 
+                  src="/ad_barber3.png" 
                   alt="Office services" 
                   className="w-full h-full object-contain"
                 />
