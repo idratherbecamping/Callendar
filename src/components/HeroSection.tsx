@@ -120,13 +120,13 @@ const HeroSection = () => {
           <div className="text-left md:w-1/2">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-heading">
               {/* <span className="block">Automated Voicemail that Books Appointments for You</span> */}
-              <span className="block text-3xl md:text-4xl lg:text-3xl mt-4"> Voicemail that Books Appointments for You</span>
+              <span className="block text-3xl md:text-4xl lg:text-3xl mt-4"> AI Voicemail That Turns Missed Calls Into Booked Appointments</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-5">
-              Never Miss a Call, Never Miss an Opportunity
+              Never miss a client again. Our AI answers calls, books appointments, and captures every opportunity 24/7.  
             </p>
             <p className="text-lg md:text-xl text-gray-300 mb-5">
-              Service <span className="font-bold">pays for itself</span> with just one missed opportunity
+              Just one saved call can pay for the entire service.
             </p>
             <p className="text-lg md:text-xl text-gray-300 mb-8">
               {/* <span className="font-bold">FREE</span> first month, then just <span className="font-bold">$45 /month</span>   */}

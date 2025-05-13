@@ -121,7 +121,7 @@ const Navbar = () => {
             </Link> */}
             
             {/* Services Dropdown */}
-            <div className="relative services-dropdown">
+            {/* <div className="relative services-dropdown">
               <button 
                 onClick={toggleServicesDropdown}
                 className="text-gray-300 hover:text-white transition-colors hover:underline hover:underline-offset-4 decoration-beeslyYellow flex items-center"
@@ -158,7 +158,7 @@ const Navbar = () => {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
             
             {/* Who It's For Dropdown */}
             <div className="relative who-its-for-dropdown">
