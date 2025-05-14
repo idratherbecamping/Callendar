@@ -14,8 +14,8 @@
     --card-foreground: 0 0% 0%;
     --popover: 60 13% 97%;
     --popover-foreground: 0 0% 0%;
-    --primary: 58 77% 64%;   /* Keep the light green color */
-    --primary-foreground: 0 0% 0%;
+    --primary: 160 36% 45%;   /* Teal-green color */
+    --primary-foreground: 0 0% 100%;
     --secondary: 60 13% 93%;
     --secondary-foreground: 0 0% 0%;
     --muted: 60 13% 93%;
@@ -26,7 +26,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 60 13% 85%;
     --input: 60 13% 90%;
-    --ring: 58 77% 64%;
+    --ring: 160 36% 45%;
     --radius: 0.5rem;
     --heading-text: 0 0% 0%;  /* Black for headlines */
   }
@@ -38,8 +38,8 @@
     --card-foreground: 0 0% 0%;
     --popover: 60 13% 97%;
     --popover-foreground: 0 0% 0%;
-    --primary: 58 77% 64%;   /* Callendar's yellow-green */
-    --primary-foreground: 0 0% 0%;
+    --primary: 160 36% 45%;   /* Teal-green color */
+    --primary-foreground: 0 0% 100%;
     --secondary: 60 13% 93%;
     --secondary-foreground: 0 0% 0%;
     --muted: 60 13% 93%;
@@ -50,7 +50,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 60 13% 85%;
     --input: 60 13% 90%;
-    --ring: 58 77% 64%;
+    --ring: 160 36% 45%;
     --heading-text: 0 0% 0%;  /* Black for headlines */
   }
 }
@@ -87,7 +87,7 @@
   }
 
   .beesly-button-yellow {
-    @apply bg-beeslyYellow text-black hover:bg-beeslyYellow/90 hover:shadow-lg hover:shadow-beeslyYellow/20 hover:-translate-y-0.5;
+    @apply bg-beeslyYellow text-white hover:bg-beeslyYellow/90 hover:shadow-lg hover:shadow-beeslyYellow/20 hover:-translate-y-0.5;
   }
 
   .beesly-card {

@@ -43,7 +43,7 @@ export default {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
-            beeslyYellow: '#c3c785',
+            beeslyYellow: '#4a9d7e',
             beeslyGray: '#67635d',
             beeslyDark: '#f8f7f2',
   		},
