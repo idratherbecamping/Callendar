@@ -50,14 +50,36 @@ export default function OfficeServicesPage() {
                 </Link>
               </div>
             </div>
-            <div className="md:w-1/2 flex justify-center">
-              <div className="relative w-full h-80 md:h-[500px] rounded-lg overflow-hidden">
-                {/* Display office image */}
-                <img 
-                  src="/ad_barber3.png" 
-                  alt="Office services" 
-                  className="w-full h-full object-contain"
-                />
+            <div className="md:w-1/2 flex justify-center items-center">
+              <div className="relative w-full max-w-lg">
+                {/* Hexagonal decorative elements */}
+                <div className="absolute -top-6 -right-6 w-24 h-24 opacity-15">
+                  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FFC107" d="M48.1,6.7l-38.2,22c-1.6,0.9-2.6,2.6-2.6,4.5v44c0,1.9,1,3.6,2.6,4.5l38.2,22c1.6,0.9,3.6,0.9,5.2,0 l38.2-22c1.6-0.9,2.6-2.6,2.6-4.5v-44c0-1.9-1-3.6-2.6-4.5l-38.2-22C51.7,5.8,49.7,5.8,48.1,6.7z"/>
+                  </svg>
+                </div>
+                <div className="absolute -bottom-6 -left-6 w-24 h-24 opacity-15">
+                  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FFC107" d="M48.1,6.7l-38.2,22c-1.6,0.9-2.6,2.6-2.6,4.5v44c0,1.9,1,3.6,2.6,4.5l38.2,22c1.6,0.9,3.6,0.9,5.2,0 l38.2-22c1.6-0.9,2.6-2.6,2.6-4.5v-44c0-1.9-1-3.6-2.6-4.5l-38.2-22C51.7,5.8,49.7,5.8,48.1,6.7z"/>
+                  </svg>
+                </div>
+                
+                {/* Main image container with border and shadow */}
+                <div className="relative bg-beeslyDark rounded-xl overflow-hidden border-2 border-beeslyYellow/30 shadow-[0_0_30px_rgba(255,193,7,0.15)]">
+                  <img 
+                    src="/ad_barber3.png" 
+                    alt="Office services" 
+                    className="w-full h-auto"
+                  />
+                  
+                  {/* Bottom gradient overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-beeslyDark to-transparent"></div>
+                  
+                  {/* "Powered by Callendar" badge */}
+                  <div className="absolute bottom-4 right-4 bg-beeslyYellow/90 px-3 py-1 rounded-md shadow-lg text-black text-sm font-medium">
+                    Powered by Callendar AI
+                  </div>
+                </div>
               </div>
             </div>
           </div>

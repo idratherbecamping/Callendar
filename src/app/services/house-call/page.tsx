@@ -49,16 +49,24 @@ export default function HouseCallServicesPage() {
                 </Link>
               </div>
             </div>
-            <div className="md:w-1/2 flex justify-center">
-              <div className="relative w-full max-w-xl mx-auto h-80 md:h-[500px] rounded-lg overflow-hidden shadow-xl">
-                <Image
-                  src="/home_visit.png"
-                  alt="House call service professional visiting client"
-                  fill
-                  sizes="(max-width: 1000px) 100vw, 50vw"
-                  style={{ objectFit: 'contain' }}
-                  priority
-                />
+            <div className="md:w-1/2 flex justify-center items-center">
+              <div className="relative w-full max-w-lg mx-auto">
+                {/* Simplified image container */}
+                <div className="relative">
+                  <img
+                    src="/home_visit.png"
+                    alt="House call service professional visiting client"
+                    className="w-full h-auto object-contain max-h-[500px]"
+                  />
+                  
+                  {/* Bottom gradient overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-beeslyDark to-transparent"></div>
+                  
+                  {/* Small badge */}
+                  <div className="absolute bottom-4 right-4 bg-beeslyYellow/90 px-3 py-1 rounded-md shadow-md text-black text-sm font-medium">
+                    Powered by Callendar AI
+                  </div>
+                </div>
               </div>
             </div>
           </div>

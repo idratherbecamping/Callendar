@@ -28,15 +28,7 @@ interface MobileMenuProps {
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, industryCategories }) => {
-  const [servicesExpanded, setServicesExpanded] = useState(false);
   const [whoItsForExpanded, setWhoItsForExpanded] = useState(false);
-  const [houseCallsExpanded, setHouseCallsExpanded] = useState(false);
-  const [officeVirtualExpanded, setOfficeVirtualExpanded] = useState(false);
-  const [expanded, setExpanded] = useState({
-    forWho: false,
-    officeVirtual: false,
-    houseCalls: false,
-  });
   
   const handleDemoClick = () => {
     trackDemoRequest('mobile_menu');
@@ -48,29 +40,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, industryCatego
     onClose();
   };
 
-  const toggleServicesExpanded = () => {
-    setServicesExpanded(!servicesExpanded);
-    if (whoItsForExpanded) setWhoItsForExpanded(false);
-  };
-
   const toggleWhoItsForExpanded = () => {
     setWhoItsForExpanded(!whoItsForExpanded);
-    if (servicesExpanded) setServicesExpanded(false);
-  };
-
-  const toggleHouseCallsExpanded = () => {
-    setHouseCallsExpanded(!houseCallsExpanded);
-  };
-
-  const toggleOfficeVirtualExpanded = () => {
-    setOfficeVirtualExpanded(!officeVirtualExpanded);
-  };
-
-  const toggleExpanded = (section: string) => {
-    setExpanded({
-      ...expanded,
-      [section]: !expanded[section as keyof typeof expanded],
-    });
   };
 
   if (!isOpen) return null;
@@ -122,24 +93,24 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, industryCatego
         </div>
 
         <nav className="flex flex-col space-y-4">
-          <Link
+          {/* <Link
             href="#Features"
             className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all"
             onClick={onClose}
           >
             Features
-          </Link>
+          </Link> */}
           
-          {/* Services section with submenu */}
+          {/* Who It's For section with submenu */}
           <div>
-            <button
+            <button 
+              onClick={toggleWhoItsForExpanded}
               className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all w-full text-left flex justify-between items-center"
-              onClick={toggleServicesExpanded}
             >
-              <span>Services</span>
+              <span>Who It's For</span>
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                className={`h-4 w-4 transition-transform ${servicesExpanded ? 'rotate-180' : ''}`} 
+                className={`h-4 w-4 transition-transform ${whoItsForExpanded ? 'rotate-180' : ''}`} 
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
@@ -148,149 +119,72 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, industryCatego
               </svg>
             </button>
             
-            {servicesExpanded && (
-              <div className="ml-4 mt-2 space-y-2 border-l-2 border-gray-200 pl-4">
-                <Link
-                  href="/services/office"
-                  className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all block"
-                  onClick={onClose}
-                >
-                  Office & Virtual Services
-                </Link>
-                <Link
-                  href="/services/house-call"
-                  className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all block"
-                  onClick={onClose}
-                >
-                  House Call Services
-                </Link>
-              </div>
-            )}
-          </div>
-          
-          {/* Who It's For section with submenu */}
-          <div>
-            <button
-              type="button"
-              onClick={() => toggleExpanded("forWho")}
-              className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              aria-expanded={expanded.forWho}
-            >
-              Who It's For
-              <ChevronDownIcon
-                className={classNames(
-                  expanded.forWho ? "rotate-180" : "",
-                  "h-5 w-5 flex-none"
-                )}
-                aria-hidden="true"
-              />
-            </button>
-            <div className={classNames(expanded.forWho ? "" : "hidden")}>
-              {/* Office & Virtual Services */}
-              <div className="flex flex-col">
-                <button
-                  type="button"
-                  onClick={() => toggleExpanded("officeVirtual")}
-                  className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  aria-controls="disclosure-1"
-                  aria-expanded={expanded.officeVirtual}
-                >
+            {whoItsForExpanded && (
+              <div className="ml-4 mt-2 space-y-4 border-l-2 border-gray-200 pl-4">
+                <div className="border-b border-gray-200 pb-3">
                   <Link 
-                    href="/services/office"
-                    className="flex-grow text-left"
+                    href="/services/office" 
+                    className="block mb-2 text-sm font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700"
                     onClick={onClose}
                   >
-                    Office & Virtual Services
+                    Office & Virtual
                   </Link>
-                  <ChevronDownIcon
-                    className={classNames(
-                      expanded.officeVirtual ? "rotate-180" : "",
-                      "h-5 w-5 flex-none"
-                    )}
-                    aria-hidden="true"
-                  />
-                </button>
-                <div
-                  className={classNames(
-                    expanded.officeVirtual ? "" : "hidden",
-                    "mt-2 space-y-2 pl-6"
-                  )}
-                  id="disclosure-1"
-                >
-                  {industryCategories.officeVirtual.map((item, index) => (
-                    <a
-                      key={index}
-                      href={item.path}
-                      className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                      {item.name}
-                    </a>
-                  ))}
+                  <div className="grid grid-cols-1 gap-2">
+                    {industryCategories.officeVirtual.map((industry, index) => (
+                      <Link
+                        key={index}
+                        href={industry.path}
+                        className="block py-1 text-sm text-gray-700 hover:bg-green-100 rounded px-2"
+                        onClick={onClose}
+                      >
+                        {industry.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              {/* House Call Services */}
-              <div className="flex flex-col">
-                <button
-                  type="button"
-                  onClick={() => toggleExpanded("houseCalls")}
-                  className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  aria-controls="disclosure-2"
-                  aria-expanded={expanded.houseCalls}
-                >
+                
+                <div>
                   <Link 
-                    href="/services/house-call"
-                    className="flex-grow text-left"
+                    href="/services/house-call" 
+                    className="block mb-2 text-sm font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700"
                     onClick={onClose}
                   >
                     House Call Services
                   </Link>
-                  <ChevronDownIcon
-                    className={classNames(
-                      expanded.houseCalls ? "rotate-180" : "",
-                      "h-5 w-5 flex-none"
-                    )}
-                    aria-hidden="true"
-                  />
-                </button>
-                <div
-                  className={classNames(
-                    expanded.houseCalls ? "" : "hidden",
-                    "mt-2 space-y-2 pl-6"
-                  )}
-                  id="disclosure-2"
-                >
-                  {industryCategories.houseCalls.map((item, index) => (
-                    <a
-                      key={index}
-                      href={item.path}
-                      className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                      {item.name}
-                    </a>
-                  ))}
+                  <div className="grid grid-cols-1 gap-2">
+                    {industryCategories.houseCalls.map((industry, index) => (
+                      <Link
+                        key={index}
+                        href={industry.path}
+                        className="block py-1 text-sm text-gray-700 hover:bg-indigo-100 rounded px-2"
+                        onClick={onClose}
+                      >
+                        {industry.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
           
           <Link
-            href="#HIW"
-            className="text-gray-700 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
+            href="/#HIW"
+            className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all"
             onClick={onClose}
           >
             How It Works
           </Link>
           <Link
-            href="#Pricing"
-            className="text-gray-700 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
+            href="/#Pricing"
+            className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all"
             onClick={onClose}
           >
             Pricing
           </Link>
           {/* <Link
             href="#FAQs"
-            className="text-gray-700 hover:text-white py-2 px-3 rounded-md hover:bg-secondary/30 transition-all"
+            className="text-gray-700 hover:text-black py-2 px-3 rounded-md hover:bg-gray-100 transition-all"
             onClick={onClose}
           >
             FAQs

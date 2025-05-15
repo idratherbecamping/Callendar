@@ -118,17 +118,17 @@ const HeroSection = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           {/* Left column - Text content */}
           <div className="text-left md:w-1/2">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-heading">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-10 text-heading">
               {/* <span className="block">Automated Voicemail that Books Appointments for You</span> */}
               <span className="block text-3xl md:text-4xl lg:text-3xl mt-4"> AI Voicemail That Turns Missed Calls Into Booked Appointments</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-700 mb-5">
+            <p className="text-lg md:text-xl text-gray-700 mb-10">
               Never miss a client again. Our AI answers calls, books appointments, and captures every opportunity 24/7.  
             </p>
-            <p className="text-lg md:text-xl text-gray-700 mb-5">
+            <p className="text-lg md:text-xl text-gray-700 mb-10">
               Just one saved call can pay for the entire service.
             </p>
-            <p className="text-lg md:text-xl text-gray-700 mb-8">
+            <p className="text-lg md:text-xl text-gray-700 mb-10">
               {/* <span className="font-bold">FREE</span> first month, then just <span className="font-bold">$45 /month</span>   */}
             </p>
             <div className="flex flex-col sm:flex-row items-start gap-5">
@@ -144,15 +144,38 @@ const HeroSection = () => {
           
           {/* Right column - Image */}
           <div className="md:w-1/2 flex justify-center">
-            <div className="relative w-full max-w-sm">
-              <Image
-                src="/ad_generic.png"
-                alt="Callendar AI Generic Service"
-                width={400}
-                height={400}
-                className="object-contain rounded-lg shadow-xl w-4/5 mx-auto"
-                priority
-              />
+            <div className="relative w-full max-w-lg scale-60 transform">
+              {/* Hexagonal decorative elements */}
+              <div className="absolute -top-6 -right-6 w-24 h-24 opacity-15">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#FFC107" d="M48.1,6.7l-38.2,22c-1.6,0.9-2.6,2.6-2.6,4.5v44c0,1.9,1,3.6,2.6,4.5l38.2,22c1.6,0.9,3.6,0.9,5.2,0 l38.2-22c1.6-0.9,2.6-2.6,2.6-4.5v-44c0-1.9-1-3.6-2.6-4.5l-38.2-22C51.7,5.8,49.7,5.8,48.1,6.7z"/>
+                </svg>
+              </div>
+              <div className="absolute -bottom-6 -left-6 w-24 h-24 opacity-15">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#FFC107" d="M48.1,6.7l-38.2,22c-1.6,0.9-2.6,2.6-2.6,4.5v44c0,1.9,1,3.6,2.6,4.5l38.2,22c1.6,0.9,3.6,0.9,5.2,0 l38.2-22c1.6-0.9,2.6-2.6,2.6-4.5v-44c0-1.9-1-3.6-2.6-4.5l-38.2-22C51.7,5.8,49.7,5.8,48.1,6.7z"/>
+                </svg>
+              </div>
+              
+              {/* Main image container with border and shadow */}
+              <div className="relative bg-beeslyDark rounded-xl overflow-hidden border-2 border-beeslyYellow/30 shadow-[0_0_30px_rgba(255,193,7,0.15)]">
+                <Image
+                  src="/ad_generic.png"
+                  alt="Callendar AI Generic Service"
+                  width={350}
+                  height={350}
+                  className="w-full h-auto"
+                  priority
+                />
+                
+                {/* Bottom gradient overlay */}
+                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-beeslyDark to-transparent"></div>
+                
+                {/* "Powered by Callendar" badge */}
+                <div className="absolute bottom-4 right-4 bg-beeslyYellow/90 px-3 py-1 rounded-md shadow-lg text-black text-sm font-medium">
+                  Powered by Callendar AI
+                </div>
+              </div>
             </div>
           </div>
         </div>
