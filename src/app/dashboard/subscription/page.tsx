@@ -56,14 +56,19 @@ export default function SubscriptionPage() {
           throw new Error(userError.message)
         }
         
-        console.log('User data from Supabase:', userData)
+        console.log('User data from Supabase:', {
+          id: userData.id,
+          stripe_customer_id: userData.stripe_customer_id,
+          stripe_subscription_id: userData.stripe_subscription_id
+        })
         setUser(userData)
         
         // Only proceed if the user has subscription data
         if (userData.stripe_subscription_id) {
           console.log('Making API call with:', {
+            action: 'get_details',
             subscriptionId: userData.stripe_subscription_id,
-            userId: userData.stripe_customer_id
+            userId: userData.id
           })
           // Get subscription details
           const response = await fetch(`/api/stripe/manage-subscription`, {

@@ -12,6 +12,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { action, subscriptionId, userId } = body;
 
+    console.log('API received request:', { action, subscriptionId, userId });
+
     if (!action || !subscriptionId || !userId) {
       return NextResponse.json(
         { error: 'Action, subscription ID, and user ID are required' },
@@ -26,7 +28,10 @@ export async function POST(req: NextRequest) {
       .eq('id', userId)
       .single();
 
+    console.log('Supabase query result:', { user, userError });
+
     if (userError || !user) {
+      console.log('User not found or error:', userError);
       return NextResponse.json(
         { error: 'User not found or not authorized' },
         { status: 403 }
@@ -34,6 +39,10 @@ export async function POST(req: NextRequest) {
     }
 
     if (user.stripe_subscription_id !== subscriptionId) {
+      console.log('Subscription ID mismatch:', {
+        stored: user.stripe_subscription_id,
+        received: subscriptionId
+      });
       return NextResponse.json(
         { error: 'Subscription ID does not match user records' },
         { status: 403 }
