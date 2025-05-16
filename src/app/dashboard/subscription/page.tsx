@@ -63,7 +63,7 @@ export default function SubscriptionPage() {
         if (userData.stripe_subscription_id) {
           console.log('Making API call with:', {
             subscriptionId: userData.stripe_subscription_id,
-            userId: userData.id
+            userId: userData.stripe_customer_id
           })
           // Get subscription details
           const response = await fetch(`/api/stripe/manage-subscription`, {
