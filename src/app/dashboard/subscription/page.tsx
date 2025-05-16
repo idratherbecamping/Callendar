@@ -52,13 +52,19 @@ export default function SubscriptionPage() {
           .single()
           
         if (userError) {
+          console.error('Error fetching user data:', userError)
           throw new Error(userError.message)
         }
         
+        console.log('User data from Supabase:', userData)
         setUser(userData)
         
         // Only proceed if the user has subscription data
         if (userData.stripe_subscription_id) {
+          console.log('Making API call with:', {
+            subscriptionId: userData.stripe_subscription_id,
+            userId: userData.id
+          })
           // Get subscription details
           const response = await fetch(`/api/stripe/manage-subscription`, {
             method: 'POST',
