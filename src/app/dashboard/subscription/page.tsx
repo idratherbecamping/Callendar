@@ -105,7 +105,7 @@ export default function SubscriptionPage() {
   }, [router])
   
   const handleCancelSubscription = async () => {
-    if (!user?.id || !user?.stripe_subscription_id) return
+    if (!user?.id || !user?.stripe_subscription_id || !user?.stripe_customer_id) return
     
     try {
       setLoading(true)
@@ -119,6 +119,7 @@ export default function SubscriptionPage() {
           action: 'cancel',
           subscriptionId: user.stripe_subscription_id,
           userId: user.id,
+          stripeCustomerId: user.stripe_customer_id,
         }),
       })
       
@@ -139,7 +140,7 @@ export default function SubscriptionPage() {
   }
   
   const handleReactivateSubscription = async () => {
-    if (!user?.id || !user?.stripe_subscription_id) return
+    if (!user?.id || !user?.stripe_subscription_id || !user?.stripe_customer_id) return
     
     try {
       setLoading(true)
@@ -153,6 +154,7 @@ export default function SubscriptionPage() {
           action: 'reactivate',
           subscriptionId: user.stripe_subscription_id,
           userId: user.id,
+          stripeCustomerId: user.stripe_customer_id,
         }),
       })
       
