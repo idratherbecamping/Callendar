@@ -68,7 +68,8 @@ export default function SubscriptionPage() {
           console.log('Making API call with:', {
             action: 'get_details',
             subscriptionId: userData.stripe_subscription_id,
-            userId: userData.id
+            userId: userData.id,
+            stripeCustomerId: userData.stripe_customer_id
           })
           // Get subscription details
           const response = await fetch(`/api/stripe/manage-subscription`, {
@@ -80,6 +81,7 @@ export default function SubscriptionPage() {
               action: 'get_details',
               subscriptionId: userData.stripe_subscription_id,
               userId: userData.id,
+              stripeCustomerId: userData.stripe_customer_id,
             }),
           })
           

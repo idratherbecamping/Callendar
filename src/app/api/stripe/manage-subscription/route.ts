@@ -10,42 +10,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { action, subscriptionId, userId } = body;
+    const { action, subscriptionId, userId, stripeCustomerId } = body;
+    console.log('API received request:', { action, subscriptionId, userId, stripeCustomerId });
 
-    console.log('API received request:', { action, subscriptionId, userId });
-
-    if (!action || !subscriptionId || !userId) {
+    if (!action || !subscriptionId || !userId || !stripeCustomerId) {
       return NextResponse.json(
-        { error: 'Action, subscription ID, and user ID are required' },
+        { error: 'Action, subscription ID, user ID, and Stripe customer ID are required' },
         { status: 400 }
-      );
-    }
-
-    // Verify the user is authorized to perform this action
-    const { data: user, error: userError } = await supabase
-      .from('users')
-      .select('stripe_customer_id, stripe_subscription_id')
-      .eq('id', userId)
-      .single();
-
-    console.log('Supabase query result:', { user, userError });
-
-    if (userError || !user) {
-      console.log('User not found or error:', userError);
-      return NextResponse.json(
-        { error: 'User not found or not authorized' },
-        { status: 403 }
-      );
-    }
-
-    if (user.stripe_subscription_id !== subscriptionId) {
-      console.log('Subscription ID mismatch:', {
-        stored: user.stripe_subscription_id,
-        received: subscriptionId
-      });
-      return NextResponse.json(
-        { error: 'Subscription ID does not match user records' },
-        { status: 403 }
       );
     }
 
@@ -54,8 +25,15 @@ export async function POST(req: NextRequest) {
     // Process the requested action
     switch (action) {
       case 'get_details':
-        // Retrieve subscription details
-        result = await stripe.subscriptions.retrieve(subscriptionId);
+        // Retrieve subscription details and verify customer
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        if (subscription.customer !== stripeCustomerId) {
+          return NextResponse.json(
+            { error: 'Subscription does not belong to this customer' },
+            { status: 403 }
+          );
+        }
+        result = subscription;
         break;
         
       case 'cancel':
@@ -97,17 +75,6 @@ export async function POST(req: NextRequest) {
           { error: 'Invalid action' },
           { status: 400 }
         );
-    }
-
-    // Update subscription status in database if needed
-    if (action === 'cancel' || action === 'reactivate') {
-      await supabase
-        .from('users')
-        .update({
-          subscription_status: action === 'cancel' ? 'canceling' : 'active',
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', userId);
     }
 
     return NextResponse.json({
