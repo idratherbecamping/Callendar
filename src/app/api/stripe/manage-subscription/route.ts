@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
     if (!action || !subscriptionId || !userId || !stripeCustomerId) {
       return NextResponse.json(
-        { error: 'Action, subscription ID, user ID, and Stripe customer ID are required' },
+        { error: 'Action, subscription ID, user ID, and Stripe customer ID are required. If you continue to experience issues, please contact support at gannon@callendar.ai' },
         { status: 400 }
       );
     }
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
         if (subscription.customer !== stripeCustomerId) {
           return NextResponse.json(
-            { error: 'Subscription does not belong to this customer' },
+            { error: 'Subscription does not belong to this customer. If you continue to experience issues, please contact support at gannon@callendar.ai' },
             { status: 403 }
           );
         }
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
         const { newPriceId } = body;
         if (!newPriceId) {
           return NextResponse.json(
-            { error: 'New price ID is required for plan change' },
+            { error: 'New price ID is required for plan change. If you continue to experience issues, please contact support at gannon@callendar.ai' },
             { status: 400 }
           );
         }
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
 
       default:
         return NextResponse.json(
-          { error: 'Invalid action' },
+          { error: 'Invalid action. If you continue to experience issues, please contact support at gannon@callendar.ai' },
           { status: 400 }
         );
     }
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
   } catch (error: unknown) {
     console.error('Error managing subscription:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to manage subscription' },
+      { error: `${error instanceof Error ? error.message : 'Failed to manage subscription'}. If you continue to experience issues, please contact support at gannon@callendar.ai` },
       { status: 500 }
     );
   }
