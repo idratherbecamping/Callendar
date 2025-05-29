@@ -8,6 +8,57 @@ import AddressValidator from '@/components/AddressValidator'
 
 type Step = 'account' | 'service_type' | 'business' | 'location' | 'hours' | 'calendar' | 'payment'
 
+type FormData = {
+  email: string;
+  password: string;
+  businessName: string;
+  phoneNumber: string;
+  phone_carrier: string;
+  businessAddress: string;
+  maxServiceDistance: number;
+  typicalServiceTime: number;
+  localTimeZone: string;
+  businessHoursLocal: {
+    open: string;
+    close: string;
+  };
+  calendarConnected: boolean;
+  googleAuthToken: GoogleAuthToken | null;
+  acuityAuthToken: AcuityAuthToken | null;
+  squareAuthToken: SquareAuthToken | null;
+  service_type: string;
+  paymentComplete: boolean;
+  customerId: string;
+  subscriptionId: string;
+  with_work_description: boolean;
+  acuityConnected: boolean;
+  squareConnected: boolean;
+  textMessageConsent: boolean;
+};
+
+type GoogleAuthToken = {
+  access_token: string;
+  token_type: string;
+  scope: string;
+  expires_in: number;
+  id_token: string;
+};
+
+type AcuityAuthToken = {
+  access_token: string;
+  token_type: string;
+  expires_in?: number;
+  created_at: string;
+};
+
+type SquareAuthToken = {
+  access_token: string;
+  token_type: string;
+  expires_at: string;
+  merchant_id: string;
+  created_at: string;
+};
+
 // Validation functions
 const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,29 +77,32 @@ const isValidPassword = (password: string): boolean => {
 
 function SignUpContent() {
   const [step, setStep] = useState<Step>('account')
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
     businessName: '',
     phoneNumber: '',
+    phone_carrier: 'Other',
     businessAddress: '',
-    maxServiceDistance: '25',
-    typicalServiceTime: '90',
+    maxServiceDistance: 25,
+    typicalServiceTime: 90,
     localTimeZone: 'US/Pacific', // Default to Pacific time
     businessHoursLocal: {
-      open: '09:00:00',
-      close: '18:00:00'
+      open: '09:00',
+      close: '17:00',
     },
     calendarConnected: false,
     googleAuthToken: null,
-    textMessageConsent: false, // Add new field for text message consent
-    service_type: '', // Add new field for service type
-    subscriptionId: '', // Add field for Stripe subscription ID
-    customerId: '', // Add field for Stripe customer ID
-    paymentComplete: false, // Track payment completion
-    acuityConnected: false, // Add new field for Acuity connection
-    with_work_description: false, // Add new field for work description
-    phone_carrier: '', // Add new field for phone carrier
+    acuityAuthToken: null,
+    squareAuthToken: null,
+    service_type: 'House Call',
+    paymentComplete: false,
+    customerId: '',
+    subscriptionId: '',
+    with_work_description: false,
+    acuityConnected: false,
+    squareConnected: false,
+    textMessageConsent: false,
   })
   const [addressIsValid, setAddressIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null)
@@ -468,6 +522,50 @@ function SignUpContent() {
     window.location.href = authUrl.toString();
   };
 
+  const handleConnectSquare = () => {
+    // Store the form data in localStorage before redirecting
+    localStorage.setItem('signupFormData', JSON.stringify(formData));
+    
+    // Get the client ID from environment variables
+    const clientId = process.env.NEXT_PUBLIC_SQUARE_CLIENT_ID;
+    const redirectUri = process.env.NEXT_PUBLIC_SQUARE_REDIRECT_URI;
+    
+    // Add debug logging
+    console.log('Square OAuth Configuration:', {
+      clientId: clientId ? `${clientId.substring(0, 5)}...` : 'missing',
+      redirectUri: redirectUri || 'missing',
+      envKeys: Object.keys(process.env).filter(key => key.includes('SQUARE'))
+    });
+    
+    if (!clientId || !redirectUri) {
+      setError('Square OAuth configuration is missing. Please contact support.');
+      return;
+    }
+    
+    console.log('Initiating Square OAuth flow with:', {
+      clientId: clientId.substring(0, 5) + '...',
+      redirectUri
+    });
+    
+    // Generate a random state parameter for security
+    const state = Math.random().toString(36).substring(2, 15);
+    
+    // Store state in localStorage for verification
+    localStorage.setItem('square_oauth_state', state);
+    console.log('Stored Square OAuth state:', state);
+    
+    // Construct the authorization URL according to Square documentation
+    const authUrl = new URL('https://connect.squareup.com/oauth2/authorize');
+    authUrl.searchParams.append('client_id', clientId);
+    authUrl.searchParams.append('scope', 'MERCHANT_PROFILE_READ APPOINTMENTS_ALL_WRITE APPOINTMENTS_WRITE APPOINTMENTS_READ APPOINTMENTS_ALL_READ APPOINTMENTS_BUSINESS_SETTINGS_READ CUSTOMERS_READ ITEMS_READ');
+    authUrl.searchParams.append('state', state);
+    authUrl.searchParams.append('response_type', 'code');
+    authUrl.searchParams.append('redirect_uri', redirectUri);
+    
+    // Redirect to Square's authorization page
+    window.location.href = authUrl.toString();
+  };
+
   // Add calendar connected state setter
   const setCalendarConnected = (connected: boolean) => {
     setFormData(prev => ({
@@ -481,6 +579,14 @@ function SignUpContent() {
     setFormData(prev => ({
       ...prev,
       acuityConnected: connected
+    }));
+  };
+
+  // Add Square connected state setter
+  const setSquareConnected = (connected: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      squareConnected: connected
     }));
   };
 
@@ -1375,9 +1481,11 @@ function SignUpContent() {
               <p className="mt-2 text-sm text-gray-500">
                 Choose one calendar service to manage your appointments. You can only connect one calendar service.
               </p>
-              {(formData.calendarConnected || formData.acuityConnected) && (
+              {(formData.calendarConnected || formData.acuityConnected || formData.squareConnected) && (
                 <div className="mt-2 text-sm text-indigo-600 font-medium">
-                  {formData.calendarConnected ? "Google Calendar selected" : "Acuity Scheduling selected"}
+                  {formData.calendarConnected ? "Google Calendar selected" : 
+                   formData.acuityConnected ? "Acuity Scheduling selected" :
+                   "Square selected"}
                 </div>
               )}
             </div>
@@ -1388,7 +1496,7 @@ function SignUpContent() {
                 className={`border rounded-lg p-4 transition-all duration-200 ${
                   formData.calendarConnected 
                     ? 'border-green-500 bg-green-50' 
-                    : formData.acuityConnected 
+                    : (formData.acuityConnected || formData.squareConnected)
                       ? 'border-gray-300 opacity-50 cursor-not-allowed' 
                       : 'border-gray-300 hover:border-blue-500'
                 }`}
@@ -1415,14 +1523,14 @@ function SignUpContent() {
                       <button
                         type="button"
                         onClick={handleConnectCalendar}
-                        disabled={formData.acuityConnected}
+                        disabled={formData.acuityConnected || formData.squareConnected}
                         className={`mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white ${
-                          formData.acuityConnected 
+                          (formData.acuityConnected || formData.squareConnected)
                             ? 'bg-gray-400 cursor-not-allowed' 
                             : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
                         }`}
                       >
-                        {formData.acuityConnected ? 'Select Google Calendar' : 'Connect Google Calendar'}
+                        {formData.acuityConnected || formData.squareConnected ? 'Select Google Calendar' : 'Connect Google Calendar'}
                       </button>
                     )}
                   </div>
@@ -1434,7 +1542,7 @@ function SignUpContent() {
                 className={`border rounded-lg p-4 transition-all duration-200 ${
                   formData.acuityConnected 
                     ? 'border-green-500 bg-green-50' 
-                    : formData.calendarConnected 
+                    : (formData.calendarConnected || formData.squareConnected)
                       ? 'border-gray-300 opacity-50 cursor-not-allowed' 
                       : 'border-gray-300 hover:border-indigo-500'
                 }`}
@@ -1461,14 +1569,60 @@ function SignUpContent() {
                       <button
                         type="button"
                         onClick={handleConnectAcuity}
-                        disabled={formData.calendarConnected}
+                        disabled={formData.calendarConnected || formData.squareConnected}
                         className={`mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white ${
-                          formData.calendarConnected 
+                          (formData.calendarConnected || formData.squareConnected)
                             ? 'bg-gray-400 cursor-not-allowed' 
                             : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                         }`}
                       >
-                        {formData.calendarConnected ? 'Select Acuity' : 'Connect Acuity'}
+                        {formData.calendarConnected || formData.squareConnected ? 'Select Acuity' : 'Connect Acuity'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Square Option */}
+              <div 
+                className={`border rounded-lg p-4 transition-all duration-200 ${
+                  formData.squareConnected 
+                    ? 'border-green-500 bg-green-50' 
+                    : (formData.calendarConnected || formData.acuityConnected)
+                      ? 'border-gray-300 opacity-50 cursor-not-allowed' 
+                      : 'border-gray-300 hover:border-green-500'
+                }`}
+              >
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <svg className="h-6 w-6 text-green-600" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    </svg>
+                  </div>
+                  <div className="ml-3 flex-1">
+                    <h4 className="text-lg font-medium text-gray-900">Square</h4>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Connect your Square account to manage appointments and payments.
+                    </p>
+                    {formData.squareConnected ? (
+                      <div className="mt-2 flex items-center text-green-600">
+                        <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-sm font-medium">Connected</span>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleConnectSquare}
+                        disabled={formData.calendarConnected || formData.acuityConnected}
+                        className={`mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white ${
+                          (formData.calendarConnected || formData.acuityConnected)
+                            ? 'bg-gray-400 cursor-not-allowed' 
+                            : 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'
+                        }`}
+                      >
+                        {formData.calendarConnected || formData.acuityConnected ? 'Select Square' : 'Connect Square'}
                       </button>
                     )}
                   </div>

@@ -11,6 +11,14 @@ type AcuityAuthToken = {
   created_at: string;
 };
 
+type SquareAuthToken = {
+  access_token: string;
+  token_type: string;
+  expires_at: string;
+  merchant_id: string;
+  created_at: string;
+};
+
 type GoogleAuthToken = {
   scopes: string[];
   client_id: string;
@@ -34,6 +42,7 @@ type UserProfileData = {
   calendar_connected: boolean;
   google_auth_token: GoogleAuthToken | null;
   acuity_auth_token: AcuityAuthToken | null;
+  square_auth_token: SquareAuthToken | null;
   service_type: string;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
@@ -128,6 +137,7 @@ export async function POST(request: Request) {
       calendar_connected: userData.calendarConnected,
       google_auth_token: userData.googleAuthToken || null,
       acuity_auth_token: userData.acuityAuthToken || null,
+      square_auth_token: userData.squareAuthToken || null,
       service_type: userData.service_type || 'House Call',
       // Add Stripe data if available
       stripe_customer_id: paymentData?.customerId || null,
