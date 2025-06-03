@@ -557,7 +557,7 @@ function SignUpContent() {
     // Construct the authorization URL according to Square documentation
     const authUrl = new URL('https://connect.squareup.com/oauth2/authorize');
     authUrl.searchParams.append('client_id', clientId);
-    authUrl.searchParams.append('scope', 'MERCHANT_PROFILE_READ APPOINTMENTS_ALL_WRITE APPOINTMENTS_WRITE APPOINTMENTS_READ APPOINTMENTS_ALL_READ APPOINTMENTS_BUSINESS_SETTINGS_READ CUSTOMERS_READ ITEMS_READ');
+    authUrl.searchParams.append('scope', 'MERCHANT_PROFILE_READ APPOINTMENTS_ALL_WRITE APPOINTMENTS_WRITE APPOINTMENTS_READ APPOINTMENTS_ALL_READ APPOINTMENTS_BUSINESS_SETTINGS_READ CUSTOMERS_READ ITEMS_READ CUSTOMERS_WRITE');
     authUrl.searchParams.append('state', state);
     authUrl.searchParams.append('response_type', 'code');
     authUrl.searchParams.append('redirect_uri', redirectUri);
