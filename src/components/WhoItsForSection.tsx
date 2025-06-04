@@ -52,7 +52,7 @@ const WhoItsForSection = () => {
     {
       title: "Barbers",
       description: [
-        "<span class='text-beeslyYellow font-medium'>Solo barber</span> using <span class='text-beeslyYellow font-medium'>Acuity Scheduling</span>?",
+        "<span class='text-beeslyYellow font-medium'>Solo barber</span> using <span class='text-beeslyYellow font-medium'>Acuity Scheduling</span> or <span class='text-beeslyYellow font-medium'>Square</span>?",
         "Tired of <span class='text-beeslyYellow font-medium'>scheduling mid-cut</span> or <span class='text-beeslyYellow font-medium'>missing calls</span>?",
         "Callendar.ai lets clients <span class='text-beeslyYellow font-medium'>book a basic cut over the phone</span> using your calendar.",
         "<span class='text-beeslyYellow font-medium'>Finds an open slot automatically</span>—no call-backs needed."

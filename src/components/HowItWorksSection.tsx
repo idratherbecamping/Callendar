@@ -33,7 +33,7 @@ const HowItWorksSection = () => {
       number: 2,
       title: "Connect Calendar",
       description:
-        "Connect your Google Calendar or Acuity Calendar to allow the AI to view, edit and create events for you when it is scheduled on the call.",
+        "Connect your Google Calendar, Acuity Calendar, or Square Calendar to allow the AI to view, edit and create events for you when it is scheduled on the call.",
     },
     {
       number: 3,

@@ -115,11 +115,14 @@ export default function OfficeServicesPage() {
               </div>
               <h3 className="text-xl font-medium text-heading mb-3">Simple Calendar Management</h3>
               <p className="text-gray-700 mb-4">
-                Works with your existing <span className="text-beeslyYellow font-semibold">Acuity Scheduling</span> or <span className="text-beeslyYellow font-semibold">Google Calendar</span>. 
+                Works with your existing <span className="text-beeslyYellow font-semibold">Acuity Scheduling</span>, <span className="text-beeslyYellow font-semibold">Square Calendar</span>, or <span className="text-beeslyYellow font-semibold">Google Calendar</span>. 
               </p>
-              <div className="flex items-center justify-center space-x-4 mt-2">
+              <div className="flex flex-col items-center justify-center space-y-4 mt-4 p-4 bg-gray-100/10 rounded-lg">
                 <img src="/acuity-logo-final.svg" alt="Acuity Scheduling" className="h-8 filter brightness-100" />
-                <img src="/gmail_logo.png" alt="Google Calendar" className="h-8 filter brightness-300" />
+                <div className="flex items-center justify-center space-x-6">
+                  <img src="/gmail_logo.png" alt="Google Calendar" className="h-12 filter brightness-300" />
+                  <img src="/Square_combinationmark_black.png" alt="Square" className="h-12" />
+                </div>
               </div>
             </div>
 
@@ -165,7 +168,7 @@ export default function OfficeServicesPage() {
                   'Automated appointment reminders',
                   'Flexible scheduling options',
                   'Client self-booking',
-                  'Links to your Acuity or Google Calendar'
+                  'Links to your Acuity, Square, or Google Calendar'
                 ].map((item, i) => (
                   <li key={i} className="flex items-center text-gray-700">
                     <CheckIcon className="h-5 w-5 text-beeslyYellow mr-3" />
@@ -246,7 +249,7 @@ export default function OfficeServicesPage() {
                   'Let clients book 24/7 over the phone',
                   'Send automatic appointment reminders',
                   'Customize your availability',
-                  'Syncs with Acuity and Google Calendar to let clients book over the phone',
+                  'Syncs with Acuity, Square, and Google Calendar to let clients book over the phone',
                   // 'Accept payments at time of booking',
                   // 'Create service packages and offerings',
                   // 'Track client history and preferences',
