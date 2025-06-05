@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowRightIcon, CalendarIcon, UsersIcon, VideoCameraIcon, CheckIcon } from '@heroicons/react/24/outline';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import TestimonialsSection from '@/components/TestimonialsSection';
 
 export default function OfficeServicesPage() {
   return (
@@ -180,6 +181,9 @@ export default function OfficeServicesPage() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
 
       {/* Use Cases Section */}
       <section className="beesly-section bg-beeslyDark relative">

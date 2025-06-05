@@ -6,6 +6,7 @@ import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import WhoItsForSection from "@/components/WhoItsForSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import PricingSection from "@/components/PricingSection";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
@@ -31,6 +32,10 @@ export default function Home() {
 
       {/* Hero doesn't need animation as it's the first section */}
       <HeroSection />
+
+      <ScrollAnimation animationClass="fade-in">
+        <TestimonialsSection />
+      </ScrollAnimation>
 
       <ScrollAnimation animationClass="fade-in">
         <FeaturesSection />
