@@ -118,8 +118,24 @@ const HeroSection = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           {/* Left column - Text content */}
           <div className="text-left md:w-1/2">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="h-16 w-16 rounded-full overflow-hidden">
+                <Image
+                  src="/arsenal_branding.png"
+                  alt="Arsenal Barber Co. Logo"
+                  width={64}
+                  height={64}
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <p className="text-xl text-gray-700 italic">
+                  "The booking service has led to a steady increase in our weekly appointments."
+                </p>
+                <p className="text-base text-beeslyYellow font-semibold mt-2">- Hunter @ Arsenal Barber Co</p>
+              </div>
+            </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-10 text-heading">
-              {/* <span className="block">Automated Voicemail that Books Appointments for You</span> */}
               <span className="block text-3xl md:text-4xl lg:text-3xl mt-4"> AI Voicemail That Turns Missed Calls Into Booked Appointments</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-700 mb-10">

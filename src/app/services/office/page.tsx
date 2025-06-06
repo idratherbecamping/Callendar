@@ -26,6 +26,21 @@ export default function OfficeServicesPage() {
         <div className="beesly-container relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-left md:w-1/2">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="h-16 w-16 rounded-full overflow-hidden">
+                  <img
+                    src="/arsenal_branding.png"
+                    alt="Arsenal Barber Co. Logo"
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <div>
+                  <p className="text-xl text-gray-700 italic">
+                    "The booking service has led to a steady increase in our weekly appointments."
+                  </p>
+                  <p className="text-base text-beeslyYellow font-semibold mt-2">- Hunter @ Arsenal Barber Co</p>
+                </div>
+              </div>
               <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-heading">
               Voicemail that Books Appointments for You
               </h1>
@@ -86,6 +101,9 @@ export default function OfficeServicesPage() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
 
       {/* Features Section */}
       <section className="beesly-section bg-beeslyDark relative">
@@ -181,9 +199,6 @@ export default function OfficeServicesPage() {
           </div>
         </div>
       </section>
-
-      {/* Testimonials Section */}
-      <TestimonialsSection />
 
       {/* Use Cases Section */}
       <section className="beesly-section bg-beeslyDark relative">
