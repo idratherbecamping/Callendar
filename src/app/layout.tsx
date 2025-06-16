@@ -5,6 +5,7 @@ import "./globals.css";
 import ClientBody from "./ClientBody";
 import { trackPageView } from "@/lib/analytics";
 import FacebookPixelScript from "@/components/FacebookPixelScript";
+import KlaviyoForm from "@/components/KlaviyoForm";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -50,6 +51,7 @@ export default function RootLayout({
         <ClientBody>
           <div className="dark">{children}</div>
           <Analytics />
+          <KlaviyoForm />
         </ClientBody>
       </body>
     </html>
