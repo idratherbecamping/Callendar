@@ -6,34 +6,37 @@ import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="bg-beeslyDark pt-12 pb-6 border-t border-gray-800">
-      <div className="beesly-container">
+    <footer className="gradient-bg-dark pt-16 pb-8 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-pink-500 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
+      </div>
+      
+      <div className="beesly-container relative z-10">
         <div className="flex justify-between flex-col md:flex-row gap-8 mb-12">
-          <div className="flex gap-4">
-            <Link href="#Hero" className="text-gray-600 hover:text-white">
+          <div className="flex flex-wrap gap-6">
+            <Link href="#Hero" className="text-gray-400 hover:text-white transition-colors duration-300">
               Back To Top
             </Link>
-            <Link href="#Features" className="text-gray-600 hover:text-white">
+            <Link href="#Features" className="text-gray-400 hover:text-white transition-colors duration-300">
               Features
             </Link>
-            <Link href="#WhoItsFor" className="text-gray-600 hover:text-white">
+            <Link href="#WhoItsFor" className="text-gray-400 hover:text-white transition-colors duration-300">
               Who It's For
             </Link>
-            <Link href="#HIW" className="text-gray-600 hover:text-white">
+            <Link href="#HIW" className="text-gray-400 hover:text-white transition-colors duration-300">
               How It Works
             </Link>
-            <Link href="#Pricing" className="text-gray-600 hover:text-white">
+            <Link href="#Pricing" className="text-gray-400 hover:text-white transition-colors duration-300">
               Pricing
             </Link>
-            {/* <Link href="#FAQs" className="text-gray-400 hover:text-white">
-              FAQs
-            </Link> */}
-            <Link href="/privacy-policy" className="text-gray-600 hover:text-white">
+            <Link href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors duration-300">
               Privacy Policy
             </Link>
             <a
               href="mailto:gannon@callendar.ai?subject=Callendar%20Website"
-              className="text-gray-600 hover:text-white"
+              className="text-gray-400 hover:text-white transition-colors duration-300"
             >
               Email Us
             </a>
@@ -140,15 +143,16 @@ const Footer = () => {
           </div>
         </div> */}
 
-        <div className="mt-6 flex items-center">
-          <div className="text-gray-600 font-medium mr-2">Call Callendar AI:</div>
-          <a
-            href="tel:+18775704990
-"
-            className="text-beeslyYellow hover:text-beeslyYellow/80 font-semibold"
-          >
-            (877) 570-4990
-          </a>
+        <div className="mt-8 glass-morphism-dark rounded-xl p-6 border border-purple-500/20">
+          <div className="flex items-center justify-center">
+            <div className="text-gray-400 font-medium mr-3">Call Callendar AI:</div>
+            <a
+              href="tel:+18775704990"
+              className="text-gradient-accent hover:text-gradient-vibrant font-bold text-xl transition-all duration-300"
+            >
+              (877) 570-4990
+            </a>
+          </div>
         </div>
       </div>
     </footer>

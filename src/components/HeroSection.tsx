@@ -136,13 +136,13 @@ const HeroSection = () => {
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-10 text-heading">
-              <span className="block text-3xl md:text-4xl lg:text-3xl mt-4"> AI Voicemail That Turns Missed Calls Into Booked Appointments</span>
+              <span className="block text-3xl md:text-4xl lg:text-3xl mt-4">Your Phone Receptionist That Never Takes a Break</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-700 mb-10">
-              Never miss a client again. Our AI answers calls, books appointments, and captures every opportunity 24/7.  
+              Finally, answer every call without answering the phone. Just like hiring a receptionist for $1.33/day.
             </p>
             <p className="text-lg md:text-xl text-gray-700 mb-10">
-              Just one saved call can pay for the entire service.
+              <span className="font-bold text-beeslyYellow">$65 average haircut - $40 monthly cost = Profit from day one</span>
             </p>
             <p className="text-lg md:text-xl text-gray-700 mb-10">
               {/* <span className="font-bold">FREE</span> first month, then just <span className="font-bold">$45 /month</span>   */}
@@ -173,25 +173,6 @@ const HeroSection = () => {
                 </svg>
               </div>
               
-              {/* Main image container with border and shadow */}
-              <div className="relative bg-beeslyDark rounded-xl overflow-hidden border-2 border-beeslyYellow/30 shadow-[0_0_30px_rgba(255,193,7,0.15)]">
-                <Image
-                  src="/ad_generic.png"
-                  alt="Callendar AI Generic Service"
-                  width={350}
-                  height={350}
-                  className="w-full h-auto"
-                  priority
-                />
-                
-                {/* Bottom gradient overlay */}
-                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-beeslyDark to-transparent"></div>
-                
-                {/* "Powered by Callendar" badge */}
-                <div className="absolute bottom-4 right-4 bg-beeslyYellow/90 px-3 py-1 rounded-md shadow-lg text-black text-sm font-medium">
-                  Powered by Callendar AI
-                </div>
-              </div>
             </div>
           </div>
         </div>

@@ -1,71 +1,319 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRightIcon, MapPinIcon, TruckIcon, ClockIcon, CheckIcon } from '@heroicons/react/24/outline';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import ModernTestimonials from '@/components/ModernTestimonials';
+import HouseCallVoiceDemo from '@/components/HouseCallVoiceDemo';
+import HowItReallyWorks from '@/components/HowItReallyWorks';
+import ModernPricing from '@/components/ModernPricing';
+import ImpactSection from '@/components/ImpactSection';
+import { Button } from '@/components/ui/button';
 
 export default function HouseCallServicesPage() {
+  const [isCallLoading, setIsCallLoading] = useState(false);
+  const [showPhoneDialog, setShowPhoneDialog] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  const formatPhoneNumber = (value: string) => {
+    const numbers = value.replace(/\D/g, '');
+    
+    if (numbers.length <= 3) {
+      return numbers;
+    } else if (numbers.length <= 6) {
+      return `(${numbers.slice(0, 3)}) ${numbers.slice(3)}`;
+    } else if (numbers.length <= 10) {
+      return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 6)}-${numbers.slice(6)}`;
+    }
+    return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 6)}-${numbers.slice(6, 10)}`;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '');
+    if (value.length <= 10) {
+      setPhoneNumber(formatPhoneNumber(value));
+    }
+  };
+
+  const handleTestCall = async () => {
+    try {
+      setIsCallLoading(true);
+      const fullPhoneNumber = `+1${phoneNumber.replace(/\D/g, '')}`;
+      
+      const response = await fetch('/api/twilio/call', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phoneNumber: fullPhoneNumber })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to initiate call');
+      }
+      
+      alert('Test call initiated! You should receive a call shortly.');
+      setShowPhoneDialog(false);
+      setPhoneNumber('');
+    } catch (error) {
+      console.error('Error initiating test call:', error);
+      alert('Failed to initiate test call. Please try again later.');
+    } finally {
+      setIsCallLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-beeslyDark">
       <Navbar />
 
+      {/* Phone Number Input Dialog */}
+      {showPhoneDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="glass-morphism-dark rounded-2xl p-8 max-w-md w-full mx-4 border border-orange-500/20">
+            <h2 className="text-2xl font-bold mb-4 text-white">Get a Demo Call</h2>
+            <p className="text-gray-400 mb-6">Enter your phone number and our AI will call you in about 30 seconds:</p>
+            <input
+              type="tel"
+              value={phoneNumber}
+              onChange={handlePhoneChange}
+              placeholder="(555) 555-5555"
+              className="w-full p-4 border border-orange-500/30 rounded-xl mb-6 bg-black/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            />
+            <div className="flex justify-end gap-3">
+              <Button
+                onClick={() => {
+                  setShowPhoneDialog(false);
+                  setPhoneNumber('');
+                }}
+                className="bg-gray-700 text-white hover:bg-gray-600 px-6 py-3 rounded-xl"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleTestCall}
+                disabled={phoneNumber.length < 14 || isCallLoading}
+                className="btn-gradient px-6 py-3 rounded-xl disabled:opacity-50"
+              >
+                {isCallLoading ? 'Calling...' : 'Call Me Now'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
-      <section className="pt-36 pb-24 relative overflow-hidden">
-        {/* Honeycomb SVG Background */}
-        <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: "url('https://web-assets.same.dev/3660985521/15669422.svg+xml')",
-            backgroundSize: "200px",
-            backgroundRepeat: "repeat",
-          }}></div>
+      <section className="min-h-screen gradient-bg-dark relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 -left-40 w-80 h-80 bg-purple-500 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500 rounded-full filter blur-3xl opacity-10"></div>
         </div>
 
-        <div className="beesly-container relative z-10">
+        <div className="relative z-10 beesly-container pt-32 pb-20">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="text-left md:w-1/2">
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-heading">
-                House Call Services
+            <div className="text-center max-w-5xl mx-auto">
+              {/* Trust badge */}
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full mb-8 border border-white/20">
+                <span className="text-green-400">●</span>
+                <span className="text-white/80 text-sm">Turn every missed call into booked revenue</span>
+              </div>
+
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                <span className="text-white">Perfect for</span>
+                <br />
+                <span className="text-gradient">house call services</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-700 mb-5">
-              Voicemail that Books Appointments for You
+              
+              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                While you're serving customers, we're booking appointments. 
+                <span className="text-gradient-vibrant font-semibold"> 24/7 availability</span> means 
+                <span className="text-gradient-vibrant font-semibold"> zero missed opportunities</span>.
               </p>
-              <p className="text-lg text-gray-700 mb-8">
-                Callendar is an <span className="text-beeslyYellow font-semibold">AI-powered voicemail system</span> that automatically books appointments for your business. When clients call, they're routed to our <span className="text-beeslyYellow font-semibold">AI scheduling assistant</span> that checks your calendar availability, and books the appointment for you - <span className="text-beeslyYellow font-semibold">all without you having to pick up the phone</span>.
-              </p>
-              <p className="text-lg text-gray-700 mb-8">
+              
+              <p className="text-lg text-gray-400 mb-8">
                 Ideal for pool cleaners, electricians, plumbers, home services, and other businesses
                 where you go to your customers. Manage travel time and optimize your schedule.
               </p>
-              <div className="flex flex-col sm:flex-row items-start gap-5">
-                <Link 
-                  href="/auth/signup?service_type=House+Call" 
-                  className="beesly-button beesly-button-secondary w-48 h-12 flex items-center justify-center"
-                >
-                  Get Started
-                  <ArrowRightIcon className="ml-2 -mr-1 h-5 w-5" aria-hidden="true" />
+              
+              {/* Pricing highlight */}
+              <div className="mb-12">
+                <p className="text-lg text-gray-400 mb-2">
+                  <span className="text-gradient-accent font-bold">$40/month per calendar • 100 customer interactions included</span>
+                </p>
+                <p className="text-sm text-gray-500">
+                  Additional interactions: $10 per 20 calls • Spam calls don't count
+                </p>
+              </div>
+              
+              {/* Live stats */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-12">
+                <div className="glass-morphism-dark rounded-xl p-6">
+                  <div className="text-4xl font-bold text-gradient mb-2">430</div>
+                  <p className="text-gray-400">Calls managed monthly</p>
+                </div>
+                <div className="glass-morphism-dark rounded-xl p-6">
+                  <div className="text-4xl font-bold text-gradient-vibrant mb-2">$400</div>
+                  <p className="text-gray-400">Average additional revenue per customer/month*</p>
+                  <p className="text-xs text-gray-500 mt-1">*Results may vary</p>
+                </div>
+              </div>
+              {/* CTA buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/auth/signup?service_type=House+Call">
+                  <button className="btn-gradient text-lg px-8 py-6 rounded-full">
+                    Start Free Trial
+                    <span className="ml-2">→</span>
+                  </button>
                 </Link>
+                <button 
+                  className="bg-white/10 border border-white/20 text-white hover:bg-white/20 text-lg px-8 py-6 rounded-full backdrop-blur-sm"
+                  onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Watch Demo
+                </button>
+              </div>
+
+              {/* Trust indicators */}
+              <div className="mt-16 flex flex-wrap justify-center gap-8 text-gray-400">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>$40/month per calendar</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Setup in 5 minutes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Cancel anytime</span>
+                </div>
               </div>
             </div>
-            <div className="md:w-1/2 flex justify-center items-center">
-              <div className="relative w-full max-w-lg mx-auto">
-                {/* Simplified image container */}
-                <div className="relative">
-                  <img
-                    src="/home_visit.png"
-                    alt="House call service professional visiting client"
-                    className="w-full h-auto object-contain max-h-[500px]"
-                  />
-                  
-                  {/* Bottom gradient overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-beeslyDark to-transparent"></div>
-                  
-                  {/* Small badge */}
-                  <div className="absolute bottom-4 right-4 bg-beeslyYellow/90 px-3 py-1 rounded-md shadow-md text-black text-sm font-medium">
-                    Powered by Callendar AI
-                  </div>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <svg className="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </div>
+      </section>
+
+      {/* Voice Demo Section */}
+      <HouseCallVoiceDemo />
+
+      {/* Impact Section */}
+      <ImpactSection />
+
+      {/* How It Works Section */}
+      <HowItReallyWorks />
+
+      {/* Features Section */}
+      <section className="py-24 gradient-bg-dark relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-pink-500 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
+        </div>
+
+        <div className="beesly-container relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-orange-500/20 backdrop-blur-md px-4 py-2 rounded-full mb-6 border border-orange-500/30">
+              <span className="text-orange-400">🚚</span>
+              <span className="text-orange-300 text-sm font-medium">Built for mobile services</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Perfect for house call services
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Specialized features for businesses that travel to their customers.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="glass-morphism-dark rounded-2xl p-8 border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center mb-6">
+                <MapPinIcon className="h-8 w-8 text-white" aria-hidden="true" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Service Area Verification</h3>
+              <p className="text-gray-400 mb-6">
+                Our AI automatically checks if customers are within your service area before booking. Only accepts appointments you can actually service.
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Automatic area verification</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Rejects out-of-area requests</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Customizable service boundaries</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="glass-morphism-dark rounded-2xl p-8 border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center mb-6">
+                <TruckIcon className="h-8 w-8 text-white" aria-hidden="true" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Travel Optimization</h3>
+              <p className="text-gray-400 mb-6">
+                Set your maximum service distance and typical service time. We only allow bookings in your area, so you spend time working, not driving.
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Distance boundaries</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Efficient routing</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Fuel cost savings</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="glass-morphism-dark rounded-2xl p-8 border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center mb-6">
+                <ClockIcon className="h-8 w-8 text-white" aria-hidden="true" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Smart Scheduling</h3>
+              <p className="text-gray-400 mb-6">
+                Account for travel time between appointments. Never double-book yourself or arrive late to an appointment again.
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Travel time buffer</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">No double bookings</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-gray-300 text-sm">Punctual arrivals</span>
                 </div>
               </div>
             </div>
@@ -73,88 +321,31 @@ export default function HouseCallServicesPage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="beesly-section bg-beeslyDark relative">
-        {/* Honeycomb SVG Background */}
-        <div className="absolute right-0 top-0 h-40 w-40 opacity-10">
-          <img
-            src="https://web-assets.same.dev/2637280236/2568384771.svg+xml"
-            alt="Honeycomb background"
-            className="w-full h-full"
-          />
-        </div>
-
-        <div className="beesly-container">
-          <div className="text-center mb-20">
-            <span className="beesly-section-title">
-              Specialized Features
-            </span>
-            <h2 className="beesly-section-heading">
-              Designed for Mobile Service Providers
-            </h2>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="beesly-card beesly-card-hover">
-              <div className="h-12 w-12 rounded-md bg-beeslyYellow flex items-center justify-center mb-4">
-                <MapPinIcon className="h-6 w-6 text-black" aria-hidden="true" />
-              </div>
-              <h3 className="text-xl font-medium text-heading mb-3">Location-Based Scheduling</h3>
-              <p className="text-gray-600">
-                Customers provide their address, and we help you manage appointments based on location to minimize travel time.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="beesly-card beesly-card-hover">
-              <div className="h-12 w-12 rounded-md bg-beeslyYellow flex items-center justify-center mb-4">
-                <TruckIcon className="h-6 w-6 text-black" aria-hidden="true" />
-              </div>
-              <h3 className="text-xl font-medium text-heading mb-3">Travel Optimization</h3>
-              <p className="text-gray-600">
-                Set your maximum service distance and typical service time. We only allow bookings in your area, so you can spend your time working and not driving.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="beesly-card beesly-card-hover">
-              <div className="h-12 w-12 rounded-md bg-beeslyYellow flex items-center justify-center mb-4">
-                <ClockIcon className="h-6 w-6 text-black" aria-hidden="true" />
-              </div>
-              <h3 className="text-xl font-medium text-heading mb-3">Buffer Time Management</h3>
-              <p className="text-gray-600">
-                Account for travel time between appointments. Never double-book yourself or arrive late to an appointment again.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Use Cases Section */}
-      <section className="beesly-section bg-beeslyDark relative">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 z-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: "url('https://web-assets.same.dev/2637280236/2568384771.svg+xml')",
-            backgroundSize: "200px",
-            backgroundRepeat: "repeat",
-          }}></div>
+      <section className="py-24 gradient-bg-dark relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
+          <div className="absolute bottom-0 right-0 w-80 h-80 bg-pink-500 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
         </div>
         
         <div className="beesly-container relative z-10">
-          <div className="text-center mb-20">
-            <span className="beesly-section-title">
-              Industry Solutions
-            </span>
-            <h2 className="beesly-section-heading">
-              Perfect For Your Business
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-green-500/20 backdrop-blur-md px-4 py-2 rounded-full mb-6 border border-green-500/30">
+              <span className="text-green-400">🏠</span>
+              <span className="text-green-300 text-sm font-medium">Mobile service specialists</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Built for businesses that travel
             </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Specialized features and workflow designed specifically for mobile service providers.
+            </p>
           </div>
           
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div className="beesly-card beesly-card-hover">
-              <h3 className="text-xl font-medium text-heading mb-6">Who Uses House Call Services?</h3>
+            <div className="glass-morphism-dark rounded-2xl p-8 border border-green-500/20 hover:border-green-500/40 transition-all duration-300">
+              <h3 className="text-2xl font-bold text-white mb-6">Who Uses House Call Services?</h3>
               <ul className="space-y-4">
                 {[
                   'Pool cleaners and maintenance',
@@ -167,7 +358,7 @@ export default function HouseCallServicesPage() {
                   'Mobile detailing services'
                 ].map((item, i) => (
                   <li key={i} className="flex items-start">
-                    <div className="w-5 h-5 bg-beeslyYellow rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12"
@@ -175,22 +366,22 @@ export default function HouseCallServicesPage() {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="4"
+                        strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="text-black"
+                        className="text-white"
                       >
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span className="text-gray-700">{item}</span>
+                    <span className="text-gray-300">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
             
-            <div className="beesly-card beesly-card-hover">
-              <h3 className="text-xl font-medium text-heading mb-6">Key Benefits</h3>
+            <div className="glass-morphism-dark rounded-2xl p-8 border border-green-500/20 hover:border-green-500/40 transition-all duration-300">
+              <h3 className="text-2xl font-bold text-white mb-6">Key Benefits</h3>
               <ul className="space-y-4">
                 {[
                   'Captures every booking opportunity—even when you\'re tied up',
@@ -198,10 +389,10 @@ export default function HouseCallServicesPage() {
                   'Minimize drive time between appointments',
                   'Set service boundaries with maximum travel distance',
                   'Optimize daily schedules by geographic area',
-
+                  'Works with Google Calendar, Square, and Acuity Scheduling'
                 ].map((item, i) => (
                   <li key={i} className="flex items-start">
-                    <div className="w-5 h-5 bg-beeslyYellow rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12"
@@ -209,53 +400,125 @@ export default function HouseCallServicesPage() {
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="4"
+                        strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="text-black"
+                        className="text-white"
                       >
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span className="text-gray-700">{item}</span>
+                    <span className="text-gray-300">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="beesly-section bg-beeslyDark relative py-16">
-        <div className="beesly-container">
-          <div className="beesly-card text-center py-12 px-4 sm:px-6 relative overflow-hidden">
-            {/* Honeycomb background in the card */}
-            <div className="absolute inset-0 z-0 opacity-10">
-              <div className="absolute inset-0" style={{
-                backgroundImage: "url('https://web-assets.same.dev/3660985521/15669422.svg+xml')",
-                backgroundSize: "150px",
-                backgroundRepeat: "repeat",
-              }}></div>
-            </div>
-            
-            <div className="relative z-10">
-              <h2 className="text-3xl font-extrabold text-heading sm:text-4xl mb-6">
-                Ready to streamline your mobile service business?
-              </h2>
-              <p className="mt-4 text-lg leading-6 text-gray-700 max-w-3xl mx-auto mb-8">
-                Start your free trial today and see how our House Call service can help you save time, reduce travel costs, and serve more customers.
-              </p>
-              <Link
-                href="/auth/signup?service_type=House+Call"
-                className="beesly-button beesly-button-yellow inline-flex items-center justify-center px-8 py-3"
-              >
-                Start Your Free Trial
-              </Link>
+          
+          {/* Calendar Integrations */}
+          <div className="mt-16 text-center">
+            <h3 className="text-2xl font-bold text-white mb-8">Supported Calendar Systems</h3>
+            <div className="flex justify-center items-center gap-8 flex-wrap">
+              <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-lg border-2 border-green-500/30 hover:border-green-500/60 transition-all duration-300">
+                <img src="/acuity-logo-final.svg" alt="Acuity Scheduling" className="h-8" />
+                <span className="text-gray-900 font-medium">Acuity Scheduling</span>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-lg border-2 border-green-500/30 hover:border-green-500/60 transition-all duration-300">
+                <img src="/gmail_logo.png" alt="Google Calendar" className="h-8" />
+                <span className="text-gray-900 font-medium">Google Calendar</span>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-lg border-2 border-green-500/30 hover:border-green-500/60 transition-all duration-300">
+                <img src="/Square_combinationmark_black.png" alt="Square" className="h-8" />
+                <span className="text-gray-900 font-medium">Square Appointments</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <ModernTestimonials />
+
+      {/* Try It Yourself Section */}
+      <section className="py-24 gradient-bg-dark relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-pink-500 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
+        </div>
+        
+        <div className="beesly-container relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-orange-500/20 backdrop-blur-md px-4 py-2 rounded-full mb-6 border border-orange-500/30">
+              <span className="text-orange-400">📞</span>
+              <span className="text-orange-300 text-sm font-medium">Live demo</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Try it yourself right now
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8">
+              Call our live demo line and experience our AI receptionist in action. 
+              See how it handles house call bookings, verifies service areas, and sounds completely natural.
+            </p>
+          </div>
+          
+          {/* Phone number highlight */}
+          <div className="max-w-2xl mx-auto">
+            <div className="glass-morphism-dark rounded-3xl p-8 md:p-12 border border-orange-500/20 text-center">
+              <div className="text-6xl mb-6">🚚</div>
+              <h3 className="text-2xl font-bold text-white mb-4">Call our demo line</h3>
+              <a 
+                href="tel:+18775704990"
+                className="text-5xl md:text-6xl font-bold text-gradient-accent hover:text-gradient-vibrant transition-all duration-300 block mb-6"
+              >
+                (877) 570-4990
+              </a>
+              <p className="text-gray-400 mb-8">
+                This is a real AI receptionist for house call services. Try booking an appointment, 
+                ask about service areas, or test how it handles travel scheduling.
+              </p>
+              
+              {/* Call options */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                <a 
+                  href="tel:+18775704990"
+                  className="btn-gradient text-lg px-8 py-4 rounded-full text-center"
+                >
+                  📞 Call Now: (877) 570-4990
+                </a>
+                <Button
+                  onClick={() => setShowPhoneDialog(true)}
+                  className="bg-white/10 border border-white/20 text-white hover:bg-white/20 text-lg px-8 py-4 rounded-full backdrop-blur-sm"
+                >
+                  📲 Have AI Call You
+                </Button>
+              </div>
+              
+              {/* What to expect */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                <div className="text-center p-4">
+                  <div className="text-2xl mb-2">🗺️</div>
+                  <h4 className="text-white font-semibold mb-2">Service Area Check</h4>
+                  <p className="text-gray-400 text-sm">Verifies if you're in the coverage area</p>
+                </div>
+                <div className="text-center p-4">
+                  <div className="text-2xl mb-2">📅</div>
+                  <h4 className="text-white font-semibold mb-2">Travel Time Booking</h4>
+                  <p className="text-gray-400 text-sm">Accounts for travel between appointments</p>
+                </div>
+                <div className="text-center p-4">
+                  <div className="text-2xl mb-2">🤖</div>
+                  <h4 className="text-white font-semibold mb-2">Natural Conversation</h4>
+                  <p className="text-gray-400 text-sm">Sounds like a real receptionist</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <ModernPricing />
 
       <Footer />
     </main>
