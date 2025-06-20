@@ -6,27 +6,27 @@ const CalendarComparison = () => {
   const [showAfter, setShowAfter] = useState(false);
 
   const beforeSlots = [
-    { time: "9:00 AM", status: "empty", note: "Missed call" },
-    { time: "10:00 AM", status: "booked", client: "John D." },
-    { time: "11:00 AM", status: "empty", note: "No show" },
-    { time: "12:00 PM", status: "empty", note: "" },
-    { time: "1:00 PM", status: "booked", client: "Mike S." },
-    { time: "2:00 PM", status: "empty", note: "Missed 2 calls" },
-    { time: "3:00 PM", status: "empty", note: "" },
-    { time: "4:00 PM", status: "booked", client: "Dave R." },
-    { time: "5:00 PM", status: "empty", note: "Phone off" }
+    { time: "9:00 AM", status: "empty", note: "Missed call", client: undefined, tag: undefined },
+    { time: "10:00 AM", status: "booked", client: "John D.", note: undefined, tag: undefined },
+    { time: "11:00 AM", status: "empty", note: "No show", client: undefined, tag: undefined },
+    { time: "12:00 PM", status: "empty", note: "", client: undefined, tag: undefined },
+    { time: "1:00 PM", status: "booked", client: "Mike S.", note: undefined, tag: undefined },
+    { time: "2:00 PM", status: "empty", note: "Missed 2 calls", client: undefined, tag: undefined },
+    { time: "3:00 PM", status: "empty", note: "", client: undefined, tag: undefined },
+    { time: "4:00 PM", status: "booked", client: "Dave R.", note: undefined, tag: undefined },
+    { time: "5:00 PM", status: "empty", note: "Phone off", client: undefined, tag: undefined }
   ];
 
   const afterSlots = [
-    { time: "9:00 AM", status: "booked", client: "Sarah M.", tag: "AI Booked" },
-    { time: "10:00 AM", status: "booked", client: "John D." },
-    { time: "11:00 AM", status: "booked", client: "Tom H.", tag: "AI Booked" },
-    { time: "12:00 PM", status: "booked", client: "Amy L.", tag: "AI Booked" },
-    { time: "1:00 PM", status: "booked", client: "Mike S." },
-    { time: "2:00 PM", status: "booked", client: "Chris P.", tag: "AI Booked" },
-    { time: "3:00 PM", status: "booked", client: "Lisa W.", tag: "AI Booked" },
-    { time: "4:00 PM", status: "booked", client: "Dave R." },
-    { time: "5:00 PM", status: "booked", client: "Emma K.", tag: "AI Booked" }
+    { time: "9:00 AM", status: "booked", client: "Sarah M.", tag: "AI Booked", note: undefined },
+    { time: "10:00 AM", status: "booked", client: "John D.", tag: undefined, note: undefined },
+    { time: "11:00 AM", status: "booked", client: "Tom H.", tag: "AI Booked", note: undefined },
+    { time: "12:00 PM", status: "booked", client: "Amy L.", tag: "AI Booked", note: undefined },
+    { time: "1:00 PM", status: "booked", client: "Mike S.", tag: undefined, note: undefined },
+    { time: "2:00 PM", status: "booked", client: "Chris P.", tag: "AI Booked", note: undefined },
+    { time: "3:00 PM", status: "booked", client: "Lisa W.", tag: "AI Booked", note: undefined },
+    { time: "4:00 PM", status: "booked", client: "Dave R.", tag: undefined, note: undefined },
+    { time: "5:00 PM", status: "booked", client: "Emma K.", tag: "AI Booked", note: undefined }
   ];
 
   const currentSlots = showAfter ? afterSlots : beforeSlots;

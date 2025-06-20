@@ -2,10 +2,16 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
-const StatCard = ({ number, label, prefix = "", suffix = "", delay = 0 }) => {
+const StatCard = ({ number, label, prefix = "", suffix = "", delay = 0 }: {
+  number: number;
+  label: string;
+  prefix?: string;
+  suffix?: string;
+  delay?: number;
+}) => {
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

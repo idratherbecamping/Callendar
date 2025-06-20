@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 const VoiceDemo = () => {
   const [selectedDemo, setSelectedDemo] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentAudio, setCurrentAudio] = useState(null);
+  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
   const demos = [
     {
@@ -32,7 +32,7 @@ const VoiceDemo = () => {
     // }
   ];
 
-  const playDemo = (index) => {
+  const playDemo = (index: number) => {
     // If audio is currently playing, stop it
     if (isPlaying && currentAudio) {
       currentAudio.pause();

@@ -12,6 +12,11 @@ function AcuityCallbackContent() {
   useEffect(() => {
     async function handleCallback() {
       try {
+        // Check if searchParams is available
+        if (!searchParams) {
+          throw new Error('No search parameters available')
+        }
+        
         // Extract the authorization code and state from URL
         const code = searchParams.get('code')
         const state = searchParams.get('state')

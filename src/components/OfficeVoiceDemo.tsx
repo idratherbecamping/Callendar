@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const OfficeVoiceDemo = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentAudio, setCurrentAudio] = useState(null);
+  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
   const demo = {
     title: "Haircut Booking",

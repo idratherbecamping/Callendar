@@ -3,7 +3,14 @@
 import React from "react";
 import Image from "next/image";
 
-const TestimonialCard = ({ quote, author, business, avatar, metric, highlight }) => {
+const TestimonialCard = ({ quote, author, business, avatar, metric, highlight }: {
+  quote: string;
+  author: string;
+  business: string;
+  avatar: string;
+  metric?: { value: string; label: string };
+  highlight?: string;
+}) => {
   return (
     <div className="glass-morphism-dark rounded-2xl p-8 border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:transform hover:scale-105">
       <div className="flex items-start gap-4 mb-6">
