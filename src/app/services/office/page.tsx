@@ -67,7 +67,7 @@ export default function OfficeServicesPage() {
               </div>
             </div>
             <div className="md:w-1/2 flex justify-center items-center">
-              <div className="relative w-full max-w-lg">
+              <div className="relative w-full max-w-sm">
                 {/* Hexagonal decorative elements */}
                 <div className="absolute -top-6 -right-6 w-24 h-24 opacity-15">
                   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">

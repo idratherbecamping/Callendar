@@ -39,7 +39,7 @@ const HowItWorksSection = () => {
       number: 3,
       title: "Connect Number",
       description:
-        "Connect your phone number to Callendar AI so that we can answer your missed calls and book appointments for you.",
+        "Connect your phone number to Callendar AI so that we can answer your missed calls and book appointments for you OR use one of our dedicated business numbers for your company.",
     },
   ];
 

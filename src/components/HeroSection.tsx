@@ -160,7 +160,7 @@ const HeroSection = () => {
           
           {/* Right column - Image */}
           <div className="md:w-1/2 flex justify-center">
-            <div className="relative w-full max-w-lg scale-60 transform">
+            <div className="relative w-full max-w-lg scale-30 transform">
               {/* Hexagonal decorative elements */}
               <div className="absolute -top-6 -right-6 w-24 h-24 opacity-15">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">

@@ -4,7 +4,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 
-const TestimonialCard = ({ quote, role }: { quote: string; role: string }) => {
+const TestimonialCard = ({ quote, role, logo }: { quote: string; role: string; logo?: string }) => {
   return (
     <Card className="beesly-card beesly-card-hover h-full transform transition-all duration-300 hover:scale-105 border-2 border-beeslyYellow/20">
       <CardContent className="p-10">
@@ -15,12 +15,12 @@ const TestimonialCard = ({ quote, role }: { quote: string; role: string }) => {
           />
           <div className="border-t border-beeslyYellow/20 pt-6">
             <div className="flex items-center gap-4">
-              <div className="relative h-12 w-12 rounded-full overflow-hidden">
+              <div className="relative h-16 w-16 rounded-full overflow-hidden bg-gray-100">
                 <Image
-                  src="/arsenal_branding.png"
-                  alt="Arsenal Barber Co. Logo"
+                  src={logo || "/arsenal_branding.png"}
+                  alt={`${role} Logo`}
                   fill
-                  className="object-cover"
+                  className="object-cover object-left"
                 />
               </div>
               <p className="text-base text-beeslyYellow font-bold uppercase tracking-wide font-sans">{role}</p>
@@ -35,16 +35,19 @@ const TestimonialCard = ({ quote, role }: { quote: string; role: string }) => {
 const TestimonialsSection = () => {
   const testimonials = [
     {
-      quote: "The booking service has <span class='text-beeslyYellow font-medium'>led to a steady increase in our weekly appointments</span>.",
-      role: "ARSENAL BARBER CO"
+      quote: "Clients find it convenient to schedule their visits by phone, which has helped <span class='text-beeslyYellow font-medium'>fill more time slots throughout the week</span>.",
+      role: "ARSENAL BARBER CO",
+      logo: "/arsenal_branding.png"
     },
     {
-      quote: "Clients find it convenient to schedule their visits by phone, which has helped <span class='text-beeslyYellow font-medium'>fill more time slots throughout the week</span>.",
-      role: "ARSENAL BARBER CO"
+      quote: "This booking service is a total game-changer! It's taken the stress out of scheduling by <span class='text-beeslyYellow font-medium'>screening an average of 12.75 calls a day</span>, letting me focus on delivering great haircuts. Clients seem really like <span class='text-beeslyYellow font-medium'>the flexibility of booking online or by phone</span>.",
+      role: "NORTHERN MONKEY BARBER",
+      logo: "/northern_monkey.jpg"
     },
     {
       quote: "It's made the <span class='text-beeslyYellow font-medium'>booking process smoother</span> and contributed to a <span class='text-beeslyYellow font-medium'>more consistent flow of business</span>.",
-      role: "ARSENAL BARBER CO"
+      role: "ARSENAL BARBER CO",
+      logo: "/arsenal_branding.png"
     }
   ];
 
@@ -84,6 +87,7 @@ const TestimonialsSection = () => {
               key={index}
               quote={testimonial.quote}
               role={testimonial.role}
+              logo={testimonial.logo}
             />
           ))}
         </div>
